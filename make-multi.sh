@@ -1,4 +1,6 @@
-#!/bin/zsh -feu
+#!/bin/sh
+exec /usr/bin/env zsh -feu "$0" "$@"
+!#
 
 has_dll () {
     [[ -n "$(ldconfig -p 2> /dev/null | grep -F ${1}.so)" ]]
