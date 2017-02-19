@@ -7,24 +7,34 @@
 ;;     -s optima.ppcre -s inferior-shell -E toggle-touchpad::main -L toggle-touchpad.lisp
 ;; Or use make-multi.sh to create a multi-call binary that includes toggle-touchpad support.
 
-(uiop:define-package :fare-scripts/toggle-touchpad
-  (:use :cl :fare-utils :uiop :inferior-shell
-        :optima :optima.ppcre :cl-scripting)
-  (:export #:help #:get-touchpad-id #:device-enabled-p
-           #:toggle-device #:disable-device #:enable-device))
+(uiop:define-package
+    :cl-scripts/toggle-touchpad
+    (:use :cl
+          :fare-utils
+          :uiop
+          :inferior-shell
+          :optima
+          :optima.ppcre
+          :cl-scripting)
+  (:export #:help
+           #:get-touchpad-id
+           #:device-enabled-p
+           #:toggle-device
+           #:disable-device
+           #:enable-device))
 
-(in-package :fare-scripts/toggle-touchpad)
+(in-package :cl-scripts/toggle-touchpad)
 
 (defun get-touchpad-id ()
   (dolist (line (run/lines '(xinput list)))
     (match line
-      ((ppcre "(TouchPad|\\sSYNA.*)\\s+id\=([0-9]{1,2})\\s+" _ x)
-       (return (values (parse-integer x)))))))
+           ((ppcre "(TouchPad|\\sSYNA.*)\\s+id\=([0-9]{1,2})\\s+" _ x)
+            (return (values (parse-integer x)))))))
 
 (defun device-enabled-p (&optional (id (get-touchpad-id)))
   (dolist (line (run/lines `(xinput list-props ,id)))
     (match line
-      ((ppcre "Device Enabled\\s+[():0-9]+\\s+([01])" x) (return (equal x "1"))))))
+           ((ppcre "Device Enabled\\s+[():0-9]+\\s+([01])" x) (return (equal x "1"))))))
 
 (defun toggle-device (&optional (id (get-touchpad-id)) (on :toggle))
   (let ((state (ecase on
@@ -41,16 +51,16 @@
 
 (defun help (&optional (output *standard-output*))
   (format output "toggle-touchpad functions: ~{~(~A~)~^ ~}~%"
-          (package-functions :fare-scripts/toggle-touchpad))
+          (package-functions :cl-scripts/toggle-touchpad))
   (success))
 
 (defun main (argv) ;; TODO: use command-line-arguments, or CLON
   (cond
     ((null argv) (toggle-device))
     ((eql (first-char (first argv)) #\() (eval (first argv)))
-    (t (if-let (fun (package-function :fare-scripts/toggle-touchpad
+    (t (if-let (fun (package-function :cl-scripts/toggle-touchpad
                                       (standard-case-symbol-name (first argv))))
-         (apply 'run-command fun (rest argv))
+           (apply 'run-command fun (rest argv))
          (progn
            (format *error-output* "Bad toggle-touchpad command: ~A~%" (first argv))
            (help *error-output*)
