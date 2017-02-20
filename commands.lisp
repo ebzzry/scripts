@@ -22,7 +22,7 @@
        (dolist (i (cl-launch/dispatch:all-entry-names))
          (unless (file-exists-p i)
            (format t "linking file ~A~%" i)
-           (run `(ln -s multi ,i))))))
+           (run `(ln -s cl-scripts ,i))))))
    (success))
 
  (defun help ()

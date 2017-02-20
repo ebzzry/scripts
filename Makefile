@@ -1,11 +1,11 @@
-.PHONY: all multi symlinks
+.PHONY: all cl-scripts symlinks
 
-BINARY=$$HOME/bin/multi
+BINARY=$$HOME/bin/cl-scripts
 
-multi:
+cl-scripts:
 	cl-launch --output $(BINARY) --dump ! --lisp sbcl --quicklisp --dispatch-system cl-scripts/touchpad --system cl-scripts
 
-symlinks: multi
+symlinks: cl-scripts
 	$(BINARY) create-symlinks
 
-all: multi symlinks
+all: cl-scripts symlinks
