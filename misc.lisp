@@ -71,18 +71,26 @@
  (defun xrsync (args)
    (run/i `(rsync "-rlptgoDHSx" ,@args)))
 
- ;; FIXME: loop over BAT*
  (defun battery-status ()
-   (let* ((capacity (read-file-line "/sys/class/power_supply/BAT1/capacity"))
-          (status (read-file-line "/sys/class/power_supply/BAT1/status")))
-     (println (format nil "~A% (~A)" capacity status))))
+   (let ((base-dir "/sys/class/power_supply/*")
+         (exclude-string "/AC/"))
+     (loop :for dir :in (remove-if #'(lambda (path)
+                                       (search exclude-string
+                                               (uiop:native-namestring path)))
+                                   (uiop:directory* base-dir))
+        :do  (format t "~A: ~A (~A)~%"
+                     (first (last (pathname-directory dir)))
+                     (uiop:read-file-line (merge-pathnames "capacity" dir))
+                     (uiop:read-file-line (merge-pathnames "status" dir))))
+     (values)))
 
  (defun trackpoint ()
-   (run/i `(xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation" 1))
-   (run/i `(xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Button" 2))
-   (run/i `(xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Timeout" 200))
-   (run/i `(xinput set-prop "TPPS/2 IBM TrackPoint" "Evdev Wheel Emulation Axes" 7 6 5 4))
-   (success))
+   (let ((device "TPPS/2 IBM TrackPoint"))
+     (run/i `(xinput set-prop ,device "Evdev Wheel Emulation" 1))
+     (run/i `(xinput set-prop ,device "Evdev Wheel Emulation Button" 2))
+     (run/i `(xinput set-prop ,device "Evdev Wheel Emulation Timeout" 200))
+     (run/i `(xinput set-prop ,device "Evdev Wheel Emulation Axes" 7 6 5 4))
+     (success)))
 
  (defun run-chrome (args)
    (run/i `(google-chrome-stable "--disable-extensions" ,@args)))
