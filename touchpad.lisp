@@ -17,37 +17,37 @@
           :optima.ppcre
           :cl-scripting)
   (:export #:help
-           #:get-touchpad-id
-           #:device-enabled-p
-           #:toggle-device
-           #:disable-device
-           #:enable-device))
+           #:get-id
+           #:enabledp
+           #:toggle
+           #:disable
+           #:enable))
 
 (in-package :cl-scripts/touchpad)
 
-(defun get-touchpad-id ()
+(defun get-id ()
   (dolist (line (run/lines '(xinput list)))
     (match line
            ((ppcre "(TouchPad|\\sSYNA.*)\\s+id\=([0-9]{1,2})\\s+" _ x)
             (return (values (parse-integer x)))))))
 
-(defun device-enabled-p (&optional (id (get-touchpad-id)))
+(defun enabledp (&optional (id (get-id)))
   (dolist (line (run/lines `(xinput list-props ,id)))
     (match line
            ((ppcre "Device Enabled\\s+[():0-9]+\\s+([01])" x) (return (equal x "1"))))))
 
-(defun toggle-device (&optional (id (get-touchpad-id)) (on :toggle))
+(defun toggle (&optional (id (get-id)) (on :toggle))
   (let ((state (ecase on
-                 ((:toggle) (not (device-enabled-p id)))
+                 ((:toggle) (not (enabledp id)))
                  ((nil t) on))))
     (run `(xinput ,(if state 'enable 'disable) ,id)))
   (success))
 
-(defun enable-device (&optional (id (get-touchpad-id)))
-  (toggle-device id t))
+(defun enable (&optional (id (get-id)))
+  (toggle id t))
 
-(defun disable-device (&optional (id (get-touchpad-id)))
-  (toggle-device id nil))
+(defun disable (&optional (id (get-id)))
+  (toggle id nil))
 
 (defun help (&optional (output *standard-output*))
   (format output "touchpad functions: ~{~(~A~)~^ ~}~%"
@@ -56,7 +56,7 @@
 
 (defun main (argv) ;; TODO: use command-line-arguments, or CLON
   (cond
-    ((null argv) (toggle-device))
+    ((null argv) (toggle))
     ((eql (first-char (first argv)) #\() (eval (first argv)))
     (t (if-let (fun (package-function :cl-scripts/touchpad
                                       (standard-case-symbol-name (first argv))))
