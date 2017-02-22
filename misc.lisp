@@ -19,7 +19,6 @@
           #:display-ascii-oct-table
           #:rot13
           #:xrsync
-          #:battery
           #:battery-status
           #:trackpoint
           #:run-chrome
@@ -29,6 +28,19 @@
           #:continue-chrome))
 
 (in-package :cl-scripts/misc)
+
+(defun battery ()
+   (let ((base-dir "/sys/class/power_supply/*")
+         (exclude-string "/AC/"))
+     (with-output (s nil)
+       (loop
+          :for dir :in (remove-if #'(lambda (path)
+                                      (search exclude-string (native-namestring path)))
+                                  (directory* base-dir))
+          :for battery = (first (last (pathname-directory dir)))
+          :for capacity = (read-file-line (subpathname dir "capacity"))
+          :for status = (read-file-line (subpathname dir "status"))
+          :do (format s "~A: ~A (~A)~%" battery capacity status)))))
 
 (exporting-definitions
  (defun char-display-char (c)
@@ -72,19 +84,6 @@
  (defun xrsync (args)
    (run/i `(rsync "-rlptgoDHSx" ,@args)))
 
- (defun battery ()
-   (let ((base-dir "/sys/class/power_supply/*")
-         (exclude-string "/AC/"))
-     (uiop:with-output (s nil)
-       (loop :for dir :in (remove-if #'(lambda (path)
-                                         (search exclude-string
-                                                 (uiop:native-namestring path)))
-                                     (uiop:directory* base-dir))
-          :do  (format s "~A: ~A (~A)~%"
-                       (first (last (pathname-directory dir)))
-                       (uiop:read-file-line (merge-pathnames "capacity" dir))
-                       (uiop:read-file-line (merge-pathnames "status" dir)))))))
-
  (defun battery-status ()
    (format t "~A" (battery))
    (values))
@@ -98,7 +97,7 @@
      (success)))
 
  (defun run-chrome (args)
-   (run/i `(google-chrome-stable "--disable-extensions" ,@args)))
+   (run/i `(google-chrome-stable ,@args)))
 
  (defun chrome (args)
    (run-chrome args))
