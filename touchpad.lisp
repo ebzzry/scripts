@@ -18,6 +18,7 @@
           :cl-scripting)
   (:export #:help
            #:get-id
+           #:id
            #:enabledp
            #:toggle
            #:disable
@@ -30,6 +31,8 @@
     (match line
            ((ppcre "(TouchPad|\\sSYNA.*)\\s+id\=([0-9]{1,2})\\s+" _ x)
             (return (values (parse-integer x)))))))
+
+(defun id (&rest args) (apply #'get-id args))
 
 (defun enabledp (&optional (id (get-id)))
   (dolist (line (run/lines `(xinput list-props ,id)))
