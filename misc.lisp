@@ -19,6 +19,7 @@
           #:display-ascii-oct-table
           #:rot13
           #:xrsync
+          #:battery
           #:battery-status
           #:trackpoint
           #:run-chrome
@@ -71,18 +72,22 @@
  (defun xrsync (args)
    (run/i `(rsync "-rlptgoDHSx" ,@args)))
 
- (defun battery-status ()
+ (defun battery ()
    (let ((base-dir "/sys/class/power_supply/*")
          (exclude-string "/AC/"))
-     (loop :for dir :in (remove-if #'(lambda (path)
-                                       (search exclude-string
-                                               (uiop:native-namestring path)))
-                                   (uiop:directory* base-dir))
-        :do  (format t "~A: ~A (~A)~%"
-                     (first (last (pathname-directory dir)))
-                     (uiop:read-file-line (merge-pathnames "capacity" dir))
-                     (uiop:read-file-line (merge-pathnames "status" dir))))
-     (values)))
+     (uiop:with-output (s nil)
+       (loop :for dir :in (remove-if #'(lambda (path)
+                                         (search exclude-string
+                                                 (uiop:native-namestring path)))
+                                     (uiop:directory* base-dir))
+          :do  (format s "~A: ~A (~A)~%"
+                       (first (last (pathname-directory dir)))
+                       (uiop:read-file-line (merge-pathnames "capacity" dir))
+                       (uiop:read-file-line (merge-pathnames "status" dir)))))))
+
+ (defun battery-status ()
+   (format t "~A" (battery))
+   (values))
 
  (defun trackpoint ()
    (let ((device "TPPS/2 IBM TrackPoint"))
