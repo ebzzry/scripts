@@ -13,7 +13,6 @@
           #:*colon-mode*
           #:*normal-mode*
           #:*num-mode*
-          #:char-display-char
           #:display-ascii-hex-table
           #:ascii
           #:display-ascii-oct-table
@@ -29,6 +28,13 @@
 
 (in-package :cl-scripts/misc)
 
+(defun char-display-char (c)
+   (if (or (member c '(127 155))
+           (< c 32)
+           (<= 128 c 159))
+       #\space
+       (code-char c)))
+
 (defun battery ()
    (let ((base-dir "/sys/class/power_supply/*")
          (exclude-string "/AC/"))
@@ -43,13 +49,6 @@
           :do (format s "~A: ~A (~A)~%" battery capacity status)))))
 
 (exporting-definitions
- (defun char-display-char (c)
-   (if (or (member c '(127 155))
-           (< c 32)
-           (<= 128 c 159))
-       #\space
-       (code-char c)))
-
  (defvar *num-mode* "[31m")
  (defvar *colon-mode* "[34m")
  (defvar *char-mode* "[0m[1m")
