@@ -1,11 +1,18 @@
-.PHONY: all cl-scripts symlinks
+#.PHONY: all build
 
-BINARY=$$HOME/bin/cl-scripts
+NAME=cl-scripts
+BINARY=$(HOME)/bin/$(NAME)
+.PHONY: all $(NAME) clean
 
-cl-scripts:
-	cl-launch --output $(BINARY) --dump ! --lisp sbcl --quicklisp --dispatch-system cl-scripts/touchpad --system cl-scripts
+all: $(NAME)
 
-symlinks: cl-scripts
+$(NAME):
+	cl-launch --output $(NAME) --dump ! --lisp sbcl --quicklisp --dispatch-system $(NAME)/touchpad --system $(NAME)
+
+install: $(NAME)
+	cp -p $(NAME) $(BINARY)
 	$(BINARY) create-symlinks
 
-all: cl-scripts symlinks
+clean:
+	rm -f $(NAME)
+
