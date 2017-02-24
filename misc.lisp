@@ -18,6 +18,7 @@
           #:display-ascii-oct-table
           #:rot13
           #:xrsync
+          #:battery
           #:battery-status
           #:trackpoint
           #:run-chrome
@@ -46,7 +47,7 @@
           :for battery = (first (last (pathname-directory dir)))
           :for capacity = (read-file-line (subpathname dir "capacity"))
           :for status = (read-file-line (subpathname dir "status"))
-          :do (format s "~A: ~A (~A)~%" battery capacity status)))))
+          :do (format s "~A: ~A% (~A)~%" battery capacity status)))))
 
 (exporting-definitions
  (defvar *num-mode* "[31m")
