@@ -25,7 +25,12 @@
           #:chrome
           #:kill-chrome
           #:stop-chrome
-          #:continue-chrome))
+          #:continue-chrome
+          #:run-fox
+          #:fox
+          #:kill-fox
+          #:stop-fox
+          #:continue-fox))
 
 (in-package :cl-scripts/misc)
 
@@ -88,8 +93,8 @@
    (format t "~A" (battery))
    (values))
 
- (defun trackpoint ()
-   (let ((device "TPPS/2 IBM TrackPoint"))
+ (defun trackpoint (arg)
+   (let ((device arg))
      (run/i `(xinput set-prop ,device "Evdev Wheel Emulation" 1))
      (run/i `(xinput set-prop ,device "Evdev Wheel Emulation Button" 2))
      (run/i `(xinput set-prop ,device "Evdev Wheel Emulation Timeout" 200))
@@ -99,7 +104,7 @@
  (defun run-chrome (args)
    (run/i `(google-chrome-stable ,@args)))
 
- (defun chrome (args)
+ (defun chrome (&rest args)
    (run-chrome args))
 
  (defun kill-chrome (&rest args)
@@ -112,6 +117,23 @@
 
  (defun continue-chrome ()
    (kill-chrome "-CONT"))
+
+ (defun run-fox (args)
+   (run/i `(firefox ,@args)))
+
+ (defun fox (&rest args)
+   (run-fox args))
+
+ (defun kill-fox (&rest args)
+   (inferior-shell:run
+    `(killall ,@args firefox iceweasel)
+    :output :interactive :input :interactive :error-output nil :on-error nil))
+
+ (defun stop-fox ()
+   (kill-fox "-STOP"))
+
+ (defun continue-fox ()
+   (kill-fox "-CONT"))
 )
 
 (register-commands :cl-scripts/misc)
