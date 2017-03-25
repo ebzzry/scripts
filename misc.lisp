@@ -21,6 +21,7 @@
           #:battery
           #:battery-status
           #:trackpoint
+          #:xm
           #:run-chrome
           #:chrome
           #:kill-chrome
@@ -100,6 +101,12 @@
      (run/i `(xinput set-prop ,device "Evdev Wheel Emulation Timeout" 200))
      (run/i `(xinput set-prop ,device "Evdev Wheel Emulation Axes" 7 6 5 4))
      (success)))
+
+ (defun xm (arg)
+   (run/i `(setxkbmap dvorak))
+   (run/i `(xset r rate 250))
+   (run/i `(xmodmap ,(subpathname (user-homedir-pathname) (format nil "hejmo/ktp/xmodmap/.Xmodmap.~A" arg))))
+   (success))
 
  (defun run-chrome (args)
    (run/i `(google-chrome-stable ,@args)))
