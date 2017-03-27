@@ -8,6 +8,7 @@
        :cl-scripts/commands
        :optima
        :optima.ppcre
+       :cl-ppcre
        :cl-launch/dispatch)
  (:export #:*char-mode*
           #:*colon-mode*
@@ -21,7 +22,10 @@
           #:battery
           #:battery-status
           #:trackpoint
-          #:xm
+          #:xdev-id
+          #:xdev
+          #:xmap
+          #:xmr
           #:run-chrome
           #:chrome
           #:kill-chrome
@@ -102,10 +106,35 @@
      (run/i `(xinput set-prop ,device "Evdev Wheel Emulation Axes" 7 6 5 4))
      (success)))
 
- (defun xm (arg)
+ (defun xdev-id (name type)
+   (format nil "~A"
+           (cl-ppcre:regex-replace
+            (cl-ppcre:create-scanner ".*id=(.*?)	+.*")
+            (first (remove-if (complement
+                               #'(lambda (line)
+                                   (and (search name line) (search (format nil "slave  ~A" type) line))))
+                              (uiop:run-program '("xinput" "list") :output :lines))) "\\1")))
+
+
+ (defun xdev (name type command &rest args)
+   (let ((id (parse-integer (xdev-id name type))))
+     (run/i `(xinput ,command ,id ,@args))
+     (success)))
+
+ (defun xmap (arg)
    (run/i `(setxkbmap dvorak))
    (run/i `(xset r rate 250))
    (run/i `(xmodmap ,(subpathname (user-homedir-pathname) (format nil "hejmo/ktp/xmodmap/.Xmodmap.~A" arg))))
+   (success))
+
+ (defun xmr ()
+   (let ((device "Kinesis Advantage PRO MPC/USB Keyboard"))
+     (if (remove-if
+          (complement
+           #'(lambda (line) (search device line)))
+          (uiop:run-program '("lsusb") :output :lines))
+         (xmap "kadv.dvorak")
+         (xmap "tpad.dvorak")))
    (success))
 
  (defun run-chrome (args)
