@@ -27,7 +27,6 @@
 
  (defun help ()
    (format! t "~A available commands: ~{~A~^ ~}~%" (get-name) (all-entry-names))
-   (success))
- )
+   (success)))
 
 (register-commands :cl-scripts/commands)

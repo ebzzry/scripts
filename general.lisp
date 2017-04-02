@@ -1,5 +1,5 @@
 (uiop:define-package
-    :cl-scripts/misc
+    :cl-scripts/general
     (:use :cl
      :fare-utils
           :uiop
@@ -33,14 +33,18 @@
 
            #:battery
            #:battery-status
+
            #:trackpoint
+
            #:xdev-id
            #:xdev
            #:xmap
            #:xmr
-           #:askpass))
+           #:askpass
 
-(in-package :cl-scripts/misc)
+           #:pp))
+
+(in-package :cl-scripts/general)
 
 (defun char-display-char (c)
   (if (or (member c '(127 155))
@@ -177,6 +181,12 @@
   (defun askpass ()
     (run/i `(git gui--askpass))
     (values))
-)
 
-(register-commands :cl-scripts/misc)
+  (defun pp ()
+    (cl-scripts/touchpad:disable)
+    (xmr)
+    (trackpoint "TPPS/2 IBM TrackPoint")
+    (xdev "Logitech USB Receiver" "pointer" "set-button-map" "1" "2" "3" "5" "4")
+    (success)))
+
+(register-commands :cl-scripts/general)
