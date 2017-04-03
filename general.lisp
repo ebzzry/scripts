@@ -1,14 +1,15 @@
 (uiop:define-package
     :cl-scripts/general
-    (:use :cl
+    (:use
+     :cl
      :fare-utils
-          :uiop
+     :uiop
      :inferior-shell
-          :cl-scripting
+     :cl-scripting
      :cl-scripts/commands
-          :optima
+     :optima
      :optima.ppcre
-          :cl-ppcre
+     :cl-ppcre
      :cl-launch/dispatch)
   (:export #:*char-mode*
            #:*colon-mode*
@@ -42,7 +43,7 @@
            #:xmr
            #:askpass
 
-           #:pp))
+           #:xxx))
 
 (in-package :cl-scripts/general)
 
@@ -166,25 +167,22 @@
       (run/i `(xinput ,command ,id ,@args))
       (success)))
 
-  (defun xmap (arg)
+  (defun xmap (keymap)
     (run/i `(setxkbmap dvorak))
     (run/i `(xset r rate 250))
-    (run/i `(xmodmap ,(subpathname (user-homedir-pathname) (format nil "hejmo/ktp/xmodmap/.Xmodmap.~A" arg))))
+    (run/i `(xmodmap ,(subpathname (user-homedir-pathname) (format nil "hejmo/ktp/xmodmap/.Xmodmap.~A" keymap))))
     (success))
 
-  (defun xmr ()
-    (let ((device "Kinesis Advantage PRO MPC/USB Keyboard"))
-      (if (remove-if
-           (complement
-            #'(lambda (line) (search device line)))
-           (uiop:run-program '("lsusb") :output :lines))
-          (xmap "kadv.dvorak")
-          (xmap "tpad.dvorak")))
+  (defun xmr (device)
+    (if (remove-if (complement #'(lambda (line) (search device line)))
+                   (uiop:run-program '("lsusb") :output :lines))
+        (xmap "kadv.dvorak")
+        (xmap "tpad.dvorak"))
     (success))
 
   (defun xxx ()
-    (xmr)
     (cl-scripts/touchpad:disable)
+    (xmr "Kinesis Advantage PRO MPC/USB Keyboard")
     (trackpoint "TPPS/2 IBM TrackPoint")
     (xdev "Logitech USB Receiver" "pointer" "set-button-map" "1" "2" "3" "5" "4")
     (success)))
