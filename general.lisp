@@ -139,6 +139,10 @@
     (format t "~A" (battery))
     (values))
 
+  (defun askpass ()
+    (run/i `(git gui--askpass))
+    (values))
+
   (defun trackpoint (arg)
     (let ((device arg))
       (run/i `(xinput set-prop ,device "Evdev Wheel Emulation" 1))
@@ -178,13 +182,9 @@
           (xmap "tpad.dvorak")))
     (success))
 
-  (defun askpass ()
-    (run/i `(git gui--askpass))
-    (values))
-
-  (defun pp ()
-    (cl-scripts/touchpad:disable)
+  (defun xxx ()
     (xmr)
+    (cl-scripts/touchpad:disable)
     (trackpoint "TPPS/2 IBM TrackPoint")
     (xdev "Logitech USB Receiver" "pointer" "set-button-map" "1" "2" "3" "5" "4")
     (success)))
