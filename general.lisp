@@ -32,6 +32,9 @@
            #:stop-fox
            #:continue-fox
 
+           #:sumatra
+           #:lisp
+
            #:battery
            #:battery-status
 
@@ -136,6 +139,12 @@
   (defun continue-fox ()
     (kill-fox "-CONT"))
 
+  (defun sumatra (&rest args)
+    (run/i `(wine ,(subpathname (user-homedir-pathname) ".wine/drive_c/Program Files/SumatraPDF/SumatraPDF.exe") ,@args)))
+
+  (defun lisp (&rest args)
+    (run/i `(rlwrap "-s" "1000000" "-c" "-b" "(){}[].,=&^%$#@\\;|" "sbcl" ,@args)))
+
   (defun battery-status ()
     (format t "~A" (battery))
     (values))
@@ -161,11 +170,11 @@
                                     (and (search name line) (search (format nil "slave  ~A" type) line))))
                                (uiop:run-program '("xinput" "list") :output :lines))) "\\1")))
 
-
   (defun xdev (name type command &rest args)
-    (let ((id (parse-integer (xdev-id name type))))
-      (run/i `(xinput ,command ,id ,@args))
-      (success)))
+    (let ((id (xdev-id name type)))
+      (when (not (string= id "NIL"))
+        (run/i `(xinput ,command ,(parse-integer id) ,@args))
+        (success))))
 
   (defun xmap (keymap)
     (run/i `(setxkbmap dvorak))
