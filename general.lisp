@@ -32,7 +32,7 @@
            #:stop-fox
            #:continue-fox
 
-           #:sumatra
+           #:suma
            #:lisp
 
            #:battery
@@ -139,7 +139,7 @@
   (defun continue-fox ()
     (kill-fox "-CONT"))
 
-  (defun sumatra (&rest args)
+  (defun suma (&rest args)
     (run/i `(wine ,(subpathname (user-homedir-pathname) ".wine/drive_c/Program Files/SumatraPDF/SumatraPDF.exe") ,@args)))
 
   (defun lisp (&rest args)
