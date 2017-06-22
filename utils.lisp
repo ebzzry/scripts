@@ -6,7 +6,7 @@
           :fare-utils
           :cl-launch/dispatch)
   (:export #:char-display-char
-           #:battery
+           #:battery-status
            #:wine
            #:home))
 
@@ -19,7 +19,7 @@
       #\space
       (code-char c)))
 
-(defun battery ()
+(defun battery-status ()
   (let ((base-dir "/sys/class/power_supply/*")
         (exclude-string "/AC/"))
     (with-output (s nil)
@@ -37,23 +37,3 @@
 
 (defun home (path)
   (subpathname (user-homedir-pathname) path))
-
-;; (exporting-definitions
-;;  (defun getuid ()
-;;    #+sbcl (sb-posix:getuid)
-;;    #-sbcl (error "no getuid")) ;; use iolib?
-
-;;  (defun create-symlinks ()
-;;    (let ((binarch (resolve-absolute-location `(,(getenv "BINDIR")) :ensure-directory t)))
-;;      (with-current-directory (binarch)
-;;        (dolist (i (cl-launch/dispatch:all-entry-names))
-;;          (unless (file-exists-p i)
-;;            (format t "linking file ~A~%" i)
-;;            (run `(ln -s cl-scripts ,i))))))
-;;    (success))
-
-;;  (defun help ()
-;;    (format! t "~A commands: ~{~A~^ ~}~%" (get-name) (all-entry-names))
-;;    (success)))
-
-;; (register-commands :cl-scripts/utils)
