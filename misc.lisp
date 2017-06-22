@@ -1,4 +1,4 @@
-(uiop:define-package :cl-scripts/commands
+(uiop:define-package :cl-scripts/misc
     (:use :cl
           :uiop
           :inferior-shell
@@ -9,7 +9,7 @@
            #:create-symlinks
            #:help))
 
-(in-package :cl-scripts/commands)
+(in-package :cl-scripts/misc)
 
 (exporting-definitions
  (defun getuid ()
@@ -26,7 +26,7 @@
    (success))
 
  (defun help ()
-   (format! t "~A available commands: ~{~A~^ ~}~%" (get-name) (all-entry-names))
+   (format! t "~A commands: ~{~A~^ ~}~%" (get-name) (all-entry-names))
    (success)))
 
-(register-commands :cl-scripts/commands)
+(register-commands :cl-scripts/misc)
