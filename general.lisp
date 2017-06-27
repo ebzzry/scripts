@@ -9,6 +9,7 @@
      :optima
      :optima.ppcre
      :cl-ppcre
+     :local-time
      :cl-launch/dispatch
      :cl-scripts/misc
      :cl-scripts/utils)
@@ -41,6 +42,8 @@
            #:xxx))
 
 (in-package :cl-scripts/general)
+
+(defvar *cl-scripts-home* (home "hejmo/fkd/lispo/cl-scripts"))
 
 (exporting-definitions
   (defvar *num-mode* "[31m")
@@ -103,13 +106,25 @@
   ;; - akiri absolutan dosierindikon de programo
   (defun lisp-lisp (&rest args)
     (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
-           (list-args (append '("sbcl") arguments))
-           (string-args (format nil "~{~a~^ ~}" list-args))
-           (dir (home "hejmo/fkd/lispo/cl-scripts")))
+           (list-arguments (append '("sbcl") arguments))
+           (string-arguments (format nil "~{~a~^ ~}" list-arguments)))
       ;; (uiop:chdir *default-pathname-defaults*)
-      (uiop:chdir dir)
-      (run/i `(nix-shell --pure --command ,string-args))
+      (uiop:chdir *cl-scripts-home*)
+      (run/i `(nix-shell --pure --command ,string-arguments))
       (success)))
+
+  (defun ekrane (mode)
+    (let* ((dir (home "hejmo/elsx/bil/ekrane"))
+           (file (format nil "~A.png" (local-time:format-timestring nil (now))))
+           (dest (format nil "mv $f ~A" dir)))
+      (flet ((scrot (file dest &rest args)
+               (run/i `(scrot ,@args ,file -e ,dest))))
+        (cond ((string= mode "plena") (scrot file dest))
+              ((string= mode "parta") (scrot file dest -s))
+              (t (format t "Error: invalid mode~%")))
+        (format t "~A/~A~%" dir file)
+        (run/i `(xclip -selection clipboard ,(format nil "~A/~A" dir file)))
+        (success))))
 
   (defun battery ()
     (format t "~A" (battery-status))

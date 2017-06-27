@@ -4,6 +4,7 @@
           :inferior-shell
           :cl-scripting
           :fare-utils
+          :local-time
           :cl-launch/dispatch)
   (:export #:char-display-char
            #:battery-status
@@ -37,3 +38,7 @@
 
 (defun home (path)
   (subpathname (user-homedir-pathname) path))
+
+(defun dato (&rest args)
+  (format t "~A~%" (local-time:format-timestring nil (now)))
+  (success))
