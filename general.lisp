@@ -30,7 +30,6 @@
            #:continue-chrome
 
            #:suma
-           #:lisp
            #:battery
            #:trackpoint
            #:xdev-id
@@ -99,8 +98,14 @@
     (run/nil `(wine ,(home ".wine/drive_c/Program Files/SumatraPDF/SumatraPDF.exe") ,@args) :on-error nil)
     (success))
 
-  (defun lisp (&rest args)
-    (run/i `(rlwrap "-s" "1000000" "-c" "-b" "(){}[].,=&^%$#@\\;|" "sbcl" ,@args)))
+  (defun meh (&rest args)
+    (format t "~S~%" args)
+    (let* ((list-args (append '("sbcl") args))
+           (string-args (format nil "~{~a~^ ~}" list-args)))
+      (format t "~S~%" list-args)
+      (format t "~S~%" string-args)
+      (run/i `(nix-shell --pure --command ,string-args))
+      (success)))
 
   (defun battery ()
     (format t "~A" (battery-status))
