@@ -30,6 +30,7 @@
            #:continue-chrome
 
            #:suma
+           #:lisp-lisp
            #:battery
            #:trackpoint
            #:xdev-id
@@ -98,12 +99,16 @@
     (run/nil `(wine ,(home ".wine/drive_c/Program Files/SumatraPDF/SumatraPDF.exe") ,@args) :on-error nil)
     (success))
 
-  (defun meh (&rest args)
-    (format t "~S~%" args)
-    (let* ((list-args (append '("sbcl") args))
-           (string-args (format nil "~{~a~^ ~}" list-args)))
-      (format t "~S~%" list-args)
-      (format t "~S~%" string-args)
+  ;; Farenda,C<(Bo:
+  ;; - akiri loko de programo
+  (defun lisp-lisp (&rest args)
+    (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
+           (list-args (append '("sbcl") arguments))
+           (string-args (format nil "~{~a~^ ~}" list-args))
+           (dir (home "hejmo/fkd/sxelo/lisp")))
+      ;; (format t "~A~%" (uiop:argv0))
+      ;; (format t "~A~%" (uiop:raw-command-line-arguments))
+      (uiop:chdir dir)
       (run/i `(nix-shell --pure --command ,string-args))
       (success)))
 
