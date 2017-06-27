@@ -102,8 +102,7 @@
     (run/nil `(wine ,(home ".wine/drive_c/Program Files/SumatraPDF/SumatraPDF.exe") ,@args) :on-error nil)
     (success))
 
-  ;; FARENDA,C,(BO:
-  ;; - akiri absolutan dosierindikon de programo
+  ;; farenda,C<(Bo: kio estas la egalvoloro de ${BASH_SOURCE[0]} en Komuna Lispo?
   (defun lisp-lisp (&rest args)
     (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
            (list-arguments (append '("sbcl") arguments))
@@ -119,9 +118,9 @@
            (dest (format nil "mv $f ~A" dir)))
       (flet ((scrot (file dest &rest args)
                (run/i `(scrot ,@args ,file -e ,dest))))
-        (cond ((string= mode "plena") (scrot file dest))
-              ((string= mode "parta") (scrot file dest -s))
-              (t (format t "Error: invalid mode~%")))
+        (match mode
+          ((ppcre "plena") (scrot file dest))
+          ((ppcre "parta") (scrot file dest -s)))
         (format t "~A/~A~%" dir file)
         (run/i `(xclip -selection clipboard ,(format nil "~A/~A" dir file)))
         (success))))
