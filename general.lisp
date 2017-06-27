@@ -99,15 +99,14 @@
     (run/nil `(wine ,(home ".wine/drive_c/Program Files/SumatraPDF/SumatraPDF.exe") ,@args) :on-error nil)
     (success))
 
-  ;; Farenda,C<(Bo:
-  ;; - akiri loko de programo
+  ;; FARENDA,C,(BO:
+  ;; - akiri absolutan dosierindikon de programo
   (defun lisp-lisp (&rest args)
     (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
            (list-args (append '("sbcl") arguments))
            (string-args (format nil "~{~a~^ ~}" list-args))
-           (dir (home "hejmo/fkd/sxelo/lisp")))
-      ;; (format t "~A~%" (uiop:argv0))
-      ;; (format t "~A~%" (uiop:raw-command-line-arguments))
+           (dir (home "hejmo/fkd/lispo/cl-scripts")))
+      ;; (uiop:chdir *default-pathname-defaults*)
       (uiop:chdir dir)
       (run/i `(nix-shell --pure --command ,string-args))
       (success)))
