@@ -168,10 +168,15 @@
     (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
            (list-arguments (append '("sbcl") arguments))
            (string-arguments (format nil "~{~a~^ ~}" list-arguments)))
-      (uiop:chdir *cl-scripts-dir*)
-      (format t "*default-pathname-defaults*: ~A~%" *default-pathname-defaults*)
-      (format t "(uiop:argv0): ~A~%" (uiop:argv0))
-      (format t "(uiop:ensure-absolute-pathname (uiop:argv0)): ~A~%" (uiop:ensure-absolute-pathname (uiop:argv0)))
+      ;; (format t "0: ~A~%" (uiop:argv0))
+      ;; (format t "1: ~A~%" (ensure-absolute-pathname (argv0) #'getcwd))
+      ;; (format t "2: ~A~%" (pathname-directory-pathname (resolve-absolute-location (ensure-absolute-pathname (argv0) #'getcwd))))
+      ;; (format t "3: ~A~%" (resolve-absolute-location (ensure-absolute-pathname (argv0) #'getcwd)))
+      ;; (format t "4: ~A~%" (truenamize (ensure-absolute-pathname (argv0) #'getcwd)))
+      ;; (format t "5: ~A~%" (pathname-directory-pathname (resolve-absolute-location (truenamize (ensure-absolute-pathname (argv0) #'getcwd)))))
+
+      (chdir (pathname-directory-pathname (resolve-absolute-location (ensure-absolute-pathname (argv0) #'getcwd))))
+
       (run/i `(nix-shell --pure --command ,string-arguments))
       (success)))
 
