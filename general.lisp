@@ -164,12 +164,14 @@
          (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
         (_ (success)))))
 
-    ;; farenda,C<(Bo: kio estas la egalvoloro de ${BASH_SOURCE[0]} en Komuna Lispo?
   (defun lisp-lisp (&rest args)
     (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
            (list-arguments (append '("sbcl") arguments))
            (string-arguments (format nil "~{~a~^ ~}" list-arguments)))
       (uiop:chdir *cl-scripts-dir*)
+      (format t "*default-pathname-defaults*: ~A~%" *default-pathname-defaults*)
+      (format t "(uiop:argv0): ~A~%" (uiop:argv0))
+      (format t "(uiop:ensure-absolute-pathname (uiop:argv0)): ~A~%" (uiop:ensure-absolute-pathname (uiop:argv0)))
       (run/i `(nix-shell --pure --command ,string-arguments))
       (success)))
 
