@@ -183,7 +183,8 @@
                (run/i `(scrot ,@args ,file -e ,dest))))
         (match mode
           ((ppcre "(full|plena)") (scrot file dest))
-          ((ppcre "(region|parta)") (scrot file dest "-s")))
+          ((ppcre "(region|parta)") (scrot file dest "-s"))
+          (_ (err (format nil "invalid mode ~A~%" mode))))
         (run `(xclip -selection clipboard) :input (list image))
         (success)))))
 
