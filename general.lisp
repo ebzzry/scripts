@@ -168,6 +168,7 @@
     (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
            (list-arguments (append '("sbcl") arguments))
            (string-arguments (format nil "~{~a~^ ~}" list-arguments))
+           ;; This is not portable!
            (dir (pathname-directory-pathname (run/ss `(readlink -f ,(run/ss `(which ,(argv0))))))))
       (chdir dir)
       (run/i `(nix-shell --pure --command ,string-arguments))

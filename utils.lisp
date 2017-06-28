@@ -38,7 +38,3 @@
 
 (defun home (path)
   (subpathname (user-homedir-pathname) path))
-
-(defun dato (&rest args)
-  (format t "~A~%" (local-time:format-timestring nil (now)))
-  (success))
