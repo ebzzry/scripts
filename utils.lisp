@@ -9,7 +9,9 @@
   (:export #:char-display-char
            #:battery-status
            #:wine
-           #:home))
+           #:home
+
+           #:err))
 
 (in-package :cl-scripts/utils)
 
@@ -38,3 +40,6 @@
 
 (defun home (path)
   (subpathname (user-homedir-pathname) path))
+
+(defun err (format)
+  (die 1 (format t "Error: ~A" format)))
