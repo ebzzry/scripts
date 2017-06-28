@@ -167,23 +167,9 @@
   (defun lisp-lisp (&rest args)
     (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
            (list-arguments (append '("sbcl") arguments))
-           (string-arguments (format nil "~{~a~^ ~}" list-arguments)))
-
-      (ignore-errors
-        (format t "0: ~A~%" (uiop:argv0))
-        (format t "1: ~A~%" (ensure-absolute-pathname (argv0) #'getcwd))
-        (format t "2: ~A~%" (pathname-directory-pathname (resolve-absolute-location (ensure-absolute-pathname (argv0) #'getcwd))))
-        (format t "3: ~A~%" (resolve-absolute-location (ensure-absolute-pathname (argv0) #'getcwd)))
-        (format t "4: ~A~%" (truenamize (ensure-absolute-pathname (argv0) #'getcwd)))
-        (format t "5: ~A~%" (pathname-directory-pathname (resolve-absolute-location (truenamize (ensure-absolute-pathname (argv0) #'getcwd)))))
-        (format t "6: ~A~%" (truename (pathname-directory-pathname (ensure-absolute-pathname (argv0) #'getcwd))))
-        (format t "7: ~A~%" (truename (ensure-absolute-pathname (argv0) #'getcwd)))
-        (format t "8: ~A~%" (truename (resolve-absolute-location (ensure-absolute-pathname (argv0) #'getcwd))))
-        (format t "9: ~A~%" (truename (argv0)))
-        (format t "A: ~A~%" (truename (ensure-absolute-pathname (argv0))))
-        (format t "B: ~A~%" (truenamize (ensure-absolute-pathname (argv0) #'getcwd))))
-
-      (chdir *cl-scripts-dir*)
+           (string-arguments (format nil "~{~a~^ ~}" list-arguments))
+           (dir (pathname-directory-pathname (run/ss `(readlink -f ,(run/ss `(which ,(argv0))))))))
+      (chdir dir)
       (run/i `(nix-shell --pure --command ,string-arguments))
       (success)))
 
