@@ -45,7 +45,8 @@
 
 (in-package :cl-scripts/general)
 
-(defvar *cl-scripts-home* (home "hejmo/fkd/lispo/cl-scripts"))
+(defvar *cl-scripts-dir* (home "hejmo/fkd/lispo/cl-scripts"))
+(defvar *screenshots-dir* (home "hejmo/elsx/bil/ekrankopioj"))
 
 (exporting-definitions
   (defvar *num-mode* "[31m")
@@ -168,12 +169,12 @@
     (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
            (list-arguments (append '("sbcl") arguments))
            (string-arguments (format nil "~{~a~^ ~}" list-arguments)))
-      (uiop:chdir *cl-scripts-home*)
+      (uiop:chdir *cl-scripts-dir*)
       (run/i `(nix-shell --pure --command ,string-arguments))
       (success)))
 
   (defun screenshot (mode)
-    (let* ((dir (home "hejmo/elsx/bil/ekrankopioj"))
+    (let* ((dir *screenshots-dir*)
            (file (format nil "~A.png" (local-time:format-timestring nil (now))))
            (dest (format nil "mv $f ~A" dir))
            (image (format nil "~A/~A" dir file)))
@@ -182,8 +183,7 @@
         (match mode
           ((ppcre "(full|plena)") (scrot file dest))
           ((ppcre "(region|parta)") (scrot file dest "-s")))
-        (run/i `(pipe (echo -n ,image)
-                      (xclip -selection clipboard)))
+        (run `(xclip -selection clipboard) :input (list image))
         (success)))))
 
 (register-commands :cl-scripts/general)
