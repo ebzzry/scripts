@@ -18,35 +18,24 @@
            #:*normal-mode*
            #:*num-mode*
 
-           #:display-ascii-hex-table
+           #:ascii-hex-table
            #:ascii
-           #:display-ascii-oct-table
+           #:ascii-oct-table
+
            #:rot13
-           #:xrsync
-
-           #:run-chrome
-           #:chrome
-           #:kill-chrome
-           #:stop-chrome
-           #:continue-chrome
-
-           #:suma
            #:battery
            #:trackpoint
            #:xdev-id
            #:xdev
            #:xmap
            #:xmr
-           #:askpass
            #:xxx
 
-           #:lisp-lisp
-           #:screenshot))
+           #:psg
+           #:psk
+           #:psk!))
 
 (in-package :cl-scripts/general)
-
-(defvar *cl-scripts-dir* (home "hejmo/fkd/lispo/cl-scripts"))
-(defvar *screenshots-dir* (home "hejmo/elsx/bil/ekrankopioj"))
 
 (exporting-definitions
   (defvar *num-mode* "[31m")
@@ -54,7 +43,7 @@
   (defvar *char-mode* "[0m[1m")
   (defvar *normal-mode* "[0m")
 
-  (defun display-ascii-hex-table ()
+  (defun ascii-hex-table ()
     (loop for i from 32 to 255
           do (format t "~A~X~A:~A~A~A~:[ ~;~%~]"
                      *num-mode* i
@@ -64,9 +53,9 @@
                      (zerop (mod (1+ i) 16))))
     (success))
 
-  (defun ascii () (display-ascii-hex-table))
+  (defun ascii () (ascii-hex-table))
 
-  (defun display-ascii-oct-table ()
+  (defun ascii-oct-table ()
     (loop for i from 32 to 255
           do (format t "~A~3O~A~A~A~:[ ~;~%~]"
                      *num-mode* i
@@ -80,37 +69,8 @@
     (run/i `(tr "[a-zA-Z]" "[n-za-mN-ZA-M]" ,@args))
     (success))
 
-  (defun xrsync (&rest args)
-    (run/i `(rsync "-rlptgoDHSx" ,@args))
-    (success))
-
-  (defun run-chrome (args)
-    (run/i `(google-chrome-stable ,@args)))
-
-  (defun chrome (&rest args)
-    (run-chrome args))
-
-  (defun kill-chrome (&rest args)
-    (inferior-shell:run
-     `(killall ,@args chromium-browser chromium google-chrome chrome)
-     :output :interactive :input :interactive :error-output nil :on-error nil))
-
-  (defun stop-chrome ()
-    (kill-chrome "-STOP"))
-
-  (defun continue-chrome ()
-    (kill-chrome "-CONT"))
-
-  (defun suma (&rest args)
-    (run/nil `(wine ,(home ".wine/drive_c/Program Files/SumatraPDF/SumatraPDF.exe") ,@args) :on-error nil)
-    (success))
-
   (defun battery ()
     (format t "~A" (battery-status))
-    (values))
-
-  (defun askpass ()
-    (run/i `(git gui--askpass))
     (values))
 
   (defun trackpoint (arg)
@@ -164,28 +124,16 @@
          (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
         (_ (success)))))
 
-  (defun lisp-lisp (&rest args)
-    (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
-           (list-arguments (append '("sbcl") arguments))
-           (string-arguments (format nil "~{~a~^ ~}" list-arguments))
-           ;; This is not portable!
-           (dir (pathname-directory-pathname (run/ss `(readlink -f ,(run/ss `(which ,(argv0))))))))
-      (chdir dir)
-      (run/i `(nix-shell --pure --command ,string-arguments))
-      (success)))
+  (defun psg (&rest args)
+    (run/i `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args))
+    (success))
 
-  (defun screenshot (mode)
-    (let* ((dir *screenshots-dir*)
-           (file (format nil "~A.png" (local-time:format-timestring nil (now))))
-           (dest (format nil "mv $f ~A" dir))
-           (image (format nil "~A/~A" dir file)))
-      (flet ((scrot (file dest &rest args)
-               (run/i `(scrot ,@args ,file -e ,dest))))
-        (match mode
-          ((ppcre "(full|plena)") (scrot file dest))
-          ((ppcre "(region|parta)") (scrot file dest "-s"))
-          (_ (err (format nil "invalid mode ~A~%" mode))))
-        (run `(xclip -selection clipboard) :input (list image))
-        (success)))))
+  (defun psk (&rest args)
+    (let ((numbers (mapcar #'string-first (psg-lines (last args)))))
+      (loop :for number :in numbers :do (run/i `(kill ,@(butlast args) ,number))))
+    (success))
+
+  (defun psk! (&rest args)
+    (apply-args-1 'psk args :options '("-9"))))
 
 (register-commands :cl-scripts/general)
