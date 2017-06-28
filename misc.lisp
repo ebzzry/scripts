@@ -16,13 +16,21 @@
    #+sbcl (sb-posix:getuid)
    #-sbcl (error "no getuid")) ;; use iolib?
 
- (defun create-symlinks ()
+ ;; (defun create-symlinks ()
+ ;;   (let ((binarch (resolve-absolute-location `(,(getenv "BINDIR")) :ensure-directory t)))
+ ;;     (with-current-directory (binarch)
+ ;;       (dolist (i (cl-launch/dispatch:all-entry-names))
+ ;;         (unless (file-exists-p i)
+ ;;           (format t "linking file ~A~%" i)
+ ;;           (run `(ln -s cl-scripts ,i))))))
+ ;;   (success))
+
+  (defun create-symlinks (src)
    (let ((binarch (resolve-absolute-location `(,(getenv "BINDIR")) :ensure-directory t)))
      (with-current-directory (binarch)
        (dolist (i (cl-launch/dispatch:all-entry-names))
-         (unless (file-exists-p i)
-           (format t "linking file ~A~%" i)
-           (run `(ln -s cl-scripts ,i))))))
+         (format t "linking file ~A~%" i)
+         (run `(ln -sf ,src ,i)))))
    (success))
 
  (defun help ()
