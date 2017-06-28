@@ -10,8 +10,11 @@
            #:battery-status
            #:wine
            #:home
-
-           #:err))
+           #:err
+           #:apply-args
+           #:apply-args-1
+           #:string-first
+           #:psg-lines))
 
 (in-package :cl-scripts/utils)
 
@@ -43,3 +46,16 @@
 
 (defun err (format)
   (die 1 (format t "Error: ~A" format)))
+
+(defun apply-args (function options args)
+  (apply function (append (list options) args)))
+
+(defun apply-args-1 (function args &key (options nil))
+  (apply function (append options args)))
+
+(defun string-first (string)
+  (let* ((space (position #\  string :test #'equal)))
+    (subseq string 0 space)))
+
+(defun psg-lines (&rest args)
+    (run/lines `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args)))
