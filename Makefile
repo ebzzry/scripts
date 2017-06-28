@@ -11,8 +11,8 @@ $(NAME):
 	$(CL) --output $(NAME) --dump ! --lisp sbcl --quicklisp --dispatch-system $(NAME)/touchpad --system $(NAME)
 
 install: $(NAME)
-	ln -sf $(SCRIPT) $(BINARY)
-	$(SCRIPT) create-symlinks $(SCRIPT)
+	cp -f $(SCRIPT) $(BINARY)
+	$(SCRIPT) create-symlinks $(NAME)
 
 clean:
 	rm -f $(NAME)
