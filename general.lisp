@@ -31,7 +31,6 @@
            #:continue-chrome
 
            #:suma
-           #:lisp-lisp
            #:battery
            #:trackpoint
            #:xdev-id
@@ -39,7 +38,10 @@
            #:xmap
            #:xmr
            #:askpass
-           #:xxx))
+           #:xxx
+
+           #:lisp-lisp
+           #:screenshot))
 
 (in-package :cl-scripts/general)
 
@@ -102,29 +104,6 @@
     (run/nil `(wine ,(home ".wine/drive_c/Program Files/SumatraPDF/SumatraPDF.exe") ,@args) :on-error nil)
     (success))
 
-  ;; farenda,C<(Bo: kio estas la egalvoloro de ${BASH_SOURCE[0]} en Komuna Lispo?
-  (defun lisp-lisp (&rest args)
-    (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
-           (list-arguments (append '("sbcl") arguments))
-           (string-arguments (format nil "~{~a~^ ~}" list-arguments)))
-      ;; (uiop:chdir *default-pathname-defaults*)
-      (uiop:chdir *cl-scripts-home*)
-      (run/i `(nix-shell --pure --command ,string-arguments))
-      (success)))
-
-  (defun screenshot (mode)
-    (let* ((dir (home "hejmo/elsx/bil/ekrankopioj"))
-           (file (format nil "~A.png" (local-time:format-timestring nil (now))))
-           (dest (format nil "mv $f ~A" dir)))
-      (flet ((scrot (file dest &rest args)
-               (run/i `(scrot ,@args ,file -e ,dest))))
-        (match mode
-          ((ppcre "(full|plena)") (scrot file dest))
-          ((ppcre "(region|parta)") (scrot file dest "-s")))
-        (format t "~A/~A~%" dir file)
-        (run/i `(xclip -selection clipboard ,(format nil "~A/~A" dir file)))
-        (success))))
-
   (defun battery ()
     (format t "~A" (battery-status))
     (values))
@@ -175,12 +154,36 @@
     (let ((hostname (uiop:hostname))
           (xdev-args '("pointer" "set-button-map" "1" "2" "3" "5" "4")))
       (xmr "Kinesis Advantage PRO MPC/USB Keyboard")
-      (cond ((string= hostname "vulpo")
-             (cl-scripts/touchpad:disable)
-             (trackpoint "TPPS/2 IBM TrackPoint")
-             (apply #'xdev (append '("Logitech USB Receiver") xdev-args)))
-            ((string= hostname "pando")
-             (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
-            (t (success))))))
+      (match hostname
+        ((ppcre "vulpo")
+         (cl-scripts/touchpad:disable)
+         (trackpoint "TPPS/2 IBM TrackPoint")
+         (apply #'xdev (append '("Logitech USB Receiver") xdev-args)))
+        ((ppcre "pando")
+         (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
+        (_ (success)))))
+
+    ;; farenda,C<(Bo: kio estas la egalvoloro de ${BASH_SOURCE[0]} en Komuna Lispo?
+  (defun lisp-lisp (&rest args)
+    (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
+           (list-arguments (append '("sbcl") arguments))
+           (string-arguments (format nil "~{~a~^ ~}" list-arguments)))
+      (uiop:chdir *cl-scripts-home*)
+      (run/i `(nix-shell --pure --command ,string-arguments))
+      (success)))
+
+  (defun screenshot (mode)
+    (let* ((dir (home "hejmo/elsx/bil/ekrankopioj"))
+           (file (format nil "~A.png" (local-time:format-timestring nil (now))))
+           (dest (format nil "mv $f ~A" dir))
+           (image (format nil "~A/~A" dir file)))
+      (flet ((scrot (file dest &rest args)
+               (run/i `(scrot ,@args ,file -e ,dest))))
+        (match mode
+          ((ppcre "(full|plena)") (scrot file dest))
+          ((ppcre "(region|parta)") (scrot file dest "-s")))
+        (run/i `(pipe (echo -n ,image)
+                      (xclip -selection clipboard)))
+        (success)))))
 
 (register-commands :cl-scripts/general)
