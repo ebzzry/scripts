@@ -14,7 +14,8 @@
            #:apply-args
            #:apply-args-1
            #:string-first
-           #:psg-lines))
+           #:psg-lines
+           #:find-binary))
 
 (in-package :cl-scripts/utils)
 
@@ -59,3 +60,6 @@
 
 (defun psg-lines (&rest args)
     (run/lines `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args)))
+
+(defun find-binary (binary)
+  (run/ss `(readlink -f ,(run/ss `(which ,binary)))))
