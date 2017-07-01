@@ -18,7 +18,8 @@
 (in-package :cl-scripts/nix)
 
 (defparameter +hostname+ (hostname))
-(defparameter +repository+ "https://github.com/nixos/nixpkgs.git")
+(defparameter +http-repository+ "https://github.com/NixOS/nixpkgs.git")
+(defparameter +git-repository+ "git@github.com:NixOS/nixpkgs.git")
 (defparameter +base-dir+ (subpathname (user-homedir-pathname) ".nix/"))
 
 (defun base-path (path)
@@ -41,7 +42,7 @@
   (ensure-dotnix)
   (unless (file-exists-p +default-nix+)
     (with-current-directory (+base-dir+)
-      (run/i `(git "clone" ,+repository+)))))
+      (run/i `(git "clone" ,+http-repository+)))))
 
 (defun cdx (&rest args)
   (when (>= (length args) 1)
