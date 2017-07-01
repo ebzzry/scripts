@@ -45,8 +45,8 @@
 (defun home (path)
   (subpathname (user-homedir-pathname) path))
 
-(defun err (format)
-  (die 1 (format t "Error: ~A" format)))
+(defun err (message)
+  (die 1 (format t "Error: ~A~%" message)))
 
 (defun apply-args (function options args)
   (apply function (append (list options) args)))
