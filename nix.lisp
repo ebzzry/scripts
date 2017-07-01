@@ -35,12 +35,12 @@
 (defparameter +index-installed+ (index-path "installed"))
 
 (defun cdx (&rest args)
-    (when (>= (length args) 1)
-      (let ((directory (first args))
-            (arguments (rest args)))
-        (chdir directory)
-        (when arguments (run/i arguments))
-        (success))))
+  (when (>= (length args) 1)
+    (let ((directory (first args))
+          (arguments (rest args)))
+      (chdir directory)
+      (when arguments (run/i arguments))
+      (success))))
 
 (exporting-definitions
   (defun nix (&rest args)
@@ -50,9 +50,9 @@
                    (a (rest args)))
                (match op
                  ((ppcre "^(cd)$")
-                  (cdx `(,*nixpkgs* ,a)))
+                  (apply #'cdx `(,+nixpkgs+ ,@a)))
                  ((ppcre "^(out-path|o-p)$")
-                  (match (run/ss `(nix-env "--query" "--out-path" ,(first a)))
+                  (match (run/ss `(,self "query" "--out-path" ,(first a)))
                     ((ppcre ".*? (/.*)" path) (format t "~A~%" path))))
                  ((ppcre "^(cd-out-path|c-o-p)$")
                   (let* ((dir (run/ss `(,self "out-path" ,(first a))))
