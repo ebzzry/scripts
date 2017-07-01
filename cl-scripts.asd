@@ -12,4 +12,5 @@
                "cl-scripts/touchpad"
                "cl-scripts/general"
                "cl-scripts/apps"
-               "cl-scripts/unix"))
+               "cl-scripts/unix"
+               "cl-scripts/nix"))
