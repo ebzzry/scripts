@@ -248,7 +248,7 @@
                  (loop :for command :in '("channel-update" "root-channel-update" "upstream-update" "build-index")
                     :do (run/i `(,self ,command))))
                 ((ppcre "^(complete-upgrade|c-U)$")
-                 (loop :for command :in '("complete-update" "rebuild-switch-upgrade")
+                 (loop :for command :in '("complete-update" "upstream-upgrade" "rebuild-switch-upgrade")
                     :do (run/i `(,self ,command))))
                 ((ppcre "^(complete-search|c-s)$")
                  (loop :for command :in '("search-available" "upstream-search-available")
