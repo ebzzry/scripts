@@ -76,10 +76,8 @@
  (defun l1 (&rest args)
    (apply-args-1 'l args :options '("-1")))
  (defun lv (&rest args)
-   (let ((arguments (if (null args) '("*") args)))
-     (run/i `(pipe (l ,@args)
-                   (less)))
-     (success)))
+   (run/i `(pipe (l ,@args) (less)))
+   (success))
 
  (defun g (&rest args)
    (run/i `(egrep "--color" ,@args))
