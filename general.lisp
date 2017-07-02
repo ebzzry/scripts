@@ -34,7 +34,7 @@
            #:psg
            #:psk
            #:psk!
-           #:sudo))
+           #:s))
 
 (in-package :cl-scripts/general)
 
