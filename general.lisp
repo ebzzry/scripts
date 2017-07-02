@@ -33,7 +33,8 @@
 
            #:psg
            #:psk
-           #:psk!))
+           #:psk!
+           #:sudo))
 
 (in-package :cl-scripts/general)
 
@@ -134,6 +135,9 @@
     (success))
 
   (defun psk! (&rest args)
-    (apply-args-1 'psk args :options '("-9"))))
+    (apply-args-1 'psk args :options '("-9")))
+
+  (defun s (&rest args)
+    (run `(sudo ,@args) :error-output nil :on-error nil)))
 
 (register-commands :cl-scripts/general)
