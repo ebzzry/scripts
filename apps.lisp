@@ -16,19 +16,21 @@
   (:export #:xrsync
            #:ra
            #:raz
-           #:run-chrome
-           #:chrome
+
+           #:run-chrome-stable
+           #:run-chrome-beta
+           #:chrome-stable
+           #:chrome-beta
            #:kill-chrome
            #:stop-chrome
+           #:continue-chrome
+
            #:suma
            #:askpass
-
            #:lisp
-           #:lisp-1
-
            #:screenshot
-
-           #:sg2e-lisp))
+           #:sg2e
+           #:sg2eb))
 
 (in-package :cl-scripts/apps)
 
