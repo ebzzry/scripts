@@ -17,10 +17,8 @@
            #:ra
            #:raz
 
-           #:run-chrome-stable
-           #:run-chrome-beta
+           #:chrome
            #:chrome-stable
-           #:chrome-beta
            #:kill-chrome
            #:stop-chrome
            #:continue-chrome
@@ -47,17 +45,11 @@
  (defun raz (&rest args)
    (apply 'ra args))
 
- (defun run-chrome-stable (args)
-   (run/i `(google-chrome-stable ,@args)))
-
- (defun run-chrome-beta (args)
+ (defun chrome (&rest args)
    (run/i `(google-chrome-beta ,@args)))
 
  (defun chrome-stable (&rest args)
-   (run-chrome-stable args))
-
- (defun chrome-beta (&rest args)
-   (run-chrome-stable args))
+   (run/i `(google-chrome-stable ,@args)))
 
  (defun kill-chrome (&rest args)
    (run `(killall ,@args chromium-browser chromium google-chrome chrome)
