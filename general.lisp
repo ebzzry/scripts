@@ -1,5 +1,5 @@
 (uiop:define-package
-    :cl-scripts/general
+    :scripts/general
     (:use
      :cl
      :fare-utils
@@ -11,8 +11,8 @@
      :cl-ppcre
      :local-time
      :cl-launch/dispatch
-     :cl-scripts/misc
-     :cl-scripts/utils)
+     :scripts/misc
+     :scripts/utils)
   (:export #:*char-mode*
            #:*colon-mode*
            #:*normal-mode*
@@ -36,7 +36,7 @@
            #:psk!
            #:s))
 
-(in-package :cl-scripts/general)
+(in-package :scripts/general)
 
 (exporting-definitions
   (defvar *num-mode* "[31m")
@@ -118,7 +118,7 @@
       (xmr "Kinesis Advantage PRO MPC/USB Keyboard")
       (match hostname
         ((ppcre "vulpo")
-         (cl-scripts/touchpad:disable)
+         (scripts/touchpad:disable)
          (trackpoint "TPPS/2 IBM TrackPoint")
          (apply #'xdev (append '("Logitech USB Receiver") xdev-args)))
         ((ppcre "pando")
@@ -140,4 +140,4 @@
   (defun s (&rest args)
     (run `(sudo ,@args) :error-output nil :on-error nil)))
 
-(register-commands :cl-scripts/general)
+(register-commands :scripts/general)

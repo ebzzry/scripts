@@ -1,5 +1,5 @@
 (uiop:define-package
-    :cl-scripts/apps
+    :scripts/apps
     (:use
      :cl
      :fare-utils
@@ -11,8 +11,8 @@
      :cl-ppcre
      :local-time
      :cl-launch/dispatch
-     :cl-scripts/misc
-     :cl-scripts/utils)
+     :scripts/misc
+     :scripts/utils)
   (:export #:xrsync
            #:ra
            #:raz
@@ -30,7 +30,7 @@
            #:sg2e
            #:sg2eb))
 
-(in-package :cl-scripts/apps)
+(in-package :scripts/apps)
 
 (defvar *screenshots-dir* (home "hejmo/elsx/bil/ekrankopioj"))
 
@@ -101,4 +101,4 @@
    (success)))
 
 
-(register-commands :cl-scripts/apps)
+(register-commands :scripts/apps)

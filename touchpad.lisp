@@ -1,4 +1,4 @@
-":" ; exec cl-launch -Q -sm cl-scripts/touchpad "$0" "$@"
+":" ; exec cl-launch -Q -sm scripts/touchpad "$0" "$@"
 ;; -*- lisp -*-
 ;; Based on https://wiki.archlinux.org/index.php/Touchpad_Synaptics#Software_toggle
 ;; Use the UI preferences to add a keyboard shortcut that invokes this script.
@@ -8,7 +8,7 @@
 ;; Or use make-multi.sh to create a multi-call binary that includes touchpad support.
 
 (uiop:define-package
-    :cl-scripts/touchpad
+    :scripts/touchpad
     (:use :cl
           :fare-utils
           :uiop
@@ -24,7 +24,7 @@
            #:disable
            #:enable))
 
-(in-package :cl-scripts/touchpad)
+(in-package :scripts/touchpad)
 
 (defun get-id ()
   (dolist (line (run/lines '(xinput list)))
@@ -54,14 +54,14 @@
 
 (defun help (&optional (output *standard-output*))
   (format output "touchpad functions: ~{~(~A~)~^ ~}~%"
-          (package-functions :cl-scripts/touchpad))
+          (package-functions :scripts/touchpad))
   (success))
 
 (defun main (argv) ;; TODO: use command-line-arguments, or CLON
   (cond
     ((null argv) (toggle))
     ((eql (first-char (first argv)) #\() (eval (first argv)))
-    (t (if-let (fun (package-function :cl-scripts/touchpad
+    (t (if-let (fun (package-function :scripts/touchpad
                                       (standard-case-symbol-name (first argv))))
            (apply 'run-command fun (rest argv))
          (progn

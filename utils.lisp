@@ -1,4 +1,4 @@
-(uiop:define-package :cl-scripts/utils
+(uiop:define-package :scripts/utils
     (:use :cl
           :uiop
           :inferior-shell
@@ -17,7 +17,7 @@
            #:psg-lines
            #:find-binary))
 
-(in-package :cl-scripts/utils)
+(in-package :scripts/utils)
 
 (defun char-display-char (c)
   (if (or (member c '(127 155))

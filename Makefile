@@ -1,4 +1,4 @@
-NAME=cl-scripts
+NAME=scripts
 BINARY=$(HOME)/bin/$(NAME)
 SCRIPT=$(PWD)/$(NAME)
 CL=cl-launch
