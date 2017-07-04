@@ -1,7 +1,7 @@
 #-asdf3.1 (error "ASDF 3.1 or bust!")
 
 (defsystem "scripts"
-  :version "0.1"
+  :version "0.0.1"
   :description "Common Lisp scripts"
   :license "MIT"
   :author "Rommel Martinez"
