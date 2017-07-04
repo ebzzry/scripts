@@ -1,5 +1,5 @@
 (uiop:define-package
-    :cl-scripts/nix
+    :scripts/nix
     (:use
      :cl
      :fare-utils
@@ -11,11 +11,11 @@
      :cl-ppcre
      :local-time
      :cl-launch/dispatch
-     :cl-scripts/misc
-     :cl-scripts/utils)
+     :scripts/misc
+     :scripts/utils)
   (:export #:nix))
 
-(in-package :cl-scripts/nix)
+(in-package :scripts/nix)
 
 (defparameter +hostname+ (hostname))
 (defparameter +http-repository+ "https://github.com/NixOS/nixpkgs.git")
@@ -279,4 +279,4 @@
                  (run/i `(nix-prefetch-cvs ,@args)))))))
    (success)))
 
-(register-commands :cl-scripts/nix)
+(register-commands :scripts/nix)

@@ -1,5 +1,5 @@
 (uiop:define-package
-    :cl-scripts/unix
+    :scripts/unix
     (:use
      :cl
      :fare-utils
@@ -11,8 +11,8 @@
      :cl-ppcre
      :local-time
      :cl-launch/dispatch
-     :cl-scripts/misc
-     :cl-scripts/utils)
+     :scripts/misc
+     :scripts/utils)
   (:export #:x
            #:c
            #:v
@@ -34,7 +34,7 @@
            #:g
            #:gi))
 
-(in-package :cl-scripts/unix)
+(in-package :scripts/unix)
 
 (exporting-definitions
  (defun x (&rest args)
@@ -85,4 +85,4 @@
  (defun gi (&rest args)
    (apply-args-1 'g args :options '("-i"))))
 
-(register-commands :cl-scripts/unix)
+(register-commands :scripts/unix)
