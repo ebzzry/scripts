@@ -53,7 +53,8 @@
 
  (defun kill-chrome (&rest args)
    (run `(killall ,@args chromium-browser chromium google-chrome chrome)
-    :output :interactive :input :interactive :error-output nil :on-error nil))
+        :output :interactive :input :interactive :error-output nil :on-error nil)
+   (success))
 
  (defun stop-chrome ()
    (kill-chrome "-STOP"))
