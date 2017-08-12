@@ -244,13 +244,13 @@
                 ((ppcre "^(build-index|index)$")
                  (loop :for command :in '("index-available" "upstream-index-available" "index-installed")
                     :do (run/i `(,self ,command))))
-                ((ppcre "^(complete-update|c-u)$")
+                ((ppcre "^(full-update|f-u)$")
                  (loop :for command :in '("channel-update" "root-channel-update" "upstream-update" "build-index")
                     :do (run/i `(,self ,command))))
-                ((ppcre "^(complete-upgrade|c-U)$")
-                 (loop :for command :in '("complete-update" "upstream-upgrade" "rebuild-switch-upgrade")
+                ((ppcre "^(full-upgrade|f-U)$")
+                 (loop :for command :in '("full-update" "upstream-upgrade" "rebuild-switch-upgrade")
                     :do (run/i `(,self ,command))))
-                ((ppcre "^(complete-search|c-s)$")
+                ((ppcre "^(full-search|c-s)$")
                  (loop :for command :in '("search-available" "upstream-search-available")
                     :do (run/i `(,self ,command ,@a))))
 
@@ -261,7 +261,7 @@
                  (run/i `(,self "pure-shell" "--run" "make" ,@a)))
 
                 ;; prefetch
-                ((ppcre "^(fetch-url|f-u)$")
+                ((ppcre "^(fetch-url)$")
                  (run/i `(nix-prefetch-url ,@a)))
                 ((ppcre "^(fetch-file|f-f)$")
                  (run/i `(,self "fetch-url" ,(format nil "file://" (first a)))))
