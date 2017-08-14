@@ -65,6 +65,14 @@
  (defun continue-chrome ()
    (kill-chrome "-CONT"))
 
+ (defun tele (&rest args)
+   (run/i `(telegram-desktop ,@args)))
+
+ (defun kill-tele (&rest args)
+   (run `(killall ,@args telegram-desktop)
+        :output :interactive :input :interactive :error-output nil :on-error nil)
+   (success))
+
  (defun suma (&rest args)
    (run/nil `(wine ,(home ".wine/drive_c/Program Files/SumatraPDF/SumatraPDF.exe") ,@args) :on-error nil)
    (success))
