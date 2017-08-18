@@ -21,12 +21,10 @@
              #:kill-chrome
              #:stop-chrome
              #:continue-chrome
-
+             #:tele
+             #:kill-tele
              #:suma
              #:term
-
-             #:kill-apps
-
              #:askpass
              #:lisp0
              #:screenshot
@@ -80,10 +78,6 @@
  (defun term (&rest args)
    (run/nil `(terminator ,@args) :on-error nil)
    (success))
-
- (defun kill-apps ()
-   (loop :for app :in '("chrome" "viber" "telegram")
-      :do (run `(killall "-9" ,app))))
 
  (defun askpass ()
    (run/i `(git gui--askpass))
