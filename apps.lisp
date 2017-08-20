@@ -41,10 +41,13 @@
    (success))
 
  (defun ra (&rest args)
-   (apply 'xrsync args))
+   (apply 'xrsync args)
+   (success))
 
  (defun raz (&rest args)
-   (apply 'ra args))
+   (apply-args-1 'ra args :options '("-v" "-z"))
+   ;; (success)
+   )
 
  (defun chrome (&rest args)
    (run/i `(google-chrome-beta ,@args)))
