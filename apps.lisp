@@ -45,9 +45,8 @@
    (success))
 
  (defun raz (&rest args)
-   (apply-args-1 'ra args :options '("-v" "-z"))
-   ;; (success)
-   )
+   (apply-args-1 'ra args :options '("-z"))
+   (success))
 
  (defun chrome (&rest args)
    (run/i `(google-chrome-beta ,@args)))
