@@ -48,11 +48,14 @@
    (apply-args-1 'ra args :options '("-z"))
    (success))
 
- (defun chrome (&rest args)
-   (run/i `(google-chrome-beta ,@args)))
-
  (defun chrome-stable (&rest args)
    (run/i `(google-chrome-stable ,@args)))
+
+ (defun chrome-beta (&rest args)
+   (run/i `(google-chrome-beta ,@args)))
+
+ (defun chrome-unstable (&rest args)
+   (run/i `(google-chrome-unstable ,@args)))
 
  (defun kill-chrome (&rest args)
    (run `(killall ,@args chromium-browser chromium google-chrome chrome)
