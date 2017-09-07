@@ -25,8 +25,7 @@
              #:kill-tele
              #:suma
              #:term
-             #:askpass
-             #:lisp0
+             #:cl!
              #:screenshot
              #:sg2e
              #:sg2eb))
@@ -84,11 +83,7 @@
    (run/nil `(terminator ,@args) :on-error nil)
    (success))
 
- (defun askpass ()
-   (run/i `(git gui--askpass))
-   (values))
-
- (defun lisp0 (&rest args)
+ (defun cl! (&rest args)
    (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
           (list-arguments (append '("sbcl") arguments))
           (string-arguments (format nil "~{~a~^ ~}" list-arguments))
