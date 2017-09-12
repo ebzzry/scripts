@@ -16,8 +16,9 @@
              #:ra
              #:raz
 
-             #:chrome
              #:chrome-stable
+             #:chrome-beta
+             #:chrome-unstable
              #:kill-chrome
              #:stop-chrome
              #:continue-chrome
@@ -107,10 +108,12 @@
        (success))))
 
  (defun sg2e (&rest args)
+   (declare (ignore args))
    (run/i `(stem "-X" ,(argv0) "steam://rungameid/245170"))
    (success))
 
  (defun sg2eb (&rest args)
+   (declare (ignore args))
    (run/i `(stem "-X" ,(argv0) "steam://rungameid/208610"))
    (success)))
 
