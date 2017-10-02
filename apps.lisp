@@ -15,7 +15,9 @@
     (:export #:xrsync
              #:ra
              #:raz
+             #:raz!
 
+             #:chrome
              #:chrome-stable
              #:chrome-beta
              #:chrome-unstable
@@ -25,6 +27,7 @@
              #:tele
              #:kill-tele
              #:suma
+             #:kill-suma
              #:term
              #:cl!
              #:screenshot
@@ -47,6 +50,13 @@
  (defun raz (&rest args)
    (apply-args-1 'ra args :options '("-z"))
    (success))
+
+ (defun raz! (&rest args)
+   (apply-args-1 'raz args :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
+   (success))
+
+ (defun chrome (&rest args)
+   (apply #'chrome-unstable args))
 
  (defun chrome-stable (&rest args)
    (run/i `(google-chrome-stable ,@args)))
@@ -78,6 +88,11 @@
 
  (defun suma (&rest args)
    (run/nil `(wine ,(home ".wine/drive_c/Program Files/SumatraPDF/SumatraPDF.exe") ,@args) :on-error nil)
+   (success))
+
+ (defun kill-suma (&rest args)
+   (run `(killall ,@args SumatraPDF.exe)
+        :output :interactive :input :interactive :error-output nil :on-error nil)
    (success))
 
  (defun term (&rest args)
