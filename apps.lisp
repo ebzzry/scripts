@@ -26,8 +26,12 @@
              #:continue-chrome
              #:tele
              #:kill-tele
+
              #:suma
              #:kill-suma
+             #:qpdf
+             #:kill-qpdf
+
              #:term
              #:cl!
              #:screenshot
@@ -82,8 +86,7 @@
    (run/i `(telegram-desktop ,@args)))
 
  (defun kill-tele (&rest args)
-   (run `(killall ,@args telegram-desktop)
-        :output :interactive :input :interactive :error-output nil :on-error nil)
+   (run `(killall ,@args telegram-desktop) :output :interactive :input :interactive :error-output nil :on-error nil)
    (success))
 
  (defun suma (&rest args)
@@ -91,8 +94,14 @@
    (success))
 
  (defun kill-suma (&rest args)
-   (run `(killall ,@args SumatraPDF.exe)
-        :output :interactive :input :interactive :error-output nil :on-error nil)
+   (run `(killall ,@args SumatraPDF.exe) :output :interactive :input :interactive :error-output nil :on-error nil)
+   (success))
+
+ (defun qpdf (&rest args)
+   (run/i `(qpdfview ,@args)))
+
+ (defun kill-qpdf (&rest args)
+   (run `(killall ,@args qpdfview) :output :interactive :input :interactive :error-output nil :on-error nil)
    (success))
 
  (defun term (&rest args)
