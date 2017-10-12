@@ -13,5 +13,4 @@
                "scripts/touchpad"
                "scripts/general"
                "scripts/apps"
-               "scripts/unix"
-               "scripts/nix"))
+               "scripts/unix"))
