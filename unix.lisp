@@ -19,7 +19,7 @@
            #:f
            #:md
            #:rm!
-           #:sl
+           #:ln!
 
            #:l0
            #:la
@@ -54,7 +54,7 @@
  (defun rm! (&rest args)
    (run/i `(rm -rf ,@args))
    (success))
- (defun sl (&rest args)
+ (defun ln! (&rest args)
    (run/i `(ln -sf ,@args))
    (success))
 
