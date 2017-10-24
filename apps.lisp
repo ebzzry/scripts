@@ -12,118 +12,55 @@
           :cl-launch/dispatch
           :scripts/misc
           :scripts/utils)
-    (:export #:xrsync
-             #:ra
-             #:raz
-             #:raz!
+  (:export #:e
+           #:term
+           #:xrsync
+           #:ra
+           #:raz
+           #:raz!
+           #:cl!
+           #:screenshot
 
-             #:chrome
-             #:chrome-stable
-             #:chrome-beta
-             #:chrome-unstable
-             #:kill-chrome
-             #:stop-chrome
-             #:continue-chrome
-             #:tele
-             #:kill-tele
+           #:chrome
+           #:kill-chrome
+           #:stop-chrome
+           #:continue-chrome
+           #:tele
+           #:kill-tele
 
-             #:suma
-             #:kill-suma
-             #:qpdf
-             #:kill-qpdf
-
-             #:term
-             #:e
-             #:cl!
-             #:screenshot
-             #:sg2e
-             #:sg2eb))
+           #:sg2e
+           #:sg2eb))
 
 (in-package :scripts/apps)
 
 (defvar +screenshots-dir+ (home "hejmo/elsx/bil/ekrankopioj"))
 
-(defparameter +funs+
-  `((e0 . "emacsclient -nw")
-    (t0 . "terminator")))
-
-(defmacro def-fun (name command)
+(defmacro % (name command)
   `(defun ,name (&rest args)
-     (run/i (append (cl-ppcre:split "\\s+" ,command) args))
+     (run/i (append (split "\\s+" ,command) args))
      (success)))
 
-;; (defun def-funs (funs)
-;;   (loop :for (name . command) :in +funs+ :do
-;;      (def-fun name command)))
-
-(defmacro def-funs ()
-  `(loop :for (name . command) :in +funs+ :do
-      (def-fun name command)))
+(exporting-definitions
+  (% e "emacsclient -nw")
+  (% term "terminator")
+  (% xrsync "rsync -rlptgoDHSx")
+  (% ra "xrsync")
+  (% raz "ra -z")
+  (% raz! "-e `ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'")
+  (% chrome "google-chrome-unstable")
+  (% stop-chrome "kill-chrome -STOP")
+  (% continue-chrome "kill-chrome -CONT")
+  (% tele "telegram-desktop")
+  (% qpdf "qpdfview"))
 
 (exporting-definitions
-  (def-funs)
-
-  (def-fun e "emacsclient -nw")
-  (def-fun term "terminator")
-  (def-fun xrsync "rsync -rlptgoDHSx")
-  (def-fun ra "xrsync")
-  (def-fun raz "ra -z")
-
-  ;; (defun ra (&rest args)
-  ;;   (apply 'xrsync args)
-  ;;   (success))
-
-  ;; (defun raz (&rest args)
-  ;;   (apply-args-1 'ra args :options '("-z"))
-  ;;   (success))
-
-  (defun raz! (&rest args)
-    (apply-args-1 'raz args :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
-    (success))
-
-  (defun chrome (&rest args)
-    (apply #'chrome-unstable args))
-
-  (defun chrome-stable (&rest args)
-    (run/i `(google-chrome-stable ,@args)))
-
-  (defun chrome-beta (&rest args)
-    (run/i `(google-chrome-beta ,@args)))
-
-  (defun chrome-unstable (&rest args)
-    (run/i `(google-chrome-unstable ,@args)))
-
   (defun kill-chrome (&rest args)
     (run `(killall ,@args chromium-browser chromium google-chrome chrome)
          :output :interactive :input :interactive :error-output nil :on-error nil)
     (success))
 
-  (defun stop-chrome ()
-    (kill-chrome "-STOP"))
-
-  (defun continue-chrome ()
-    (kill-chrome "-CONT"))
-
-  (defun tele (&rest args)
-    (run/i `(telegram-desktop ,@args)))
-
   (defun kill-tele (&rest args)
     (run `(killall ,@args telegram-desktop) :output :interactive :input :interactive :error-output nil :on-error nil)
-    (success))
-
-  (defun suma (&rest args)
-    (run/nil `(wine ,(home ".wine/drive_c/Program Files/SumatraPDF/SumatraPDF.exe") ,@args) :on-error nil)
-    (success))
-
-  (defun kill-suma (&rest args)
-    (run `(killall ,@args SumatraPDF.exe) :output :interactive :input :interactive :error-output nil :on-error nil)
-    (success))
-
-  (defun qpdf (&rest args)
-    (run/i `(qpdfview ,@args)))
-
-  (defun kill-qpdf (&rest args)
-    (run `(killall ,@args qpdfview) :output :interactive :input :interactive :error-output nil :on-error nil)
     (success))
 
   (defun cl! (&rest args)
