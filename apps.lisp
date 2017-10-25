@@ -18,15 +18,22 @@
            #:ra
            #:raz
            #:raz!
-           #:cl!
-           #:screenshot
 
            #:chrome
+           #:tele
+           #:qpdf
+           #:@
+
+           #:v
+           #:xv
+           #:rm+
+
            #:kill-chrome
            #:stop-chrome
            #:continue-chrome
-           #:tele
            #:kill-tele
+           #:cl!
+           #:screenshot
 
            #:sg2e
            #:sg2eb))
@@ -51,7 +58,13 @@
   (% stop-chrome "kill-chrome -STOP")
   (% continue-chrome "kill-chrome -CONT")
   (% tele "telegram-desktop")
-  (% qpdf "qpdfview"))
+  (% qpdf "qpdfview")
+  (% @ "len")
+
+  (% rm+ "shred -vfzun 10")
+
+  (% v "less")
+  (% xv "xzless"))
 
 (exporting-definitions
   (defun kill-chrome (&rest args)
