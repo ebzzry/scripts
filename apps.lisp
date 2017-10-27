@@ -35,7 +35,7 @@
            #:stop-chrome
            #:continue-chrome
            #:kill-tele
-           #:cl!
+           #:lisp!
            #:screenshot
 
            #:sg2e
@@ -53,8 +53,7 @@
 (exporting-definitions
  (% s "sudo")
  (% e "emacsclient -nw")
- (% term "urxvt -bg black -fg white +sb -fn xft:Cousine:pixelsize=9 +bc")
- (% term1 "terminator")
+ (% term "terminator")
  (% xrsync "rsync -rlptgoDHSx")
  (% ra "xrsync")
  (% raz "ra -z")
@@ -81,7 +80,7 @@
    (run `(killall ,@args telegram-desktop) :output :interactive :input :interactive :error-output nil :on-error nil)
    (success))
 
- (defun cl! (&rest args)
+ (defun lisp! (&rest args)
    (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
           (list-arguments (append '("sbcl") arguments))
           (string-arguments (format nil "~{~a~^ ~}" list-arguments))
