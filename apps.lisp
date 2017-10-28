@@ -29,7 +29,8 @@
 
            #:v
            #:xv
-           #:rm+
+           #:rm@
+           #:par
 
            #:kill-chrome
            #:stop-chrome
@@ -38,8 +39,9 @@
            #:lisp!
            #:screenshot
 
-           #:sg2e
-           #:sg2eb))
+           #:len
+           #:@
+           #:leo))
 
 (in-package :scripts/apps)
 
@@ -57,20 +59,34 @@
  (% xrsync "rsync -rlptgoDHSx")
  (% ra "xrsync")
  (% raz "ra -z")
- (% raz! "-e `ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'")
  (% chrome "google-chrome-unstable")
  (% stop-chrome "kill-chrome -STOP")
  (% continue-chrome "kill-chrome -CONT")
  (% tele "telegram-desktop")
  (% qpdf "qpdfview")
- (% @ "len")
 
- (% rm+ "shred -vfzun 10")
+ (% rm@ "shred -vfzun 10")
+ (% par "parallel --will-cite")
 
  (% v "less")
  (% xv "xzless"))
 
 (exporting-definitions
+ (defun len (&rest args)
+   (setf (getenv "LANG") "en_US.UTF-8")
+   (run/i `(,@args)))
+
+ (defun @ (&rest args)
+   (apply #'len args))
+
+ (defun leo (&rest args)
+   (setf (getenv "LANG") "eo.utf8")
+   (run/i `(,@args)))
+
+ (defun raz! (&rest args)
+   (apply-args-1 'raz args :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
+   (success))
+
  (defun kill-chrome (&rest args)
    (run `(killall ,@args chromium-browser chromium google-chrome chrome)
         :output :interactive :input :interactive :error-output nil :on-error nil)
@@ -97,9 +113,9 @@
      (flet ((scrot (file dest &rest args)
               (run/i `(scrot ,@args ,file -e ,dest))))
        (match mode
-              ((ppcre "(full|plena)") (scrot file dest))
-              ((ppcre "(region|parta)") (scrot file dest '-s))
-              (_ (err (format nil "invalid mode ~A~%" mode))))
+         ((ppcre "(full|plena)") (scrot file dest))
+         ((ppcre "(region|parta)") (scrot file dest '-s))
+         (_ (err (format nil "invalid mode ~A~%" mode))))
        (run `(xclip -selection clipboard) :input (list image))
        (success)))))
 

@@ -89,7 +89,7 @@
              (first (remove-if (complement
                                 #'(lambda (line)
                                     (and (search name line) (search (format nil "slave  ~A" type) line))))
-                               (uiop:run-program '("xinput" "list") :output :lines))) "\\1")))
+                               (run-program '("xinput" "list") :output :lines))) "\\1")))
 
   (defun xdev (name type command &rest args)
     (let ((id (xdev-id name type)))
@@ -105,15 +105,15 @@
 
   (defun xmr (device)
     (if (remove-if (complement #'(lambda (line) (search device line)))
-                   (uiop:run-program '("lsusb") :output :lines))
+                   (run-program '("lsusb") :output :lines))
         (xmap "kadv.dvorak")
-        (if (string-equal (uiop:hostname) "vulpo")
+        (if (string-equal (hostname) "vulpo")
             (xmap "tpad.dvorak")
             (xmap "mik.dvorak")))
     (success))
 
   (defun xxx ()
-    (let ((hostname (uiop:hostname))
+    (let ((hostname (hostname))
           (xdev-args '("pointer" "set-button-map" "1" "2" "3" "5" "4")))
       (xmr "Kinesis Advantage PRO MPC/USB Keyboard")
       (match hostname
