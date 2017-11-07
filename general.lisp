@@ -28,7 +28,10 @@
            #:xdev-id
            #:xdev
            #:xmap
-           #:xmr
+
+           #:load-xmodmap
+           #:load-xresources
+           
            #:xxx
 
            #:psg
@@ -103,7 +106,7 @@
     (run/i `(xmodmap ,(home (format nil "hejmo/ktp/xmodmap/.Xmodmap.~A" keymap))))
     (success))
 
-  (defun xmr (device)
+  (defun load-xmodmap (device)
     (if (remove-if (complement #'(lambda (line) (search device line)))
                    (run-program '("lsusb") :output :lines))
         (xmap "kadv.dvorak")
@@ -112,10 +115,14 @@
             (xmap "mik.dvorak")))
     (success))
 
+  (defun load-xresources ()
+    (run/i `(xrdb ,(home ".Xresources"))))
+
   (defun xxx ()
     (let ((hostname (hostname))
           (xdev-args '("pointer" "set-button-map" "1" "2" "3" "5" "4")))
-      (xmr "Kinesis Advantage PRO MPC/USB Keyboard")
+      (load-xmodmap "Kinesis Advantage PRO MPC/USB Keyboard")
+      (load-xresources)
       (match hostname
         ((ppcre "vulpo")
          (scripts/touchpad:disable)
