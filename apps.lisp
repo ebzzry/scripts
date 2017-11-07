@@ -26,6 +26,7 @@
            #:tele
            #:qpdf
            #:@
+           #:rt
 
            #:v
            #:xv
@@ -41,7 +42,9 @@
 
            #:len
            #:@
-           #:leo))
+           #:leo
+
+           #:sg2e))
 
 (in-package :scripts/apps)
 
@@ -55,7 +58,7 @@
 (exporting-definitions
  (% s "sudo")
  (% e "emacsclient -nw")
- (% term "terminator")
+ (% term "@ urxvt")
  (% xrsync "rsync -rlptgoDHSx")
  (% ra "xrsync")
  (% raz "ra -z")
@@ -64,6 +67,7 @@
  (% continue-chrome "kill-chrome -CONT")
  (% tele "telegram-desktop")
  (% qpdf "qpdfview")
+ (% rt "rtorrent")
 
  (% rm@ "shred -vfzun 10")
  (% par "parallel --will-cite")
@@ -123,11 +127,6 @@
  (defun sg2e (&rest args)
    (declare (ignore args))
    (run/i `(stem "-X" ,(argv0) "steam://rungameid/245170"))
-   (success))
-
- (defun sg2eb (&rest args)
-   (declare (ignore args))
-   (run/i `(stem "-X" ,(argv0) "steam://rungameid/208610"))
    (success)))
 
 (register-commands :scripts/apps)
