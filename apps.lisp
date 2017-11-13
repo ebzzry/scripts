@@ -7,7 +7,6 @@
           :cl-scripting
           :optima
           :optima.ppcre
-          :cl-ppcre
           :local-time
           :cl-launch/dispatch
           :scripts/misc
@@ -16,7 +15,6 @@
 
            #:e
            #:term
-           #:term1
            #:xrsync
            #:ra
            #:raz
@@ -50,15 +48,10 @@
 
 (defvar +screenshots-dir+ (home "hejmo/elsx/bil/ekrankopioj"))
 
-(defmacro % (name command)
-  `(defun ,name (&rest args)
-     (run/i (append (split "\\s+" ,command) args))
-     (success)))
-
 (exporting-definitions
  (% s "sudo")
  (% e "emacsclient -nw")
- (% term "@ urxvt")
+ (% term "terminator")
  (% xrsync "rsync -rlptgoDHSx")
  (% ra "xrsync")
  (% raz "ra -z")
