@@ -87,8 +87,8 @@
 
   (defun xdev-id (name type)
     (format nil "~A"
-            (cl-ppcre:regex-replace
-             (cl-ppcre:create-scanner ".*id=(.*?)	+.*")
+            (regex-replace
+             (create-scanner ".*id=(.*?)	+.*")
              (first (remove-if (complement
                                 #'(lambda (line)
                                     (and (search name line) (search (format nil "slave  ~A" type) line))))
