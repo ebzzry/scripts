@@ -23,7 +23,6 @@
            #:chrome
            #:tele
            #:qpdf
-           #:@
            #:rt
 
            #:v
@@ -51,7 +50,7 @@
 (exporting-definitions
  (% s "sudo")
  (% e "emacsclient -nw")
- (% term "terminator")
+ (% term "len urxvt")
  (% xrsync "rsync -rlptgoDHSx")
  (% ra "xrsync")
  (% raz "ra -z")
@@ -72,9 +71,6 @@
  (defun len (&rest args)
    (setf (getenv "LANG") "en_US.UTF-8")
    (run/i `(,@args)))
-
- (defun @ (&rest args)
-   (apply #'len args))
 
  (defun leo (&rest args)
    (setf (getenv "LANG") "eo.utf8")
