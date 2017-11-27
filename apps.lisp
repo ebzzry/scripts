@@ -21,9 +21,11 @@
            #:raz!
 
            #:chrome
-           #:tele
            #:qpdf
            #:rt
+
+           #:tele
+           #:vbox
 
            #:v
            #:xv
@@ -57,7 +59,6 @@
  (% chrome "google-chrome-unstable")
  (% stop-chrome "kill-chrome -STOP")
  (% continue-chrome "kill-chrome -CONT")
- (% tele "telegram-desktop")
  (% qpdf "qpdfview")
  (% rt "rtorrent")
 
@@ -75,6 +76,14 @@
  (defun leo (&rest args)
    (setf (getenv "LANG") "eo.utf8")
    (run/i `(,@args)))
+
+ (defun tele (&rest args)
+   (setf (getenv "PATH") (unix-namestring (home ".nix/profiles/tdesktop/bin")))
+   (run/i `(telegram-desktop ,@args)))
+
+ (defun vbox (&rest args)
+   (setf (getenv "PATH") "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
+   (run/i `("VirtualBox" ,@args)))
 
  (defun raz! (&rest args)
    (apply-args-1 'raz args :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
