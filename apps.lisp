@@ -20,6 +20,7 @@
            #:raz
            #:raz!
 
+           #:ff
            #:chrome
            #:qpdf
            #:rt
@@ -56,6 +57,7 @@
  (% xrsync "rsync -rlptgoDHSx")
  (% ra "xrsync")
  (% raz "ra -z")
+ (% ff "firefox")
  (% chrome "google-chrome-unstable")
  (% stop-chrome "kill-chrome -STOP")
  (% continue-chrome "kill-chrome -CONT")
