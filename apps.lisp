@@ -24,14 +24,14 @@
            #:chrome
            #:qpdf
            #:rt
+           #:rm@
+           #:par
+           #:v
+           #:xv
+           #:jblp3
 
            #:tele
            #:vbox
-
-           #:v
-           #:xv
-           #:rm@
-           #:par
 
            #:kill-chrome
            #:stop-chrome
@@ -63,12 +63,11 @@
  (% continue-chrome "kill-chrome -CONT")
  (% qpdf "qpdfview")
  (% rt "rtorrent")
-
  (% rm@ "shred -vfzun 10")
  (% par "parallel --will-cite")
-
  (% v "less")
- (% xv "xzless"))
+ (% xv "xzless")
+ (% jblp3 "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
 
 (exporting-definitions
  (defun len (&rest args)
