@@ -77,7 +77,7 @@
    (run/i `(,@args)))
 
  (defun tele (&rest args)
-   (setf (getenv "PATH") (unix-namestring (home ".nix/profiles/tdesktop/bin")))
+   (setf (getenv "PATH") (unix-namestring (home ".baf/profiles/tdesktop/bin")))
    (run/i `(telegram-desktop ,@args)))
 
  (defun vbox (&rest args)
