@@ -20,7 +20,6 @@
            #:raz
            #:raz!
 
-           #:ff
            #:chrome
            #:qpdf
            #:rt
@@ -28,7 +27,7 @@
            #:par
            #:v
            #:xv
-           #:jblp3
+           #:bt!
 
            #:tele
            #:vbox
@@ -57,7 +56,6 @@
  (% xrsync "rsync -rlptgoDHSx")
  (% ra "xrsync")
  (% raz "ra -z")
- (% ff "firefox")
  (% chrome "google-chrome-unstable")
  (% stop-chrome "kill-chrome -STOP")
  (% continue-chrome "kill-chrome -CONT")
@@ -67,7 +65,7 @@
  (% par "parallel --will-cite")
  (% v "less")
  (% xv "xzless")
- (% jblp3 "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
+ (% bt! "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
 
 (exporting-definitions
  (defun len (&rest args)
