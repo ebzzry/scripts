@@ -8,7 +8,7 @@
      :cl-scripting
      :optima
      :optima.ppcre
-     :local-time
+     ;:local-time
      :cl-launch/dispatch
      :scripts/misc
      :scripts/utils)
@@ -30,7 +30,7 @@
            #:l!
            #:lh
            #:l1
-           
+
            #:lv
 
            #:g
@@ -42,7 +42,7 @@
  (% x "zsh-c")
  (% c "cat")
  (% v "less")
- 
+
  (% md "mkdir -p")
  (% rm! "rm -rf")
  (% ln! "ln -sf")

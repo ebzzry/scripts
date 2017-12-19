@@ -9,7 +9,6 @@
      :optima
      :optima.ppcre
      :cl-ppcre
-     :local-time
      :cl-launch/dispatch
      :scripts/misc
      :scripts/utils)
@@ -31,7 +30,7 @@
 
            #:load-xmodmap
            #:load-xresources
-           
+
            #:xxx
 
            #:psg

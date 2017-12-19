@@ -4,7 +4,6 @@
           :inferior-shell
           :cl-scripting
           :fare-utils
-          :local-time
           :cl-ppcre
           :cl-launch/dispatch)
   (:export #:char-display-char
