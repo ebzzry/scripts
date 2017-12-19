@@ -7,7 +7,6 @@
           :cl-scripting
           :optima
           :optima.ppcre
-          :local-time
           :cl-launch/dispatch
           :scripts/misc
           :scripts/utils)
@@ -30,6 +29,7 @@
            #:bt!
 
            #:tele
+           #:tox
            #:vbox
 
            #:kill-chrome
@@ -80,6 +80,10 @@
    (setf (getenv "PATH") (unix-namestring (home ".baf/profiles/tdesktop/bin")))
    (run/i `(telegram-desktop ,@args)))
 
+ (defun tox (&rest args)
+   (setf (getenv "PATH") (unix-namestring (home ".baf/profiles/qtox/bin")))
+   (run/i `(qtox ,@args)))
+
  (defun vbox (&rest args)
    (setf (getenv "PATH") "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
    (run/i `("VirtualBox" ,@args)))
@@ -108,7 +112,7 @@
 
  (defun screenshot (mode)
    (let* ((dir +screenshots-dir+)
-          (file (format nil "~A.png" (local-time:format-timestring nil (now))))
+          (file (format nil "~A.png" (local-time:format-timestring nil (local-time:now))))
           (dest (format nil "mv $f ~A" dir))
           (image (format nil "~A/~A" dir file)))
      (flet ((scrot (file dest &rest args)
