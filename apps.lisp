@@ -14,6 +14,7 @@
 
            #:e
            #:term
+           #:fire
            #:xrsync
            #:ra
            #:raz
@@ -27,6 +28,7 @@
            #:v
            #:xv
            #:bt!
+           #:msg
 
            #:tele
            #:tox
@@ -53,6 +55,7 @@
  (% s "sudo")
  (% e "emacsclient -nw")
  (% term "len urxvt")
+ (% fire "firefox")
  (% xrsync "rsync -rlptgoDHSx")
  (% ra "xrsync")
  (% raz "ra -z")
@@ -65,7 +68,8 @@
  (% par "parallel --will-cite")
  (% v "less")
  (% xv "xzless")
- (% bt! "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
+ (% bt! "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink")
+ (% msg "xmessage -timeout 3 -geometry +0+0"))
 
 (exporting-definitions
  (defun len (&rest args)
