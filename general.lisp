@@ -108,10 +108,10 @@
   (defun load-xmodmap (device)
     (if (remove-if (complement #'(lambda (line) (search device line)))
                    (run-program '("lsusb") :output :lines))
-        (xmap "kadv.dvorak")
+        (xmap "advantage.dvorak")
         (if (string-equal (hostname) "vulpo")
-            (xmap "tpad.dvorak")
-            (xmap "mik.dvorak")))
+            (xmap "thinkpad.dvorak")
+            (xmap "ceteraj.dvorak")))
     (success))
 
   (defun load-xresources ()
