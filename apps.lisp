@@ -21,7 +21,7 @@
            #:raz!
 
            #:chrome
-           #:qpdf
+           #:qp
            #:rt
            #:rm@
            #:par
@@ -29,6 +29,7 @@
            #:xv
            #:bt!
            #:msg
+           #:cmd
 
            #:tele
            #:tox
@@ -62,14 +63,15 @@
  (% chrome "google-chrome-unstable")
  (% stop-chrome "kill-chrome -STOP")
  (% continue-chrome "kill-chrome -CONT")
- (% qpdf "qpdfview")
+ (% qp "qpdfview")
  (% rt "rtorrent")
  (% rm@ "shred -vfzun 10")
  (% par "parallel --will-cite")
  (% v "less")
  (% xv "xzless")
  (% bt! "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink")
- (% msg "xmessage -timeout 3 -geometry +0+0"))
+ (% msg "xmessage -timeout 3 -geometry +0+0")
+ (% cmd "fbrun -font Monospace-9 -title Run -w 300 -fg white -bg black"))
 
 (exporting-definitions
  (defun len (&rest args)
