@@ -1,17 +1,18 @@
+;;; apps.lisp
+
 (uiop:define-package
     :scripts/apps
-    (:use :cl
-          :fare-utils
-          :uiop
-          :inferior-shell
-          :cl-scripting
-          :optima
-          :optima.ppcre
-          :cl-launch/dispatch
-          :scripts/misc
-          :scripts/utils)
+    (:use #:cl
+          #:fare-utils
+          #:uiop
+          #:inferior-shell
+          #:cl-scripting
+          #:optima
+          #:optima.ppcre
+          #:cl-launch/dispatch
+          #:scripts/misc
+          #:scripts/utils)
   (:export #:s
-
            #:e
            #:term
            #:fire
@@ -19,7 +20,6 @@
            #:ra
            #:raz
            #:raz!
-
            #:chrome
            #:qp
            #:rt
@@ -28,24 +28,16 @@
            #:v
            #:xv
            #:bt!
-           #:msg
-           #:cmd
 
+           #:len
+           #:leo
            #:tele
+           #:vibe
            #:tox
            #:vbox
 
-           #:kill-chrome
-           #:stop-chrome
-           #:continue-chrome
-           #:kill-tele
-           #:lisp!
+           #:lisp-shell
            #:screenshot
-
-           #:len
-           #:@
-           #:leo
-
            #:sg2e))
 
 (in-package :scripts/apps)
@@ -61,17 +53,13 @@
  (% ra "xrsync")
  (% raz "ra -z")
  (% chrome "google-chrome-unstable")
- (% stop-chrome "kill-chrome -STOP")
- (% continue-chrome "kill-chrome -CONT")
  (% qp "qpdfview")
  (% rt "rtorrent")
  (% rm@ "shred -vfzun 10")
  (% par "parallel --will-cite")
  (% v "less")
  (% xv "xzless")
- (% bt! "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink")
- (% msg "xmessage -timeout 3 -geometry +0+0")
- (% cmd "fbrun -font Monospace-9 -title Run -w 300 -fg white -bg black"))
+ (% bt! "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
 
 (exporting-definitions
  (defun len (&rest args)
@@ -88,6 +76,10 @@
    (setf (getenv "PATH") (unix-namestring (home ".baf/profiles/tdesktop/bin")))
    (run/i `(telegram-desktop ,@args)))
 
+ (defun vibe (&rest args)
+   (setf (getenv "PATH") (unix-namestring (home ".baf/profiles/viber/bin")))
+   (run/i `(viber ,@args)))
+
  (defun tox (&rest args)
    (setf (getenv "PATH") (unix-namestring (home ".baf/profiles/qtox/bin")))
    (run/i `(qtox ,@args)))
@@ -99,18 +91,10 @@
 
  (defun raz! (&rest args)
    (apply-args-1 'raz args :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
-   (success))
+   (success)))
 
- (defun kill-chrome (&rest args)
-   (run `(killall ,@args chromium-browser chromium google-chrome chrome)
-        :output :interactive :input :interactive :error-output nil :on-error nil)
-   (success))
-
- (defun kill-tele (&rest args)
-   (run `(killall ,@args telegram-desktop) :output :interactive :input :interactive :error-output nil :on-error nil)
-   (success))
-
- (defun lisp! (&rest args)
+(exporting-definitions
+ (defun lisp-shell (&rest args)
    (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
           (list-arguments (append '("sbcl") arguments))
           (string-arguments (format nil "~{~a~^ ~}" list-arguments))
@@ -131,9 +115,8 @@
          ((ppcre "(region|parta)") (scrot file dest '-s))
          (_ (err (format nil "invalid mode ~A~%" mode))))
        (run `(xclip -selection clipboard) :input (list image))
-       (success)))))
+       (success))))
 
-(exporting-definitions
  (defun sg2e (&rest args)
    (declare (ignore args))
    (run/i `(stem "-X" ,(argv0) "steam://rungameid/245170"))

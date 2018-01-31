@@ -1,24 +1,25 @@
+;;; unix.lisp
+
 (uiop:define-package
     :scripts/unix
-    (:use
-     :cl
-     :fare-utils
-     :uiop
-     :inferior-shell
-     :cl-scripting
-     :optima
-     :optima.ppcre
-     ;:local-time
-     :cl-launch/dispatch
-     :scripts/misc
-     :scripts/utils)
+    (:use #:cl
+          #:fare-utils
+          #:uiop
+          #:inferior-shell
+          #:cl-scripting
+          #:optima
+          #:optima.ppcre
+          #:cl-launch/dispatch
+          #:scripts/misc
+          #:scripts/utils)
   (:export #:x
            #:c
            #:v
-           #:f
+
            #:md
            #:rm!
            #:ln!
+
            #:g
            #:gi
 
@@ -31,15 +32,13 @@
            #:lh
            #:l1
 
-           #:lv
-
-           #:g
-           #:gi))
+           #:f
+           #:lv))
 
 (in-package :scripts/unix)
 
 (exporting-definitions
- (% x "zsh-c")
+ (% x "zsh -c")
  (% c "cat")
  (% v "less")
 
@@ -57,8 +56,9 @@
  (% ll "l -l")
  (% l! "l -R")
  (% lh "l -H")
- (% l1 "l -1")
+ (% l1 "l -1"))
 
+(exporting-definitions
  (defun f (arg)
    (run/i `(find "." -iname ,(format nil "*~A*" arg)))
    (success))

@@ -1,17 +1,18 @@
+;;; general.lisp
+
 (uiop:define-package
     :scripts/general
-    (:use
-     :cl
-     :fare-utils
-     :uiop
-     :inferior-shell
-     :cl-scripting
-     :optima
-     :optima.ppcre
-     :cl-ppcre
-     :cl-launch/dispatch
-     :scripts/misc
-     :scripts/utils)
+    (:use #:cl
+          #:fare-utils
+          #:uiop
+          #:inferior-shell
+          #:cl-scripting
+          #:optima
+          #:optima.ppcre
+          #:cl-ppcre
+          #:cl-launch/dispatch
+          #:scripts/misc
+          #:scripts/utils)
   (:export #:*char-mode*
            #:*colon-mode*
            #:*normal-mode*
@@ -35,8 +36,7 @@
 
            #:psg
            #:psk
-           #:psk!
-           #:s))
+           #:psk!))
 
 (in-package :scripts/general)
 
@@ -47,25 +47,25 @@
   (defvar *normal-mode* "[0m")
 
   (defun ascii-hex-table ()
-    (loop for i from 32 to 255
-          do (format t "~A~X~A:~A~A~A~:[ ~;~%~]"
-                     *num-mode* i
-                     *colon-mode* *char-mode*
-                     (char-display-char i)
-                     *normal-mode*
-                     (zerop (mod (1+ i) 16))))
+    (loop :for i :from 32 :to 255
+       :do (format t "~A~X~A:~A~A~A~:[ ~;~%~]"
+                   *num-mode* i
+                   *colon-mode* *char-mode*
+                   (char-display-char i)
+                   *normal-mode*
+                   (zerop (mod (1+ i) 16))))
     (success))
 
   (defun ascii () (ascii-hex-table))
 
   (defun ascii-oct-table ()
-    (loop for i from 32 to 255
-          do (format t "~A~3O~A~A~A~:[ ~;~%~]"
-                     *num-mode* i
-                     *char-mode*
-                     (char-display-char i)
-                     *normal-mode*
-                     (zerop (mod (1+ i) 16))))
+    (loop :for i :from 32 :to 255
+       :do (format t "~A~3O~A~A~A~:[ ~;~%~]"
+                   *num-mode* i
+                   *char-mode*
+                   (char-display-char i)
+                   *normal-mode*
+                   (zerop (mod (1+ i) 16))))
     (success))
 
   (defun rot13 (&rest args)
@@ -141,9 +141,6 @@
     (success))
 
   (defun psk! (&rest args)
-    (apply-args-1 'psk args :options '("-9")))
-
-  (defun s (&rest args)
-    (run `(sudo ,@args) :error-output nil :on-error nil)))
+    (apply-args-1 'psk args :options '("-9"))))
 
 (register-commands :scripts/general)
