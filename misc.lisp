@@ -1,10 +1,12 @@
+;;; misc.lisp
+
 (uiop:define-package :scripts/misc
-    (:use :cl
-          :uiop
-          :inferior-shell
-          :cl-scripting
-          :fare-utils
-          :cl-launch/dispatch)
+    (:use #:cl
+          #:uiop
+          #:inferior-shell
+          #:cl-scripting
+          #:fare-utils
+          #:cl-launch/dispatch)
   (:export #:getuid
            #:create-symlinks
            #:help))

@@ -1,11 +1,13 @@
+;;; utils.lisp
+
 (uiop:define-package :scripts/utils
-    (:use :cl
-          :uiop
-          :inferior-shell
-          :cl-scripting
-          :fare-utils
-          :cl-ppcre
-          :cl-launch/dispatch)
+    (:use #:cl
+          #:uiop
+          #:inferior-shell
+          #:cl-scripting
+          #:fare-utils
+          #:cl-ppcre
+          #:cl-launch/dispatch)
   (:export #:char-display-char
            #:battery-status
            #:wine
