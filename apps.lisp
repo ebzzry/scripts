@@ -76,11 +76,13 @@
 (exporting-definitions
  (defun len (&rest args)
    (setf (getenv "LANG") "en_US.UTF-8")
-   (run/i `(,@args)))
+   (run/i `(,@args))
+   (success))
 
  (defun leo (&rest args)
    (setf (getenv "LANG") "eo.utf8")
-   (run/i `(,@args)))
+   (run/i `(,@args))
+   (success))
 
  (defun tele (&rest args)
    (setf (getenv "PATH") (unix-namestring (home ".baf/profiles/tdesktop/bin")))
@@ -91,7 +93,8 @@
    (run/i `(qtox ,@args)))
 
  (defun vbox (&rest args)
-   (setf (getenv "PATH") "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
+   (setf (getenv "PATH")
+         "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
    (run/i `("VirtualBox" ,@args)))
 
  (defun raz! (&rest args)
@@ -124,7 +127,7 @@
      (flet ((scrot (file dest &rest args)
               (run/i `(scrot ,@args ,file -e ,dest))))
        (match mode
-         ((ppcre "(full|plena)") (scrot file dest))
+         ((ppcre "(full|tuta)") (scrot file dest))
          ((ppcre "(region|parta)") (scrot file dest '-s))
          (_ (err (format nil "invalid mode ~A~%" mode))))
        (run `(xclip -selection clipboard) :input (list image))
