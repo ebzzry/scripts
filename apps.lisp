@@ -61,6 +61,12 @@
  (% xv "xzless")
  (% bt! "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
 
+(defun run-profile (profile binary &rest args)
+  "Run binary under a separate profile"
+  (let ((bin (home (format nil ".baf/profiles/~A/bin" profile))))
+    (setf (getenv "PATH") (unix-namestring bin))
+    (run/i `(,binary ,@args))))
+
 (exporting-definitions
  (defun len (&rest args)
    (setf (getenv "LANG") "en_US.UTF-8")
@@ -72,17 +78,9 @@
    (run/i `(,@args))
    (success))
 
- (defun tele (&rest args)
-   (setf (getenv "PATH") (unix-namestring (home ".baf/profiles/tdesktop/bin")))
-   (run/i `(telegram-desktop ,@args)))
-
- (defun vibe (&rest args)
-   (setf (getenv "PATH") (unix-namestring (home ".baf/profiles/viber/bin")))
-   (run/i `(viber ,@args)))
-
- (defun tox (&rest args)
-   (setf (getenv "PATH") (unix-namestring (home ".baf/profiles/qtox/bin")))
-   (run/i `(qtox ,@args)))
+ (defun tele (&rest args) (run-profile "tdesktop" "telegram-desktop" args))
+ (defun vibe (&rest args) (run-profile "viber" "viber" args))
+ (defun tox (&rest args) (run-profile "qtox" "qtox" args))
 
  (defun vbox (&rest args)
    (setf (getenv "PATH")
