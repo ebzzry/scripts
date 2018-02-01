@@ -61,31 +61,32 @@
  (% xv "xzless")
  (% bt! "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
 
-(defun run-profile (profile binary &rest args)
+(defun run-locale (locale &rest args)
+  "Run args with locale set to LOCALE"
+  (setf (getenv "LANG") locale)
+  (run/i `(,@args))
+  (success))
+
+(defun run-nix-user (profile binary &rest args)
   "Run binary under a separate profile"
   (let ((bin (home (format nil ".baf/profiles/~A/bin" profile))))
     (setf (getenv "PATH") (unix-namestring bin))
     (run/i `(,binary ,@args))))
 
+(defun run-nix-system (binary &rest args)
+  "Run binary without user paths"
+  (setf (getenv "PATH") "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
+  (run/i `(,binary ,@args)))
+
 (exporting-definitions
- (defun len (&rest args)
-   (setf (getenv "LANG") "en_US.UTF-8")
-   (run/i `(,@args))
-   (success))
+ (defun len (&rest args) (run-locale "en_US.UTF-8" args))
+ (defun leo (&rest args) (run-locale "eo.utf8" args))
 
- (defun leo (&rest args)
-   (setf (getenv "LANG") "eo.utf8")
-   (run/i `(,@args))
-   (success))
+ (defun tele (&rest args) (run-nix-user "tdesktop" "telegram-desktop" args))
+ (defun vibe (&rest args) (run-nix-user "viber" "viber" args))
+ (defun tox (&rest args) (run-nix-user "qtox" "qtox" args))
 
- (defun tele (&rest args) (run-profile "tdesktop" "telegram-desktop" args))
- (defun vibe (&rest args) (run-profile "viber" "viber" args))
- (defun tox (&rest args) (run-profile "qtox" "qtox" args))
-
- (defun vbox (&rest args)
-   (setf (getenv "PATH")
-         "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
-   (run/i `("VirtualBox" ,@args)))
+ (defun vbox (&rest args) (run-nix-system "VirtualBox"))
 
  (defun raz! (&rest args)
    (apply-args-1 'raz args :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
