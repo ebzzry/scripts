@@ -13,7 +13,6 @@
           #:scripts/misc
           #:scripts/utils)
   (:export #:x
-           #:c
            #:v
 
            #:md
@@ -39,7 +38,6 @@
 
 (exporting-definitions
  (% x "zsh -c")
- (% c "cat")
  (% v "less")
 
  (% md "mkdir -p")

@@ -28,6 +28,7 @@
            #:v
            #:xv
            #:bt!
+           #:c@
 
            #:len
            #:leo
@@ -36,7 +37,7 @@
            #:tox
            #:vbox
 
-           #:lisp-shell
+           #:shell
            #:screenshot
            #:sg2e))
 
@@ -59,7 +60,8 @@
  (% par "parallel --will-cite")
  (% v "less")
  (% xv "xzless")
- (% bt! "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
+ (% bt! "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink")
+ (% c@ "xclip -selection clipboard"))
 
 (defun run-locale (locale &rest args)
   "Run args with locale set to LOCALE"
@@ -93,13 +95,10 @@
    (success)))
 
 (exporting-definitions
- (defun lisp-shell (&rest args)
-   (let* ((arguments (mapcar #'(lambda (s) (format nil "\'~A\'" s)) args))
-          (list-arguments (append '("sbcl") arguments))
-          (string-arguments (format nil "~{~a~^ ~}" list-arguments))
-          (dir (pathname-directory-pathname (find-binary (argv0)))))
-     (chdir dir)
-     (run/i `(nix-shell --pure --command ,string-arguments))
+ (defun shell (&rest args)
+   (let* ((directory (pathname-directory-pathname (find-binary (argv0)))))
+     (chdir directory)
+     (run/i `(nix-shell --pure ,@args))
      (success)))
 
  (defun screenshot (mode)
