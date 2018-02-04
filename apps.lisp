@@ -96,9 +96,8 @@
 
 (exporting-definitions
  (defun shell (&rest args)
-   (let* ((directory (pathname-directory-pathname (find-binary (argv0)))))
-     (chdir directory)
-     (run/i `(nix-shell --pure ,@args))
+   (let ((directory (pathname-directory-pathname (find-binary (argv0)))))
+     (run/i `(nix-shell --pure ,(format nil "~A/default.nix" directory) ,@args))
      (success)))
 
  (defun screenshot (mode)
