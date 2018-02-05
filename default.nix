@@ -14,9 +14,6 @@ stdenv.mkDerivation {
     cmucl_binary
     clisp
     mkcl
-
-    python2Packages.python
-    python3Packages.python
   ];
 
   LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [
