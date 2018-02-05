@@ -38,6 +38,7 @@
            #:vbox
 
            #:shell
+           #:shell
            #:screenshot
            #:sg2e))
 
@@ -99,6 +100,9 @@
    (let ((directory (pathname-directory-pathname (find-binary (argv0)))))
      (run/i `(nix-shell --pure ,(format nil "~A/default.nix" directory) ,@args))
      (success)))
+
+ (defun shell@ (command)
+   (shell "--command" (format nil " rlwrap -s 1000000 -c -b \"(){}[].,=&^%0\;|\" ~A" command)))
 
  (defun screenshot (mode)
    (let* ((dir +screenshots-dir+)
