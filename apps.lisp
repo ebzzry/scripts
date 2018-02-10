@@ -16,6 +16,7 @@
            #:e
            #:term
            #:fire
+           #:keep
            #:xrsync
            #:ra
            #:raz
@@ -51,6 +52,7 @@
  (% e "emacsclient -nw")
  (% term "len urxvt")
  (% fire "firefox")
+ (% keep "keepassxc")
  (% xrsync "rsync -rlptgoDHSx")
  (% ra "xrsync")
  (% raz "ra -z")
