@@ -1,4 +1,4 @@
-;;; apps.lisp
+;;;; apps.lisp
 
 (uiop:define-package
     :scripts/apps
@@ -39,7 +39,7 @@
            #:vbox
 
            #:shell
-           #:shell
+           #:rshell
            #:screenshot
            #:sg2e))
 
@@ -103,7 +103,7 @@
      (run/i `(nix-shell --pure ,(format nil "~A/default.nix" directory) ,@args))
      (success)))
 
- (defun shell@ (command)
+ (defun rshell (command)
    (shell "--command" (format nil " rlwrap -s 1000000 -c -b \"(){}[].,=&^%0\;|\" ~A" command)))
 
  (defun screenshot (mode)
