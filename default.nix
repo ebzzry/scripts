@@ -7,13 +7,13 @@ stdenv.mkDerivation {
 
   buildInputs = [
     rlwrap
-
     sbcl
     ccl
     ecl
     cmucl_binary
     clisp
     mkcl
+    ncurses
   ];
 
   LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [
@@ -23,6 +23,7 @@ stdenv.mkDerivation {
     SDL2_image
     SDL2_ttf
     libffi
+    ncurses
   ];
 
   shellHook = ''
