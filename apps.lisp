@@ -38,6 +38,7 @@
            #:tox
            #:vbox
 
+           #:@
            #:shell
            #:rshell
            #:screenshot
@@ -98,6 +99,13 @@
    (success)))
 
 (exporting-definitions
+ (defun @ (&rest args)
+   (let ((path (uiop:native-namestring (uiop:resolve-symlinks "/dev/fd/0"))))
+     (match path
+       ((ppcre "/dev/tty[0-9]*") (run/i `(setleds "-caps")))
+       (_ (run/i `(xdotool "key" "Caps_Lock"))))
+     (success)))
+
  (defun shell (&rest args)
    (let ((directory (pathname-directory-pathname (find-binary (argv0)))))
      (run/i `(nix-shell --pure ,(format nil "~A/default.nix" directory) ,@args))
