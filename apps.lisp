@@ -17,6 +17,8 @@
            #:term
            #:fire
            #:keep
+           #:skype
+
            #:xrsync
            #:ra
            #:raz
@@ -28,8 +30,9 @@
            #:par
            #:v
            #:xv
-           #:bt!
-           #:c@
+
+           #:bt0
+           #:bt1
 
            #:len
            #:leo
@@ -54,6 +57,7 @@
  (% term "len urxvt")
  (% fire "firefox")
  (% keep "keepassxc")
+ (% skype "skypeforlinux")
  (% xrsync "rsync -rlptgoDHSx")
  (% ra "xrsync")
  (% raz "ra -z")
@@ -64,8 +68,7 @@
  (% par "parallel --will-cite")
  (% v "less")
  (% xv "xzless")
- (% bt! "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink")
- (% c@ "xclip -selection clipboard"))
+ (% bt1 "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
 
 (defun run-locale (locale &rest args)
   "Run args with locale set to LOCALE"
@@ -99,6 +102,11 @@
    (success)))
 
 (exporting-definitions
+ (defun bt0 (&rest args)
+   (run/i `(pacmd "set-default-sink" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink"))
+   (run/i `(pacmd "set-default-source" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink.monitor"))
+   (success))
+
  (defun @ (&rest args)
    (let ((path (uiop:native-namestring (uiop:resolve-symlinks "/dev/fd/0"))))
      (match path
