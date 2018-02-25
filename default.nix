@@ -24,6 +24,9 @@ stdenv.mkDerivation {
     SDL2_ttf
     libffi
     ncurses
+    freeglut
+    mesa
+    cairo
   ];
 
   shellHook = ''
