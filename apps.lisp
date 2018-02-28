@@ -67,8 +67,7 @@
  (% rm@ "shred -vfzun 10")
  (% par "parallel --will-cite")
  (% v "less")
- (% xv "xzless")
- (% bt1 "pacmd set-default-sink bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
+ (% xv "xzless"))
 
 (defun run-locale (locale &rest args)
   "Run args with locale set to LOCALE"
@@ -105,6 +104,11 @@
  (defun bt0 (&rest args)
    (run/i `(pacmd "set-default-sink" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink"))
    (run/i `(pacmd "set-default-source" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink.monitor"))
+   (success))
+
+ (defun bt1 (&rest args)
+   (run/i `(pacmd "set-default-sink" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
+   (run/i `(pacmd "set-default-source" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink.monitor"))
    (success))
 
  (defun @ (&rest args)
