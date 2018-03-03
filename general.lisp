@@ -115,7 +115,8 @@
     (success))
 
   (defun load-xresources ()
-    (run/i `(xrdb ,(home ".Xresources"))))
+    (run `(xrdb ,(home ".Xresources")) :output :interactive :input :interactive :error-output nil :on-error nil)
+    (success))
 
   (defun xxx ()
     (let ((hostname (hostname))
