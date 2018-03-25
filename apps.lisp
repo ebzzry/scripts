@@ -56,6 +56,7 @@
  (% e "emacsclient -nw")
  (% term "len urxvt")
  (% fire "firefox")
+ (% tele "telegram-desktop")
  (% keep "keepassxc")
  (% skype "skypeforlinux")
  (% xrsync "rsync -rlptgoDHSx")
@@ -90,8 +91,6 @@
 (exporting-definitions
  (defun len (&rest args) (run-locale "en_US.UTF-8" args))
  (defun leo (&rest args) (run-locale "eo.utf8" args))
-
- (defun tele (&rest args) (run-nix-user "tdesktop" "telegram-desktop" args))
  (defun vibe (&rest args) (run-nix-user "viber" "viber" args))
  (defun tox (&rest args) (run-nix-user "qtox" "qtox" args))
 
