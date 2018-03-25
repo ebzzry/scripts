@@ -31,6 +31,7 @@
            #:v
            #:xv
 
+           #:bt
            #:bt0
            #:bt1
 
@@ -41,7 +42,6 @@
            #:tox
            #:vbox
 
-           #:@
            #:shell
            #:rshell
            #:screenshot
@@ -67,7 +67,8 @@
  (% rm@ "shred -vfzun 10")
  (% par "parallel --will-cite")
  (% v "less")
- (% xv "xzless"))
+ (% xv "xzless")
+ (% bt "bluetoothctl"))
 
 (defun run-locale (locale &rest args)
   "Run args with locale set to LOCALE"
@@ -104,19 +105,13 @@
  (defun bt0 (&rest args)
    (run/i `(pacmd "set-default-sink" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink"))
    (run/i `(pacmd "set-default-source" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink.monitor"))
+   (run/i `(pacmd "set-port-latency-offset" "bluez_card.B8_D5_0B_8D_77_EB" "headphone-output" "250000"))
    (success))
 
  (defun bt1 (&rest args)
    (run/i `(pacmd "set-default-sink" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
    (run/i `(pacmd "set-default-source" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink.monitor"))
    (success))
-
- (defun @ (&rest args)
-   (let ((path (uiop:native-namestring (uiop:resolve-symlinks "/dev/fd/0"))))
-     (match path
-       ((ppcre "/dev/tty[0-9]*") (run/i `(setleds "-caps")))
-       (_ (run/i `(xdotool "key" "Caps_Lock"))))
-     (success)))
 
  (defun shell (&rest args)
    (let ((directory (pathname-directory-pathname (find-binary (argv0)))))
