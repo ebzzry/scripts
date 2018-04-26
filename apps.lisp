@@ -24,6 +24,8 @@
            #:raz
            #:raz!
            #:chrome
+           #:tele
+           #:vibe
            #:qp
            #:rt
            #:rm@
@@ -37,8 +39,6 @@
 
            #:len
            #:leo
-           #:tele
-           #:vibe
            #:tox
            #:vbox
 
@@ -57,6 +57,7 @@
  (% term "len urxvt")
  (% fire "firefox")
  (% tele "telegram-desktop")
+ (% vibe "viber")
  (% keep "keepassxc")
  (% skype "skypeforlinux")
  (% xrsync "rsync -rlptgoDHSx")
@@ -128,8 +129,8 @@
      (flet ((scrot (file dest &rest args)
               (run/i `(scrot ,@args ,file -e ,dest))))
        (match mode
-         ((ppcre "(full|tuta)") (scrot file dest))
-         ((ppcre "(region|parta)") (scrot file dest '-s))
+         ((ppcre "(full|tute)") (scrot file dest))
+         ((ppcre "(region|parte)") (scrot file dest '-s))
          (_ (err (format nil "invalid mode ~A~%" mode))))
        (run `(xclip -selection clipboard) :input (list image))
        (success))))
