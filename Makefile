@@ -12,8 +12,7 @@ $(NAME):
 
 install: $(NAME)
 	@ln -sf $(SCRIPT) $(BINARY)
-	@$(SCRIPT) create-symlinks $(NAME)
+	@$(SCRIPT) create-symlinks $(BINARY)
 
 clean:
 	@rm -f $(NAME)
-
