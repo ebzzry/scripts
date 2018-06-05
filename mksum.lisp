@@ -22,40 +22,36 @@ provided, prints the SHA-256 checksum by default.")
          (stropt :short-name "a" :long-name "algorithm"
                  :description "Select algorithm to use.")))
 
-(defun digest-sum-files (digest-name &rest files)
+(defun digest-files (name &rest files)
   (unless files
     (error "no files given to digest"))
   (loop :with buffer = (make-array 8192 :element-type '(unsigned-byte 8))
-     :with digest = (make-array (ironclad:digest-length digest-name)
+     :with digest = (make-array (digest-length name)
                                 :element-type '(unsigned-byte 8))
      :for file :in files
-     :for digester = (ironclad:make-digest digest-name)
+     :for digester = (make-digest name)
      :then (reinitialize-instance digester)
-     :do (ironclad:digest-file digester file :buffer buffer :digest digest)
+     :do (digest-file digester file :buffer buffer :digest digest)
        (format t "~A ~A~%" (file-namestring file)
-               (ironclad:byte-array-to-hex-string digest))))
+               (byte-array-to-hex-string digest))))
+
+(defun check-context (algorithm)
+  (string= (getopt :short-name "a" :context (make-context)) algorithm))
+
+(defun digest-to (algorithm)
+  (apply #'digest-files algorithm (remainder))
+  (exit))
 
 (exporting-definitions
  (defun mksum (&rest args)
    (declare (ignore args))
    (cond ((getopt :short-name "h"
-                  :context (make-context)) (help) (exit))
-         ((string= (getopt :short-name "a"
-                           :context (make-context)) "md5") (eval `(digest-sum-files 'md5
-                                                                                    ,@(remainder)))
-                                                           (exit))
-         ((string= (getopt :short-name "a"
-                           :context (make-context)) "sha256") (eval `(digest-sum-files 'sha256
-                                                                                       ,@(remainder)))
-                                                              (exit))
-         ((string= (getopt :short-name "a"
-                           :context (make-context)) "sha1") (eval `(digest-sum-files 'sha1
-                                                                                     ,@(remainder)))
-                                                            (exit))
-         
-         ((remainder) (eval `(digest-sum-files 'sha256
-                                               ,@(remainder)))
-                      (exit))
+                  :context (make-context)) (help)
+          (exit))
+         ((check-context "md5") (digest-to 'md5))
+         ((check-context "sha256") (digest-to 'sha256))
+         ((check-context "sha1") (digest-to 'sha1))
+         ((remainder) (digest-to 'sha256))
          (t (help)
             (exit)))))
 
