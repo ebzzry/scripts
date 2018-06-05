@@ -10,8 +10,11 @@
                (:version "inferior-shell" "2.0.3.3")
                (:version "fare-utils" "1.0.0.5")
                :local-time
+               :ironclad
+               :net.didierverna.clon
                "scripts/misc"
                "scripts/touchpad"
                "scripts/general"
                "scripts/apps"
-               "scripts/unix"))
+               "scripts/unix"
+               "scripts/mksum"))
