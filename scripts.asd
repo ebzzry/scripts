@@ -12,6 +12,7 @@
                :local-time
                :ironclad
                :net.didierverna.clon
+               :mof
                "scripts/misc"
                "scripts/touchpad"
                "scripts/general"
