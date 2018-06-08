@@ -3,7 +3,6 @@
 (uiop:define-package :scripts/mksum
     (:use #:cl
           #:uiop
-          #:inferior-shell
           #:cl-scripting
           #:fare-utils
           #:net.didierverna.clon
@@ -12,9 +11,8 @@
 
 (in-package :scripts/mksum)
 
-(defsynopsis (:postfix "FILES...")
-  (text :contents "Print the file/directory checksums (for supported algorithms, provide the \"-l\"
-option flag). With no options provided, prints the SHA-256 checksum by default.")
+(defsynopsis (:postfix "FILE...")
+  (text :contents "Prints the checksums of files and directories. Uses SHA-256 by default.")
   (group (:header "Options:")
          (flag :short-name "h" :long-name "help"
                :description "Print this help.")
@@ -42,6 +40,10 @@ option flag). With no options provided, prints the SHA-256 checksum by default."
                   (mapcar #'(lambda (file) (single-digest type file))
                           (mof:files directory)))))
 
+(defun concat (&rest args)
+  "Concatenate strings."
+  (reduce #'(lambda (x y) (concatenate 'string x y)) args))
+
 (defun mksum-dir (type directory)
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
   (let* ((long-string (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
@@ -61,11 +63,9 @@ option flag). With no options provided, prints the SHA-256 checksum by default."
   "Output default mksum hash in ironclad format."
   (read-from-string (concat "ironclad:" "sha256")))
 
-(defun pretty-splice (list)
+(defun print-list (list)
+  "Output formatted string from LIST"
   (format t "~{~A~%~}" list))
-
-(defun concat (&rest args)
-  (reduce #'(lambda (x y) (concatenate 'string x y)) args))
 
 (exporting-definitions
   (defun mksum (&rest args)
@@ -95,12 +95,12 @@ option flag). With no options provided, prints the SHA-256 checksum by default."
                                                                         (first arg))
                                                              (option-without (rest arg)))))))
       (cond ((get-opt "h") (help) (exit))
-            ((get-opt "l") (pretty-splice (list-all-digests))
+            ((get-opt "l") (print-list (list-all-digests))
              (exit))
             ((null (remainder)) (help) (exit))
-            ((get-opt "t") (pretty-splice (option-with (remainder)))
+            ((get-opt "t") (print-list (option-with (remainder)))
              (exit))
-            (t (pretty-splice (option-without (remainder)))
+            (t (print-list (option-without (remainder)))
                (exit))))))
 
 (register-commands :scripts/mksum)
