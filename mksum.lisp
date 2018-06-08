@@ -46,9 +46,9 @@
 
 (defun mksum-dir (type directory)
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
-  (let* ((long-string (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
+  (let* ((value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
                               (create-context type directory))))
-    (format nil "~A ~A" (hash type long-string) (merge-pathnames* directory
+    (format nil "~A ~A" (hash type value) (merge-pathnames* directory
                                                                   (user-homedir-pathname)))))
 
 (defun get-opt (option)
@@ -77,22 +77,14 @@
              (option-with (arg)
                (cond ((null arg) nil)
                      ((and (context-p) (file-exists-p (first arg)))
-                      (cons (single-digest (iron-hash)
-                                           (first arg))
-                            (option-with (rest arg))))
-                     
-                     ((and (context-p)
-                           (directory-exists-p (first arg)))
-                      (cons (mksum-dir (iron-hash)
-                                       (first arg))
-                            (option-with (rest arg))))))
+                      (cons (single-digest (iron-hash) (first arg)) (option-with (rest arg))))
+                     ((and (context-p) (directory-exists-p (first arg)))
+                      (cons (mksum-dir (iron-hash) (first arg)) (option-with (rest arg))))))
              (option-without (arg)
                (cond ((null arg) nil)
-                     ((file-exists-p (first arg)) (cons (single-digest (iron-d-hash)
-                                                                       (first arg))
+                     ((file-exists-p (first arg)) (cons (single-digest (iron-d-hash) (first arg))
                                                         (option-without (rest arg))))
-                     ((directory-exists-p (first arg)) (cons (mksum-dir (iron-d-hash)
-                                                                        (first arg))
+                     ((directory-exists-p (first arg)) (cons (mksum-dir (iron-d-hash) (first arg))
                                                              (option-without (rest arg)))))))
       (cond ((get-opt "h") (help) (exit))
             ((get-opt "l") (print-list (list-all-digests))
