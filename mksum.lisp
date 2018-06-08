@@ -19,7 +19,7 @@ option flag). With no options provided, prints the SHA-256 checksum by default."
          (flag :short-name "h" :long-name "help"
                :description "Print this help.")
          (flag :short-name "l" :long-name "list"
-               :description "List supported hash checksum algorithms.")
+               :description "List supported hash functions.")
          (stropt :short-name "t" :long-name "type"
                  :description "Specify hash function to use.")))
 
@@ -35,14 +35,17 @@ option flag). With no options provided, prints the SHA-256 checksum by default."
   "Compute the TYPE checksum of STRING."
   (byte-array-to-hex-string (digest-sequence type (ascii-string-to-byte-array string))))
 
+(defun create-context (type directory)
+  "Compute the TYPE checksums of the files inside DIRECTORY"
+  (mapcar #'first
+          (mapcar #'(lambda (string) (cl-ppcre:split #\space string))
+                  (mapcar #'(lambda (file) (single-digest type file))
+                          (mof:files directory)))))
+
 (defun mksum-dir (type directory)
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
-  (let* ((list-of-string (mapcar #'first
-                                 (mapcar #'(lambda (string) (cl-ppcre:split #\space string))
-                                         (mapcar #'(lambda (file) (single-digest type file))
-                                                 (mof:files directory)))))
-         (long-string (reduce #'(lambda (str1 str2) (concatenate 'string str1 str2))
-                              list-of-string)))
+  (let* ((long-string (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
+                              (create-context type directory))))
     (format nil "~A ~A" (hash type long-string) (merge-pathnames* directory
                                                                   (user-homedir-pathname)))))
 
@@ -52,11 +55,17 @@ option flag). With no options provided, prints the SHA-256 checksum by default."
 
 (defun iron-hash ()
   "Output how ironclad shows its hash function through the command line."
-  (read-from-string (concatenate 'string "ironclad:" (get-opt "t"))))
+  (read-from-string (concat "ironclad:" (get-opt "t"))))
 
 (defun iron-d-hash ()
   "Output default mksum hash in ironclad format."
-  (read-from-string (concatenate 'string "ironclad:" "sha256")))
+  (read-from-string (concat "ironclad:" "sha256")))
+
+(defun pretty-splice (list)
+  (format t "~{~A~%~}" list))
+
+(defun concat (&rest args)
+  (reduce #'(lambda (x y) (concatenate 'string x y)) args))
 
 (exporting-definitions
   (defun mksum (&rest args)
@@ -65,33 +74,33 @@ option flag). With no options provided, prints the SHA-256 checksum by default."
     (labels ((context-p ()
                (member (iron-hash)
                        (list-all-digests)))
-             (m-s (arg)
+             (option-with (arg)
                (cond ((null arg) nil)
                      ((and (context-p) (file-exists-p (first arg)))
                       (cons (single-digest (iron-hash)
                                            (first arg))
-                            (m-s (rest arg))))
+                            (option-with (rest arg))))
                      
                      ((and (context-p)
                            (directory-exists-p (first arg)))
                       (cons (mksum-dir (iron-hash)
                                        (first arg))
-                            (m-s (rest arg))))))
-             (m-sha (arg)
+                            (option-with (rest arg))))))
+             (option-without (arg)
                (cond ((null arg) nil)
                      ((file-exists-p (first arg)) (cons (single-digest (iron-d-hash)
                                                                        (first arg))
-                                                        (m-sha (rest arg))))
+                                                        (option-without (rest arg))))
                      ((directory-exists-p (first arg)) (cons (mksum-dir (iron-d-hash)
                                                                         (first arg))
-                                                             (m-sha (rest arg)))))))
+                                                             (option-without (rest arg)))))))
       (cond ((get-opt "h") (help) (exit))
-            ((get-opt "l") (format t "~{~A~%~}" (list-all-digests))
+            ((get-opt "l") (pretty-splice (list-all-digests))
              (exit))
             ((null (remainder)) (help) (exit))
-            ((get-opt "t")  (format t "~{~A~%~}" (m-s (remainder)))
+            ((get-opt "t") (pretty-splice (option-with (remainder)))
              (exit))
-            (t (format t "~{~A~%~}" (m-sha (remainder)))
+            (t (pretty-splice (option-without (remainder)))
                (exit))))))
 
 (register-commands :scripts/mksum)
