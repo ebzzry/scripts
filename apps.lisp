@@ -45,7 +45,8 @@
            #:shell
            #:rshell
            #:screenshot
-           #:sg2e))
+           #:sg2e
+           #:smb))
 
 (in-package :scripts/apps)
 
@@ -56,21 +57,20 @@
   (% e "emacsclient -nw")
   (% term "len urxvt")
   (% fire "firefox")
+  (% chrome "google-chrome-unstable")
   (% tele "telegram-desktop")
-  (% vibe "viber")
   (% keep "keepassxc")
-  (% skype "skypeforlinux")
   (% xrsync "rsync -rlptgoDHSx")
   (% ra "xrsync")
   (% raz "ra -z")
-  (% chrome "google-chrome-unstable")
   (% qp "qpdfview")
   (% rt "rtorrent")
   (% rm@ "shred -vfzun 10")
   (% par "parallel --will-cite")
   (% v "less")
   (% xv "xzless")
-  (% bt "bluetoothctl"))
+  (% bt "bluetoothctl")
+  (% kt "len krita"))
 
 (defun run-locale (locale &rest args)
   "Run args with locale set to LOCALE"
@@ -93,7 +93,6 @@
   (defun len (&rest args) (run-locale "en_US.UTF-8" args))
   (defun leo (&rest args) (run-locale "eo.utf8" args))
   (defun tox (&rest args) (run-nix-user "qtox" "qtox" args))
-
   (defun vbox () (run-nix-system "VirtualBox"))
 
   (defun raz! (&rest args)
@@ -132,11 +131,17 @@
           ((ppcre "(region|parte)") (scrot file dest '-s))
           (_ (err (format nil "invalid mode ~A~%" mode))))
         (run `(xclip -selection clipboard) :input (list image))
-        (success))))
+        (success)))))
 
+(exporting-definitions
   (defun sg2e (&rest args)
     (declare (ignore args))
     (run/i `(stem "-X" ,(argv0) "steam://rungameid/245170"))
+    (success))
+
+  (defun smb (&rest args)
+    (declare (ignore args))
+    (run/i `(stem "-s"  "steam://rungameid/40800"))
     (success)))
 
 (register-commands :scripts/apps)
