@@ -33,6 +33,8 @@
                                                                (ironclad:ascii-string-to-byte-array
                                                                 string))))
 
+(defvar *default-hash* :sha256 "Default hash function")
+
 (defun list-dir-checksum (type directory)
   "List the TYPE checksums of the files inside DIRECTORY."
   (mapcar #'first
@@ -68,10 +70,6 @@
   "Get first element of (CONTEXT-P)"
   (first (context-p)))
 
-(defun for-sha256 ()
-  "Return IRONCLAD:SHA256 symbol."
-  (intern "SHA256" "IRONCLAD"))
-
 (defun file-really-exists-p (arg)
   "Check if file really exists."
   (and (uiop:file-exists-p arg) (uiop:probe-file* arg)))
@@ -97,8 +95,8 @@
   "Create list of SHA256 checksums of files and directories"
   (cond ((null arg) nil)
         ((file-really-exists-p (first arg))
-         (cons (checksum (for-sha256) (first arg)) (option-without (rest arg))))
-        ((uiop:directory-exists-p (first arg)) (cons (directory-checksum (for-sha256)
+         (cons (checksum *default-hash* (first arg)) (option-without (rest arg))))
+        ((uiop:directory-exists-p (first arg)) (cons (directory-checksum *default-hash*
                                                                          (first arg))
                                                      (option-without (rest arg))))
         (t nil)))
