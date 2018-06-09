@@ -1,4 +1,4 @@
-;;; general.lisp
+;;;; general.lisp
 
 (uiop:define-package
     :scripts/general
@@ -48,24 +48,24 @@
 
   (defun ascii-hex-table ()
     (loop :for i :from 32 :to 255
-       :do (format t "~A~X~A:~A~A~A~:[ ~;~%~]"
-                   *num-mode* i
-                   *colon-mode* *char-mode*
-                   (char-display-char i)
-                   *normal-mode*
-                   (zerop (mod (1+ i) 16))))
+          :do (format t "~A~X~A:~A~A~A~:[ ~;~%~]"
+                      *num-mode* i
+                      *colon-mode* *char-mode*
+                      (char-display-char i)
+                      *normal-mode*
+                      (zerop (mod (1+ i) 16))))
     (success))
 
   (defun ascii () (ascii-hex-table))
 
   (defun ascii-oct-table ()
     (loop :for i :from 32 :to 255
-       :do (format t "~A~3O~A~A~A~:[ ~;~%~]"
-                   *num-mode* i
-                   *char-mode*
-                   (char-display-char i)
-                   *normal-mode*
-                   (zerop (mod (1+ i) 16))))
+          :do (format t "~A~3O~A~A~A~:[ ~;~%~]"
+                      *num-mode* i
+                      *char-mode*
+                      (char-display-char i)
+                      *normal-mode*
+                      (zerop (mod (1+ i) 16))))
     (success))
 
   (defun rot13 (&rest args)
