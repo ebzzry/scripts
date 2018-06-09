@@ -59,7 +59,7 @@
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
   (when (uiop:directory-exists-p directory)
     (let ((value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
-                         (list-dir-checksum type directory))))
+                         (list-dir-checksum type (slash-string directory)))))
       (format nil "~A ~A" (hash type value) (slash-string directory)))))
 
 (defun get-opt (option)
