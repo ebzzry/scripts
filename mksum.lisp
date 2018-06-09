@@ -11,7 +11,7 @@
 (in-package :scripts/mksum)
 
 (defsynopsis (:postfix "FILE...")
-  (text :contents "Prints the checksums of files and directories. Uses SHA-256 by default.")
+  (text :contents "Prints the checksums of files and directories. Uses SHA256 by default.")
   (group (:header "Options:")
          (flag :short-name "h" :long-name "help"
                :description "Print this help.")
@@ -60,18 +60,24 @@
   "Output formatted string from LIST"
   (format t "~{~A~%~}" list))
 
+(defun context-p ()
+  "Check membership of option value in supported digests."
+  (member (intern (string-upcase (get-opt "t")) "IRONCLAD")
+                       (ironclad:list-all-digests)))
+
+(defun first-context ()
+  "Get first element of (CONTEXT-P)"
+  (first (context-p)))
+
+(defun for-sha256 ()
+  "Return IRONCLAD:SHA256 symbol."
+  (intern "SHA256" "IRONCLAD"))
+
 (exporting-definitions
   (defun mksum (&rest args)
     "Compute the checksum of the given file(s) and directory(ies)."
     (declare (ignorable args))
-    (labels ((context-p ()
-               (member (intern (string-upcase (get-opt "t")) "IRONCLAD")
-                       (ironclad:list-all-digests)))
-             (first-context ()
-               (first (context-p)))
-             (for-sha ()
-               (intern "SHA256" "IRONCLAD"))
-             (option-with (arg)
+    (labels ((option-with (arg)
                (cond ((null arg) nil)
                      ((and (context-p) (file-exists-p (first arg)))
                       (cons (single-digest (first-context) (first arg)) (option-with (rest arg))))
