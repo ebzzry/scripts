@@ -17,7 +17,7 @@
                :description "Print this help.")
          (flag :short-name "l" :long-name "list"
                :description "List supported hash functions.")
-         (stropt :short-name "t" :long-name "type"
+         (stropt :short-name "t" :long-name "type" :argument-name "HASH"
                  :description "Specify hash function to use.")))
 
 (defun single-digest (type file)
