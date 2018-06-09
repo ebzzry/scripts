@@ -27,6 +27,12 @@ stdenv.mkDerivation {
     freeglut
     mesa
     cairo
+    glib
+    gdk_pixbuf
+    gnome2.pango
+    gnome3.gtk
+    gnome3.libsoup
+    gnome3.webkitgtk
   ];
 
   shellHook = ''
