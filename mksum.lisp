@@ -12,23 +12,19 @@
 (defvar *default-hash* :sha256 "Default hash function")
 
 (defsynopsis (:postfix "FILE...")
-  (text :contents "Prints the checksums of files and directories. Uses SHA256 by default.")
+  (text :contents "Prints the checksums of files and directories. Uses SHA256 by default")
   (group (:header "Options:")
          (flag :short-name "h" :long-name "help"
-               :description "Print this help.")
+               :description "Print this help")
          (flag :short-name "l" :long-name "list"
-               :description "List supported hash functions.")
+               :description "List supported hash functions")
          (stropt :short-name "t" :long-name "type" :argument-name "HASH"
-                 :description "Specify hash function to use.")
+                 :description "Specify hash function to use")
          (flag :short-name "s" :long-name "string"
-               :description "Treat argument as a literal string.")))
-
-(defun format-two (arg-1 arg-2)
-  "Print the two arguments in aesthetic form."
-  (format nil "~A ~A" arg-1 arg-2))
+               :description "Specify string to compute the checksum of")))
 
 (defun checksum (type file)
-  "Compute the TYPE checksum of FILE."
+  "Compute the TYPE checksum of FILE"
   (let ((buffer (make-array 8192 :element-type '(unsigned-byte 8)))
         (digest (make-array (ironclad:digest-length type) :element-type '(unsigned-byte 8)))
         (digester (ironclad:make-digest type)))
@@ -36,13 +32,13 @@
     (format-two (ironclad:byte-array-to-hex-string digest) (uiop:truenamize file))))
 
 (defun hash (type string)
-  "Compute the TYPE checksum of STRING."
+  "Compute the TYPE checksum of STRING"
   (ironclad:byte-array-to-hex-string (ironclad:digest-sequence type
                                                                (ironclad:ascii-string-to-byte-array
                                                                 string))))
 
 (defun slash-string (directory)
-  "Convert directory to its truename."
+  "Convert directory to its truename"
   (let* ((length (length directory))
          (last (elt directory (1- length))))
     (if (char= last #\/)
@@ -50,18 +46,18 @@
         (concatenate 'string directory "/"))))
 
 (defun list-dir-checksum (type directory)
-  "List the TYPE checksums of the files inside DIRECTORY."
+  "List the TYPE checksums of the files inside DIRECTORY"
   (mapcar #'first
           (mapcar #'(lambda (string) (cl-ppcre:split #\space string))
                   (mapcar #'(lambda (file) (checksum type file))
                           (mof:files directory)))))
 
 (defun concat (&rest args)
-  "Concatenate strings."
+  "Concatenate strings"
   (reduce #'(lambda (x y) (concatenate 'string x y)) args))
 
 (defun directory-checksum (type directory)
-  "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
+  "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY"
   (when (uiop:directory-exists-p directory)
     (let* ((path (slash-string directory))
            (value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
@@ -69,15 +65,20 @@
       (format-two (hash type value) path))))
 
 (defun get-opt (option)
-  "Get the value of OPTION from the context."
+  "Get the value of OPTION from the context"
   (getopt :short-name option :context (make-context)))
 
 (defun print-list (list)
   "Output formatted string from LIST"
   (format t "~{~A~%~}" list))
 
+(defun print-exit (list)
+  "Prints LIST then exit"
+  (print-list list)
+  (exit))
+
 (defun context-p (option)
-  "Check membership of option value in supported digests."
+  "Check membership of option value in supported digests"
   (member (intern (string-upcase (get-opt option)) "IRONCLAD")
           (ironclad:list-all-digests)))
 
@@ -86,19 +87,19 @@
   (first (context-p "t")))
 
 (defun file-really-exists-p (arg)
-  "Check if file really exists."
+  "Check if file really exists"
   (and (uiop:file-exists-p arg) (uiop:probe-file* arg)))
 
 (defun file-context-p (arg)
-  "Check if file really exists and option value is valid."
+  "Check if file really exists and option value is valid"
   (and (context-p "t") (file-really-exists-p arg)))
 
 (defun directory-context-p (arg)
-  "Check if directory exists and option value is valid."
+  "Check if directory exists and option value is valid"
   (and (context-p "t") (uiop:directory-exists-p arg)))
 
 (defun option-with (arg)
-  "Create list, of the given type, of checksums of files and directories."
+  "Create list, of the given type, of checksums of files and directories"
   (cond ((null arg) nil)
         ((file-context-p (first arg))
          (cons (checksum (first-context) (first arg)) (option-with (rest arg))))
@@ -107,7 +108,7 @@
         (t nil)))
 
 (defun option-without (arg)
-  "Create list of SHA256 checksums of files and directories."
+  "Create list of SHA256 checksums of files and directories"
   (cond ((null arg) nil)
         ((file-really-exists-p (first arg))
          (cons (checksum *default-hash* (first arg)) (option-without (rest arg))))
@@ -117,40 +118,41 @@
         (t nil)))
 
 (defun string-with (arg)
-  "Create list, of the given type, of checksums of files and directories."
+  "Create list, of the given type, of checksums of files and directories"
   (cond ((null arg) nil)
         (t (cons (format-two (hash (first-context) (first arg)) (first arg))
                  (string-with (rest arg))))))
 
 (defun string-without (arg)
-  "Create list of SHA256 checksums of strings."
+  "Create list of SHA256 checksums of strings"
   (cond ((null arg) nil)
         (t (cons (format-two (hash *default-hash* (first arg)) (first arg))
                  (string-without (rest arg))))))
 
 (defun print-help ()
-  "Print help page."
-  (help) (exit))
+  "Print help text"
+  (help)
+  (exit))
 
 (defun print-digests ()
-  "Print list of supported digests."
+  "Print list of supported digests"
   (print-list (ironclad:list-all-digests)))
 
 (exporting-definitions
   (defun mksum (&rest args)
-    "Compute the checksum of the given file(s) and directory(ies)."
+    "Compute the checksum of the given file(s) and directory(ies)"
     (declare (ignorable args))
-    (cond ((or (get-opt "h") (null (remainder))) (print-help))
-          ((get-opt "l") (print-list (ironclad:list-all-digests))
-           (exit))
+    (cond ((or (get-opt "h") (null (remainder)))
+           (print-help))
+          ((get-opt "l")
+           (print-exit (ironclad:list-all-digests)))
           ((and (get-opt "s")
-                (get-opt "t")) (print-list (string-with (remainder)))
-           (exit))
-          ((get-opt "s") (print-list (string-without (remainder)))
-           (exit))
-          ((get-opt "t") (print-list (option-with (remainder)))
-           (exit))          
-          (t (print-list (option-without (remainder)))
-             (exit)))))
+                (get-opt "t"))
+           (print-exit (string-with (remainder))))
+          ((get-opt "s")
+           (print-exit (string-without (remainder))))
+          ((get-opt "t")
+           (print-exit (option-with (remainder))))
+          (t (print-exit (option-without (remainder)))))))
 
 (register-commands :scripts/mksum)
