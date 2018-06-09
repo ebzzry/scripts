@@ -5,8 +5,7 @@
           #:cl-scripting
           #:fare-utils
           #:net.didierverna.clon)
-  (:export #:mksum
-           #:ms))
+  (:export #:mksum))
 
 (in-package :scripts/mksum)
 
@@ -20,7 +19,9 @@
          (flag :short-name "l" :long-name "list"
                :description "List supported hash functions.")
          (stropt :short-name "t" :long-name "type" :argument-name "HASH"
-                 :description "Specify hash function to use.")))
+                 :description "Specify hash function to use.")
+         (flag :short-name "s" :long-name "string"
+               :description "Specify string to compute the checksum of.")))
 
 (defun checksum (type file)
   "Compute the TYPE checksum of FILE."
@@ -28,7 +29,7 @@
         (digest (make-array (ironclad:digest-length type) :element-type '(unsigned-byte 8)))
         (digester (ironclad:make-digest type)))
     (ironclad:digest-file digester file :buffer buffer :digest digest)
-    (format nil "~A ~A" (ironclad:byte-array-to-hex-string digest) (file-namestring file))))
+    (format nil "~A ~A" (ironclad:byte-array-to-hex-string digest) (uiop:truenamize file))))
 
 (defun hash (type string)
   "Compute the TYPE checksum of STRING."
@@ -58,9 +59,10 @@
 (defun directory-checksum (type directory)
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
   (when (uiop:directory-exists-p directory)
-    (let ((value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
-                         (list-dir-checksum type (slash-string directory)))))
-      (format nil "~A ~A" (hash type value) (slash-string directory)))))
+    (let* ((path (slash-string directory))
+           (value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
+                          (list-dir-checksum type path))))
+      (format nil "~A ~A" (hash type value) path))))
 
 (defun get-opt (option)
   "Get the value of OPTION from the context."
@@ -70,14 +72,14 @@
   "Output formatted string from LIST"
   (format t "~{~A~%~}" list))
 
-(defun context-p ()
+(defun context-p (option)
   "Check membership of option value in supported digests."
-  (member (intern (string-upcase (get-opt "t")) "IRONCLAD")
+  (member (intern (string-upcase (get-opt option)) "IRONCLAD")
           (ironclad:list-all-digests)))
 
 (defun first-context ()
   "Get first element of (CONTEXT-P)"
-  (first (context-p)))
+  (first (context-p "t")))
 
 (defun file-really-exists-p (arg)
   "Check if file really exists."
@@ -85,11 +87,11 @@
 
 (defun file-context-p (arg)
   "Check if file really exists and option value is valid."
-  (and (context-p) (file-really-exists-p arg)))
+  (and (context-p "t") (file-really-exists-p arg)))
 
 (defun directory-context-p (arg)
   "Check if directory exists and option value is valid."
-  (and (context-p) (uiop:directory-exists-p arg)))
+  (and (context-p "t") (uiop:directory-exists-p arg)))
 
 (defun option-with (arg)
   "Create list of the given type of checksums of files and directories"
@@ -110,23 +112,39 @@
                                                      (option-without (rest arg))))
         (t nil)))
 
-(defun aapsdoify (&rest args)
-  )
+(defun string-with (arg)
+  (cond ((null arg) nil)
+        (t (cons (hash (first-context) (first arg))
+                 (string-with (rest arg))))))
+
+(defun string-without (arg)
+  (cond ((null arg) nil)
+        (t (cons (hash *default-hash* (first arg))
+                 (string-without (rest arg))))))
+
+(defun print-help ()
+  "Print help page."
+  (help) (exit))
+
+(defun print-digests ()
+  "Print list of supported digests."
+  (print-list (ironclad:list-all-digests)))
 
 (exporting-definitions
   (defun mksum (&rest args)
     "Compute the checksum of the given file(s) and directory(ies)."
     (declare (ignorable args))
-    (cond ((get-opt "h") (help) (exit))
+    (cond ((or (get-opt "h") (null (remainder))) (print-help))
           ((get-opt "l") (print-list (ironclad:list-all-digests))
            (exit))
-          ((null (remainder)) (help) (exit))
-          ((get-opt "t") (print-list (option-with (remainder)))
+          ((and (get-opt "s")
+                (get-opt "t")) (print-list (string-with (remainder)))
            (exit))
+          ((get-opt "s") (print-list (string-without (remainder)))
+           (exit))
+          ((get-opt "t") (print-list (option-with (remainder)))
+           (exit))          
           (t (print-list (option-without (remainder)))
              (exit)))))
-
-(defun ms (&rest args)
-  (apply #'mksum args))
 
 (register-commands :scripts/mksum)
