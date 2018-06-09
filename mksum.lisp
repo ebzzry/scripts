@@ -5,9 +5,12 @@
           #:cl-scripting
           #:fare-utils
           #:net.didierverna.clon)
-  (:export #:ms))
+  (:export #:mksum
+           #:ms))
 
 (in-package :scripts/mksum)
+
+(defvar *default-hash* :sha256 "Default hash function")
 
 (defsynopsis (:postfix "FILE...")
   (text :contents "Prints the checksums of files and directories. Uses SHA256 by default.")
@@ -32,8 +35,6 @@
   (ironclad:byte-array-to-hex-string (ironclad:digest-sequence type
                                                                (ironclad:ascii-string-to-byte-array
                                                                 string))))
-
-(defvar *default-hash* :sha256 "Default hash function")
 
 (defun slash-string (directory)
   "Convert directory to its truename."
@@ -71,8 +72,8 @@
 
 (defun context-p ()
   "Check membership of option value in supported digests."
-  (member (string-upcase (get-opt "t")) (mapcar #'string (ironclad:list-all-digests)) :test
-          #'equal))
+  (member (intern (string-upcase (get-opt "t")) "IRONCLAD")
+          (ironclad:list-all-digests)))
 
 (defun first-context ()
   "Get first element of (CONTEXT-P)"
@@ -109,8 +110,8 @@
                                                      (option-without (rest arg))))
         (t nil)))
 
-(defun ms (&rest args)
-  (apply #'mksum args))
+(defun aapsdoify (&rest args)
+  )
 
 (exporting-definitions
   (defun mksum (&rest args)
@@ -124,5 +125,8 @@
            (exit))
           (t (print-list (option-without (remainder)))
              (exit)))))
+
+(defun ms (&rest args)
+  (apply #'mksum args))
 
 (register-commands :scripts/mksum)
