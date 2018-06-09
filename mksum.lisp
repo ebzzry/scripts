@@ -5,7 +5,7 @@
           #:cl-scripting
           #:fare-utils
           #:net.didierverna.clon)
-  (:export #:mksum))
+  (:export #:ms))
 
 (in-package :scripts/mksum)
 
@@ -35,6 +35,14 @@
 
 (defvar *default-hash* :sha256 "Default hash function")
 
+(defun slash-string (directory)
+  "Convert directory to its truename."
+  (let* ((length (length directory))
+         (last (elt directory (1- length))))
+    (if (char= last #\/)
+        directory
+        (concatenate 'string directory "/"))))
+
 (defun list-dir-checksum (type directory)
   "List the TYPE checksums of the files inside DIRECTORY."
   (mapcar #'first
@@ -51,7 +59,7 @@
   (when (uiop:directory-exists-p directory)
     (let ((value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
                          (list-dir-checksum type directory))))
-      (format nil "~A ~A" (hash type value) (uiop:directory-exists-p directory)))))
+      (format nil "~A ~A" (hash type value) (slash-string directory)))))
 
 (defun get-opt (option)
   "Get the value of OPTION from the context."
@@ -63,8 +71,8 @@
 
 (defun context-p ()
   "Check membership of option value in supported digests."
-  (member (intern (string-upcase (get-opt "t")) "IRONCLAD")
-          (ironclad:list-all-digests)))
+  (member (string-upcase (get-opt "t")) (mapcar #'string (ironclad:list-all-digests)) :test
+          #'equal))
 
 (defun first-context ()
   "Get first element of (CONTEXT-P)"
@@ -100,6 +108,9 @@
                                                                          (first arg))
                                                      (option-without (rest arg))))
         (t nil)))
+
+(defun ms (&rest args)
+  (apply #'mksum args))
 
 (exporting-definitions
   (defun mksum (&rest args)
