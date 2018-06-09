@@ -5,8 +5,7 @@
           #:uiop
           #:cl-scripting
           #:fare-utils
-          #:net.didierverna.clon
-          #:ironclad)
+          #:net.didierverna.clon)
   (:export #:mksum))
 
 (in-package :scripts/mksum)
@@ -24,14 +23,16 @@
 (defun single-digest (type file)
   "Compute the TYPE checksum of FILE."
   (let ((buffer (make-array 8192 :element-type '(unsigned-byte 8)))
-        (digest (make-array (digest-length type) :element-type '(unsigned-byte 8)))
-        (digester (make-digest type)))
-    (digest-file digester file :buffer buffer :digest digest)
-    (format nil "~A ~A" (byte-array-to-hex-string digest) (file-namestring file))))
+        (digest (make-array (ironclad:digest-length type) :element-type '(unsigned-byte 8)))
+        (digester (ironclad:make-digest type)))
+    (ironclad:digest-file digester file :buffer buffer :digest digest)
+    (format nil "~A ~A" (ironclad:byte-array-to-hex-string digest) (file-namestring file))))
 
 (defun hash (type string)
   "Compute the TYPE checksum of STRING."
-  (byte-array-to-hex-string (digest-sequence type (ascii-string-to-byte-array string))))
+  (ironclad:byte-array-to-hex-string (ironclad:digest-sequence type
+                                                               (ironclad:ascii-string-to-byte-array
+                                                                string))))
 
 (defun create-context (type directory)
   "Compute the TYPE checksums of the files inside DIRECTORY"
@@ -47,21 +48,13 @@
 (defun mksum-dir (type directory)
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
   (let* ((value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
-                              (create-context type directory))))
+                        (create-context type directory))))
     (format nil "~A ~A" (hash type value) (merge-pathnames* directory
-                                                                  (user-homedir-pathname)))))
+                                                            (user-homedir-pathname)))))
 
 (defun get-opt (option)
   "Get the value of OPTION from the context."
   (getopt :short-name option :context (make-context)))
-
-(defun iron-hash ()
-  "Output how ironclad shows its hash function through the command line."
-  (read-from-string (concat "ironclad:" (get-opt "t"))))
-
-(defun iron-d-hash ()
-  "Output default mksum hash in ironclad format."
-  (read-from-string (concat "ironclad:" "sha256")))
 
 (defun print-list (list)
   "Output formatted string from LIST"
@@ -72,22 +65,16 @@
     "Compute the checksum of the given file(s) and directory(ies)."
     (declare (ignorable args))
     (labels ((context-p ()
-               (member (iron-hash)
-                       (list-all-digests)))
+               (member ;(read-from-string (get-opt "t"))
+                       ;(get-opt "t")
+                       (ironclad:list-all-digests)))
              (option-with (arg)
                (cond ((null arg) nil)
-                     ((and (context-p) (file-exists-p (first arg)))
-                      (cons (single-digest (iron-hash) (first arg)) (option-with (rest arg))))
-                     ((and (context-p) (directory-exists-p (first arg)))
-                      (cons (mksum-dir (iron-hash) (first arg)) (option-with (rest arg))))))
+                     ((context-p) (context-p))))
              (option-without (arg)
-               (cond ((null arg) nil)
-                     ((file-exists-p (first arg)) (cons (single-digest (iron-d-hash) (first arg))
-                                                        (option-without (rest arg))))
-                     ((directory-exists-p (first arg)) (cons (mksum-dir (iron-d-hash) (first arg))
-                                                             (option-without (rest arg)))))))
+               (cond ((null arg) nil))))
       (cond ((get-opt "h") (help) (exit))
-            ((get-opt "l") (print-list (list-all-digests))
+            ((get-opt "l") (print-list (ironclad:list-all-digests))
              (exit))
             ((null (remainder)) (help) (exit))
             ((get-opt "t") (print-list (option-with (remainder)))
