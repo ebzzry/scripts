@@ -5,8 +5,10 @@ scripts
 Overview
 --------
 
-This is a collection of scripts written in Common Lisp. This repo started as my fork of
-[Fare’s scripts](http://github.com/fare/fare-scripts).
+This is a collection of scripts written in Common Lisp. This repo started as a fork of
+[fare-scripts](http://github.com/fare/fare-scripts).
+
+The mksum subsystem was implemented by [Raymund Martinez](https://github.com/zhaqenl).
 
 
 Dependencies
@@ -23,7 +25,7 @@ Building
 To install the scripts to `~/bin`, run:
 
 ```
-$ make
+$ make install
 ```
 
 
