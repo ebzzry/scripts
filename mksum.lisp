@@ -94,7 +94,7 @@
   (and (context-p "t") (uiop:directory-exists-p arg)))
 
 (defun option-with (arg)
-  "Create list of the given type of checksums of files and directories"
+  "Create list, of the given type, of checksums of files and directories."
   (cond ((null arg) nil)
         ((file-context-p (first arg))
          (cons (checksum (first-context) (first arg)) (option-with (rest arg))))
@@ -103,7 +103,7 @@
         (t nil)))
 
 (defun option-without (arg)
-  "Create list of SHA256 checksums of files and directories"
+  "Create list of SHA256 checksums of files and directories."
   (cond ((null arg) nil)
         ((file-really-exists-p (first arg))
          (cons (checksum *default-hash* (first arg)) (option-without (rest arg))))
@@ -113,11 +113,13 @@
         (t nil)))
 
 (defun string-with (arg)
+  "Create list, of the given type, of checksums of files and directories."
   (cond ((null arg) nil)
         (t (cons (hash (first-context) (first arg))
                  (string-with (rest arg))))))
 
 (defun string-without (arg)
+  "Create list of SHA256 checksums of strings."
   (cond ((null arg) nil)
         (t (cons (hash *default-hash* (first arg))
                  (string-without (rest arg))))))
