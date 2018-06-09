@@ -38,7 +38,7 @@
   (mapcar #'first
           (mapcar #'(lambda (string) (cl-ppcre:split #\space string))
                   (mapcar #'(lambda (file) (single-digest type file))
-                          (mof:files directory)))))
+                          (mof:files (uiop:directory-exists-p directory))))))
 
 (defun concat (&rest args)
   "Concatenate strings."
@@ -48,7 +48,7 @@
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
   (let* ((value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
                         (create-context type directory))))
-    (format nil "~A ~A" (hash type value) directory)))
+    (format nil "~A ~A" (hash type value) (uiop:directory-exists-p directory))))
 
 (defun get-opt (option)
   "Get the value of OPTION from the context."
