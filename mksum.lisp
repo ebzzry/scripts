@@ -2,7 +2,6 @@
 
 (uiop:define-package :scripts/mksum
     (:use #:cl
-          #:uiop
           #:cl-scripting
           #:fare-utils
           #:net.didierverna.clon)
@@ -49,8 +48,7 @@
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
   (let* ((value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
                         (create-context type directory))))
-    (format nil "~A ~A" (hash type value) (merge-pathnames* directory
-                                                            (user-homedir-pathname)))))
+    (format nil "~A ~A" (hash type value) directory)))
 
 (defun get-opt (option)
   "Get the value of OPTION from the context."
@@ -79,16 +77,20 @@
     (declare (ignorable args))
     (labels ((option-with (arg)
                (cond ((null arg) nil)
-                     ((and (context-p) (file-exists-p (first arg)))
+                     ((and (context-p) (uiop:file-exists-p (first arg)) (uiop:probe-file* (first arg)))
                       (cons (single-digest (first-context) (first arg)) (option-with (rest arg))))
-                     ((and (context-p) (directory-exists-p (first arg)))
-                      (cons (mksum-dir (first-context) (first arg)) (option-with (rest arg))))))
+                     ((and (context-p) (uiop:directory-exists-p (first arg)))
+                      (cons (mksum-dir (first-context) (first arg)) (option-with (rest arg))))
+                     (t nil)))
              (option-without (arg)
                (cond ((null arg) nil)
-                     ((file-exists-p (first arg)) (cons (single-digest (for-sha256) (first arg))
-                                                        (option-without (rest arg))))
-                     ((directory-exists-p (first arg)) (cons (mksum-dir (for-sha256) (first arg))
-                                                             (option-without (rest arg)))))))
+                     ((and (uiop:file-exists-p (first arg))
+                           (uiop:probe-file* (first arg))) (cons (single-digest (for-sha256)
+                                                                                (first arg))
+                                                                 (option-without (rest arg))))
+                     ((uiop:directory-exists-p (first arg)) (cons (mksum-dir (for-sha256) (first arg))
+                                                                  (option-without (rest arg))))
+                     (t nil))))
       (cond ((get-opt "h") (help) (exit))
             ((get-opt "l") (print-list (ironclad:list-all-digests))
              (exit))
