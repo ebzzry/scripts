@@ -21,7 +21,7 @@
          (stropt :short-name "t" :long-name "type" :argument-name "HASH"
                  :description "Specify hash function to use.")
          (flag :short-name "s" :long-name "string"
-               :description "Specify string to compute the checksum of.")))
+               :description "Treat argument as a literal string.")))
 
 (defun format-two (arg-1 arg-2)
   "Print the two arguments in aesthetic form."
