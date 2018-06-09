@@ -33,7 +33,7 @@
                                                                (ironclad:ascii-string-to-byte-array
                                                                 string))))
 
-(defun create-context (type directory)
+(defun directory-checksum (type directory)
   "Compute the TYPE checksums of the files inside DIRECTORY"
   (mapcar #'first
           (mapcar #'(lambda (string) (cl-ppcre:split #\space string))
@@ -47,7 +47,7 @@
 (defun mksum-dir (type directory)
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
   (let* ((value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
-                        (create-context type directory))))
+                        (directory-checksum type directory))))
     (format nil "~A ~A" (hash type value) (uiop:directory-exists-p directory))))
 
 (defun get-opt (option)
