@@ -186,6 +186,10 @@
           ((remainder) (print-exit (option-without (remainder))))
           ((get-opt "s") (print-preserve #'string-without))
           ((get-opt "l") (print-exit (ironclad:list-all-digests)))
-          (t (print-help)))))
+          ((or (get-opt "h") (null (remainder))) (print-help))
+          ((and (get-opt "s") (get-opt "t")) (print-exit (string-with (remainder))))
+          ((get-opt "s") (print-exit (string-without (remainder))))
+          ((get-opt "t") (print-exit (option-with (remainder))))
+          (t (print-exit (option-without (remainder)))))))
 
 (register-commands :scripts/mksum)
