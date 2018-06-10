@@ -19,8 +19,10 @@
     #-sbcl (error "no getuid")) ;; use iolib?
 
   (defun create-symlinks (src)
-    (let ((binarch (resolve-absolute-location `("~/bin") :ensure-directory t)))
-      (with-current-directory (binarch)
+    (let* ((directory (or (getenv "BIN") "~/bin"))
+           (destination (uiop:truenamize directory)))
+      (uiop:ensure-all-directories-exist (list (concatenate 'string (uiop:native-namestring destination) "/")))
+      (with-current-directory (destination)
         (dolist (i (cl-launch/dispatch:all-entry-names))
           (run `(ln -sf ,src ,i)))))
     (success))
