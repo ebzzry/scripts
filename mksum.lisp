@@ -45,12 +45,19 @@
         directory
         (concatenate 'string directory "/"))))
 
+(defun collect-files (directory)
+  "Collect valid existing files under DIRECTORY"
+  (loop :for file
+        :in (mof:files directory)
+        :when (file-really-exists-p file)
+        :collect file))
+
 (defun list-dir-checksum (type directory)
   "List the TYPE checksums of the files inside DIRECTORY"
   (mapcar #'first
           (mapcar #'(lambda (string) (cl-ppcre:split #\space string))
                   (mapcar #'(lambda (file) (checksum type file))
-                          (mof:files directory)))))
+                          (collect-files directory)))))
 
 (defun concat (&rest args)
   "Concatenate strings"
@@ -88,7 +95,8 @@
 
 (defun file-really-exists-p (arg)
   "Check if file really exists"
-  (and (uiop:file-exists-p arg) (uiop:probe-file* arg)))
+  (and (uiop:file-exists-p arg)
+       (uiop:probe-file* (uiop:truenamize arg))))
 
 (defun file-context-p (arg)
   "Check if file really exists and option value is valid"
