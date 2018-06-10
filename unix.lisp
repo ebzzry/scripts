@@ -1,7 +1,6 @@
 ;;;; unix.lisp
 
-(uiop:define-package
-    :scripts/unix
+(uiop:define-package #:scripts/unix
     (:use #:cl
           #:fare-utils
           #:uiop

@@ -1,7 +1,6 @@
 ;;;; apps.lisp
 
-(uiop:define-package
-    :scripts/apps
+(uiop:define-package #:scripts/apps
     (:use #:cl
           #:fare-utils
           #:uiop
@@ -17,8 +16,6 @@
            #:term
            #:fire
            #:keep
-           #:skype
-
            #:xrsync
            #:ra
            #:raz
@@ -32,16 +29,13 @@
            #:par
            #:v
            #:xv
-
            #:bt
            #:bt0
            #:bt1
-
            #:len
            #:leo
            #:tox
            #:vbox
-
            #:shell
            #:rshell
            #:screenshot
