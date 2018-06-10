@@ -1,5 +1,6 @@
 NAME=scripts
-BINARY=$(HOME)/bin/$(NAME)
+DEST=$(HOME)/bin
+BINARY=$(DEST)/$(NAME)
 SCRIPT=$(PWD)/$(NAME)
 CL=cl-launch
 
