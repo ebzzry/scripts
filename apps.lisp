@@ -15,28 +15,35 @@
            #:e
            #:term
            #:fire
+           #:chrome
+           #:tele
            #:keep
            #:xrsync
            #:ra
            #:raz
-           #:raz!
-           #:chrome
-           #:tele
            #:qp
            #:rt
            #:rm@
            #:par
            #:v
-           #:xv
            #:bt
-           #:bt-air
-           #:bt-pulse
+           #:kt
+
            #:len
            #:leo
            #:tox
            #:vbox
+           #:raz!
+           #:lispworks-gui
+           #:lispworks-terminal
+           #:lw
+           #:lwt
+
+           #:bt-air
+           #:bt-pulse
            #:shell
            #:rshell
+
            #:screenshot
            #:sg2e
            #:smb))
@@ -78,7 +85,6 @@
   (% rm@ "shred -vfzun 10")
   (% par "parallel --will-cite")
   (% v "less")
-  (% xv "xzless")
   (% bt "bluetoothctl")
   (% kt "len krita"))
 
@@ -90,7 +96,21 @@
 
   (defun raz! (&rest args)
     (apply-args-1 'raz args :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
-    (success)))
+    (success))
+
+  (defun lispworks-gui (&rest args)
+    (run/i `(zsh "-c" "cr /usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux" ,@args))
+    (success))
+
+  (defun lispworks-terminal (&rest args)
+    (run/i `(zsh "-c" "cr /home/pub/hejmo/apoj/lispworks/save-image/lispworks-terminal" ,@args))
+    (success))
+
+  (defun lw (&rest args)
+    (apply #'lispworks-gui args))
+
+  (defun lwt (&rest args)
+    (apply #'lispworks-terminal args)))
 
 (exporting-definitions
   (defun bt-air ()

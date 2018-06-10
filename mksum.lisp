@@ -5,9 +5,7 @@
           #:cl-scripting
           #:fare-utils
           #:net.didierverna.clon)
-  (:export #:mksum
-           #:file-checksum
-           #:directory-checksum))
+  (:export #:mksum))
 
 (in-package :scripts/mksum)
 
