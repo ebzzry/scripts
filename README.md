@@ -35,14 +35,7 @@ Lisp dependencies
 You may install the above with:
 
 ```
-$ sbcl
-* (dolist (x '(:inferior-shell :local-time :ironclad :clon :cl-launch :fare-utils :cl-scripting)) (ql:quickload x))
-* (quit)
-```
-
-Mof can be fetched with:
-
-```
+$ sbcl --noinform --eval "(mapc #'ql:quickload '(:inferior-shell :local-time :ironclad :clon :cl-launch :fare-utils :cl-scripting))" --quit
 $ cd ~/common-lisp
 $ git clone https://github.com/ebzzry/mof.git
 ```
