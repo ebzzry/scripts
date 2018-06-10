@@ -1,6 +1,6 @@
 ;;;; mksum.lisp
 
-(uiop:define-package :scripts/mksum
+(uiop:define-package #:scripts/mksum
     (:use #:cl
           #:cl-scripting
           #:fare-utils

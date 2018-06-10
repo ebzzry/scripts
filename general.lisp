@@ -1,7 +1,6 @@
 ;;;; general.lisp
 
-(uiop:define-package
-    :scripts/general
+(uiop:define-package #:scripts/general
     (:use #:cl
           #:fare-utils
           #:uiop
@@ -13,11 +12,7 @@
           #:cl-launch/dispatch
           #:scripts/misc
           #:scripts/utils)
-  (:export #:*char-mode*
-           #:*colon-mode*
-           #:*normal-mode*
-           #:*num-mode*
-           #:ascii-hex-table
+  (:export #:ascii-hex-table
            #:ascii-oct-table
            #:rot13
            #:battery
@@ -28,6 +23,11 @@
            #:psk!))
 
 (in-package :scripts/general)
+
+(defvar *num-mode* "[31m")
+(defvar *colon-mode* "[34m")
+(defvar *char-mode* "[0m[1m")
+(defvar *normal-mode* "[0m")
 
 (defun xdev-id (name type)
   (format nil "~A"
@@ -64,11 +64,6 @@
   (success))
 
 (exporting-definitions
-  (defvar *num-mode* "[31m")
-  (defvar *colon-mode* "[34m")
-  (defvar *char-mode* "[0m[1m")
-  (defvar *normal-mode* "[0m")
-
   (defun ascii-hex-table ()
     (loop :for i :from 32 :to 255
           :do (format t "~A~X~A:~A~A~A~:[ ~;~%~]"
