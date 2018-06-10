@@ -33,7 +33,7 @@ Miscellany
 ----------
 
 The file `default.nix` is used with [Nix](https://nixos.org/nix) to spawn a shell containing
-programs and library dependencies conducive to development.
+programs and library dependencies conducive to Common Lisp development.
 
 To load it, change to this repository’s directory then run:
 

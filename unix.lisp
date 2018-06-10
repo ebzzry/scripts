@@ -1,4 +1,4 @@
-;;; unix.lisp
+;;;; unix.lisp
 
 (uiop:define-package
     :scripts/unix
@@ -14,23 +14,18 @@
           #:scripts/utils)
   (:export #:x
            #:v
-
            #:md
            #:rm!
            #:ln!
-
            #:g
            #:gi
-
            #:la
            #:lk
-
            #:l
            #:ll
            #:l!
            #:lh
            #:l1
-
            #:f
            #:lv))
 
