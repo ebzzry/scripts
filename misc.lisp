@@ -1,4 +1,4 @@
-;;; misc.lisp
+;;;; misc.lisp
 
 (uiop:define-package :scripts/misc
     (:use #:cl

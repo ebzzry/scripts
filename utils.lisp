@@ -1,4 +1,4 @@
-;;; utils.lisp
+;;;; utils.lisp
 
 (uiop:define-package :scripts/utils
     (:use #:cl
