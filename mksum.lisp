@@ -5,7 +5,9 @@
           #:cl-scripting
           #:fare-utils
           #:net.didierverna.clon)
-  (:export #:mksum))
+  (:export #:mksum
+           #:file-sum
+           #:dir-sum))
 
 (in-package :scripts/mksum)
 
@@ -58,6 +60,8 @@
           (mapcar #'(lambda (string) (cl-ppcre:split #\space string))
                   (mapcar #'(lambda (file) (checksum type file))
                           (collect-files directory)))))
+                  (mapcar #'(lambda (file) (file-sum type file))
+                          (mof:files directory)))))
 
 (defun concat (&rest args)
   "Concatenate strings"
@@ -110,17 +114,17 @@
   "Create list, of the given type, of checksums of files and directories"
   (cond ((null arg) nil)
         ((file-context-p (first arg))
-         (cons (checksum (first-context) (first arg)) (option-with (rest arg))))
+         (cons (file-sum (first-context) (first arg)) (option-with (rest arg))))
         ((directory-context-p (first arg))
-         (cons (directory-checksum (first-context) (first arg)) (option-with (rest arg))))
+         (cons (dir-sum (first-context) (first arg)) (option-with (rest arg))))
         (t nil)))
 
 (defun option-without (arg)
   "Create list of SHA256 checksums of files and directories"
   (cond ((null arg) nil)
         ((file-really-exists-p (first arg))
-         (cons (checksum *default-hash* (first arg)) (option-without (rest arg))))
-        ((uiop:directory-exists-p (first arg)) (cons (directory-checksum *default-hash*
+         (cons (file-sum *default-hash* (first arg)) (option-without (rest arg))))
+        ((uiop:directory-exists-p (first arg)) (cons (dir-sum *default-hash*
                                                                          (first arg))
                                                      (option-without (rest arg))))
         (t nil)))
