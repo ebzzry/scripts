@@ -6,17 +6,46 @@ Overview
 --------
 
 This is a collection of scripts written in Common Lisp. This repo started as a fork of
-[fare-scripts](http://github.com/fare/fare-scripts).
+[fare-scripts](http://github.com/fare/fare-scripts). The mksum subsystem was implemented by
+[zhaqenl](https://github.com/zhaqenl).
 
-The mksum subsystem was implemented by [zhaqenl](https://github.com/zhaqenl).
 
-
-Dependencies
-------------
+System dependencies
+-------------------
 
 - sbcl
 - cl-launch
 - make
+
+Use your system package manager to install the aboe.
+
+
+Lisp dependencies
+-----------------
+
+- inferior-shell
+- local-time
+- ironclad
+- clon
+- cl-launch
+- fare-utils
+- cl-scripting
+- mof
+
+You may install the above with:
+
+```
+$ sbcl
+* (dolist (x '(:inferior-shell :local-time :ironclad :clon :cl-launch :fare-utils :cl-scripting)) (ql:quickload x))
+* (quit)
+```
+
+Mof can be fetched with:
+
+```
+$ cd ~/common-lisp
+$ git clone https://github.com/ebzzry/mof.git
+```
 
 
 Building
