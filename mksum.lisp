@@ -13,8 +13,9 @@
 
 (defvar *default-hash* :sha256 "Default hash function")
 
-(defsynopsis (:postfix "FILE...")
-  (text :contents "Prints the checksums of files and directories. Uses SHA256 by default")
+(defsynopsis (:postfix "(FILE...|STRING)")
+  (text :contents "Prints the checksums of files and directories. Uses SHA256 by default.
+")
   (group (:header "Options:")
          (flag :short-name "h" :long-name "help"
                :description "Print this help")
@@ -23,7 +24,11 @@
          (stropt :short-name "t" :long-name "type" :argument-name "HASH"
                  :description "Specify hash function to use")
          (flag :short-name "s" :long-name "string"
-               :description "Specify string to compute the checksum of")))
+               :description "Treat argument as a literal string")))
+
+(defun format-two (arg-1 arg-2)
+  "Print the two arguments in aesthetic form."
+  (format nil "~A ~A" arg-1 arg-2))
 
 (defun file-checksum (type file)
   "Compute the TYPE checksum of FILE."
