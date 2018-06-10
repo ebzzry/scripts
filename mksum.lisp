@@ -167,14 +167,14 @@
   "Create list, of the given type, of checksums of files and directories"
   (cond ((null arg) nil)
         (t (cons (format-two (hash type (first arg)) (first arg))
-                 (string-with (rest arg))))))
+                 (weird-with (rest arg) type)))))
 
 (exporting-definitions
   (defun mksum (&rest args)
     "Compute the checksum of the given file(s) and directory(ies)."
     (cond ((and (get-opt "s") (get-opt "t") (remainder)) (print-exit (string-with (remainder))))
-          ((and (member "-s" args :test #'equal) (weird-p args) (= (length args) 4))
-           (print-exit (weird-with (list (second args)) (first-weird args))))
+          ((and (member "-s" args :test #'equal) (weird-p args) (>= (length args) 4))
+           (print-exit (weird-with (rest args) (first-weird args))))
           ((and (get-opt "s") (get-opt "t")) (print-preserve #'string-with))
           ((and (get-opt "s") (remainder)) (print-exit (string-without (remainder))))
           ((and (get-opt "t") (remainder)) (print-exit (option-with (remainder))))
