@@ -22,7 +22,6 @@
            #:raz!
            #:chrome
            #:tele
-           #:vibe
            #:qp
            #:rt
            #:rm@
@@ -30,8 +29,8 @@
            #:v
            #:xv
            #:bt
-           #:bt0
-           #:bt1
+           #:bt-air
+           #:bt-pulse
            #:len
            #:leo
            #:tox
@@ -44,7 +43,24 @@
 
 (in-package :scripts/apps)
 
-(defvar +screenshots-dir+ (home "hejmo/elsx/bil/ekrankopioj"))
+(defvar +screenshots-dir+ (home ".screenshots/"))
+
+(defun run-locale (locale &rest args)
+  "Run args with locale set to LOCALE"
+  (setf (getenv "LANG") locale)
+  (run/i `(,@args))
+  (success))
+
+(defun run-nix-user (profile binary &rest args)
+  "Run binary under a separate profile"
+  (let ((bin (home (format nil ".baf/profiles/~A/bin" profile))))
+    (setf (getenv "PATH") (unix-namestring bin))
+    (run/i `(,binary ,@args))))
+
+(defun run-nix-system (binary &rest args)
+  "Run binary without user paths"
+  (setf (getenv "PATH") "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
+  (run/i `(,binary ,@args)))
 
 (exporting-definitions
   (% s "sudo")
@@ -66,23 +82,6 @@
   (% bt "bluetoothctl")
   (% kt "len krita"))
 
-(defun run-locale (locale &rest args)
-  "Run args with locale set to LOCALE"
-  (setf (getenv "LANG") locale)
-  (run/i `(,@args))
-  (success))
-
-(defun run-nix-user (profile binary &rest args)
-  "Run binary under a separate profile"
-  (let ((bin (home (format nil ".baf/profiles/~A/bin" profile))))
-    (setf (getenv "PATH") (unix-namestring bin))
-    (run/i `(,binary ,@args))))
-
-(defun run-nix-system (binary &rest args)
-  "Run binary without user paths"
-  (setf (getenv "PATH") "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
-  (run/i `(,binary ,@args)))
-
 (exporting-definitions
   (defun len (&rest args) (run-locale "en_US.UTF-8" args))
   (defun leo (&rest args) (run-locale "eo.utf8" args))
@@ -94,13 +93,13 @@
     (success)))
 
 (exporting-definitions
-  (defun bt0 ()
+  (defun bt-air ()
     (run/i `(pacmd "set-default-sink" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink"))
     (run/i `(pacmd "set-default-source" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink.monitor"))
     (run/i `(pacmd "set-port-latency-offset" "bluez_card.B8_D5_0B_8D_77_EB" "headphone-output" "250000"))
     (success))
 
-  (defun bt1 ()
+  (defun bt-pulse ()
     (run/i `(pacmd "set-default-sink" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
     (run/i `(pacmd "set-default-source" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink.monitor"))
     (success))
@@ -117,7 +116,7 @@
     (let* ((dir +screenshots-dir+)
            (file (format nil "~A.png" (local-time:format-timestring nil (local-time:now))))
            (dest (format nil "mv $f ~A" dir))
-           (image (format nil "~A/~A" dir file)))
+           (image (format nil "~A~A" dir file)))
       (flet ((scrot (file dest &rest args)
                (run/i `(scrot ,@args ,file -e ,dest))))
         (match mode
