@@ -8,7 +8,7 @@ Overview
 This is a collection of scripts written in Common Lisp. This repo started as a fork of
 [fare-scripts](http://github.com/fare/fare-scripts).
 
-The mksum subsystem was implemented by [Raymund Martinez](https://github.com/zhaqenl).
+The mksum subsystem was implemented by [zhaqenl](https://github.com/zhaqenl).
 
 
 Dependencies
