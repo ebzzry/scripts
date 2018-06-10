@@ -25,13 +25,8 @@
          (flag :short-name "s" :long-name "string"
                :description "Specify string to compute the checksum of")))
 
-
-(defun checksum (type file)
-  "Compute the TYPE checksum of FILE"
-
-
-
-
+(defun file-checksum (type file)
+  "Compute the TYPE checksum of FILE."
   (let ((buffer (make-array 8192 :element-type '(unsigned-byte 8)))
         (digest (make-array (ironclad:digest-length type) :element-type '(unsigned-byte 8)))
         (digester (ironclad:make-digest type)))
@@ -63,25 +58,15 @@
   "List the TYPE checksums of the files inside DIRECTORY"
   (mapcar #'first
           (mapcar #'(lambda (string) (cl-ppcre:split #\space string))
-
-                  (mapcar #'(lambda (file) (checksum type file))
+                  (mapcar #'(lambda (file) (file-checksum type file))
                           (collect-files directory)))))
-                  (mapcar #'(lambda (file) (file-sum type file))
-
-
-
-                          (mof:files directory)))))
 
 (defun concat (&rest args)
   "Concatenate strings"
   (reduce #'(lambda (x y) (concatenate 'string x y)) args))
 
 (defun directory-checksum (type directory)
-
-  "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY"
-
-
-
+  "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
   (when (uiop:directory-exists-p directory)
     (let* ((path (uiop:truenamize (slash-string directory)))
            (value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
@@ -171,27 +156,15 @@
 
 (exporting-definitions
   (defun mksum (&rest args)
-    "Compute the checksum of the given file(s) and directory(ies)"
+    "Compute the checksum of the given file(s) and directory(ies)."
     (declare (ignorable args))
-
-    (cond ((or (get-opt "h") (null (remainder)))
-           (print-help))
-          ((get-opt "l")
-           (print-exit (ironclad:list-all-digests)))
-
-
-
-
-
-
-
-          ((and (get-opt "s")
-                (get-opt "t"))
-           (print-exit (string-with (remainder))))
-          ((get-opt "s")
-           (print-exit (string-without (remainder))))
-          ((get-opt "t")
-           (print-exit (option-with (remainder))))
+    (cond ((and (get-opt "s") (null (remainder)) (get-opt "t")) (print-preserve #'string-with))
+          ((and (get-opt "s") (null (remainder))) (print-preserve #'string-without))
+          ((get-opt "l") (print-exit (ironclad:list-all-digests)))
+          ((or (get-opt "h") (null (remainder))) (print-help))
+          ((and (get-opt "s") (get-opt "t")) (print-exit (string-with (remainder))))
+          ((get-opt "s") (print-exit (string-without (remainder))))
+          ((get-opt "t") (print-exit (option-with (remainder))))          
           (t (print-exit (option-without (remainder)))))))
 
 (register-commands :scripts/mksum)
