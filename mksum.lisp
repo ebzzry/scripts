@@ -154,17 +154,33 @@
   (print-list (apply ffunction (list (list (symbol-name (read))))))
   (exit))
 
+(defun weird-p (arg)
+  "Check if last arg is a valid digest."
+  (member (intern (string-upcase (second (member "-t" arg :test #'equal))) "IRONCLAD")
+          (ironclad:list-all-digests)))
+
+(defun first-weird (arg)
+  "Get first element of (WEIRD-P)."
+  (first (weird-p arg)))
+
+(defun weird-with (arg type)
+  "Create list, of the given type, of checksums of files and directories"
+  (cond ((null arg) nil)
+        (t (cons (format-two (hash type (first arg)) (first arg))
+                 (string-with (rest arg))))))
+
 (exporting-definitions
   (defun mksum (&rest args)
     "Compute the checksum of the given file(s) and directory(ies)."
-    (declare (ignorable args))
-    (cond ((and (get-opt "s") (null (remainder)) (get-opt "t")) (print-preserve #'string-with))
-          ((and (get-opt "s") (null (remainder))) (print-preserve #'string-without))
+    (cond ((and (get-opt "s") (get-opt "t") (remainder)) (print-exit (string-with (remainder))))
+          ((and (member "-s" args :test #'equal) (weird-p args) (= (length args) 4))
+           (print-exit (weird-with (list (second args)) (first-weird args))))
+          ((and (get-opt "s") (get-opt "t")) (print-preserve #'string-with))
+          ((and (get-opt "s") (remainder)) (print-exit (string-without (remainder))))
+          ((and (get-opt "t") (remainder)) (print-exit (option-with (remainder))))
+          ((remainder) (print-exit (option-without (remainder))))
+          ((get-opt "s") (print-preserve #'string-without))
           ((get-opt "l") (print-exit (ironclad:list-all-digests)))
-          ((or (get-opt "h") (null (remainder))) (print-help))
-          ((and (get-opt "s") (get-opt "t")) (print-exit (string-with (remainder))))
-          ((get-opt "s") (print-exit (string-without (remainder))))
-          ((get-opt "t") (print-exit (option-with (remainder))))          
-          (t (print-exit (option-without (remainder)))))))
+          (t (print-help)))))
 
 (register-commands :scripts/mksum)
