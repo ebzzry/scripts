@@ -17,7 +17,7 @@ System dependencies
 - cl-launch
 - make
 
-Use your system package manager to install the aboe.
+Use your system package manager to install the above.
 
 
 Lisp dependencies
@@ -54,10 +54,10 @@ $ make install
 Miscellany
 ----------
 
-The file `default.nix` is used with [Nix](https://nixos.org/nix) to spawn a shell containing
-programs and library dependencies conducive to Common Lisp development.
+The file `default.nix` is used with by the `shell` and `rshell` scripts to spawn a nix-shell
+containing programs and library dependencies conducive to Common Lisp development.
 
-To load it, change to this repository’s directory then run:
+To load it directly, change to this repository’s directory then run:
 
 ```
 $ nix-shell
