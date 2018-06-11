@@ -12,18 +12,19 @@
 (defvar *default-hash* :sha256 "Default hash function")
 
 (defsynopsis (:postfix "(FILE...|STRING)")
-  (text :contents "Prints the checksums of files and directories. Uses SHA256 by default.")
+  (text :contents "Prints the checksums of files and directories. Uses SHA256 by default.
+")
   (group (:header "Options:")
          (flag :short-name "h" :long-name "help"
-               :description "Print this help")
+               :description "Print this help.")
          (flag :short-name "l" :long-name "list"
-               :description "List supported hash functions")
+               :description "List supported hash functions.")
          (flag :short-name "s" :long-name "string"
-               :description "Treat argument as a literal string")
+               :description "Treat arguments as a literal strings.")
          (flag :short-name "v" :long-name "verbose"
-               :description "List contents of the checked directory(ies)")
+               :description "Print files of files when handling directories.")
          (stropt :short-name "t" :long-name "type" :argument-name "HASH"
-                 :description "Specify hash function to use")))
+                 :description "Specify hash function to use.")))
 
 (defun format-two (arg-1 arg-2)
   "Print the two arguments in aesthetic form."
@@ -114,8 +115,9 @@
 
 (defun append-contents (arg type function)
   "Append directory TYPE checksum to its file contents."
-  (append (cons (directory-checksum type (first arg)) (funcall function (rest arg) t))
-          (mof:files (uiop:truenamize (first arg)))))
+  (append (list "")
+          (mof:files (uiop:truenamize (first arg)))
+          (cons (directory-checksum type (first arg)) (funcall function (rest arg) t))))
 
 (defun option-with (arg verbose-p)
   "Create list, of the given type, of checksums of files and directories."
@@ -183,7 +185,7 @@
 
 (exporting-definitions
   (defun mksum (&rest args)
-    "Compute the checksum of the given file(s) and directory(ies)."
+    "The top-level function"
     (cond ((and (get-opt "s") (get-opt "t") (remainder)) (print-exit (string-with (remainder))))
           ((and (member "-s" args :test #'equal) (weird-p args) (>= (length args) 4))
            (print-exit (weird-with (rest args) (first-weird args))))
