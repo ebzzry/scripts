@@ -12,17 +12,18 @@
 (defvar *default-hash* :sha256 "Default hash function")
 
 (defsynopsis (:postfix "(FILE...|STRING)")
-  (text :contents "Prints the checksums of files and directories. Uses SHA256 by default.
-")
+  (text :contents "Prints the checksums of files and directories. Uses SHA256 by default.")
   (group (:header "Options:")
          (flag :short-name "h" :long-name "help"
                :description "Print this help")
          (flag :short-name "l" :long-name "list"
                :description "List supported hash functions")
-         (stropt :short-name "t" :long-name "type" :argument-name "HASH"
-                 :description "Specify hash function to use")
          (flag :short-name "s" :long-name "string"
-               :description "Treat argument as a literal string")))
+               :description "Treat argument as a literal string")
+         (flag :short-name "v" :long-name "verbose"
+               :description "List contents of the checked directory(ies)")
+         (stropt :short-name "t" :long-name "type" :argument-name "HASH"
+                 :description "Specify hash function to use")))
 
 (defun format-two (arg-1 arg-2)
   "Print the two arguments in aesthetic form."
@@ -37,13 +38,13 @@
     (format-two (ironclad:byte-array-to-hex-string digest) (uiop:truenamize file))))
 
 (defun hash (type string)
-  "Compute the TYPE checksum of STRING"
+  "Compute the TYPE checksum of STRING."
   (ironclad:byte-array-to-hex-string (ironclad:digest-sequence type
                                                                (ironclad:ascii-string-to-byte-array
                                                                 string))))
 
 (defun slash-string (directory)
-  "Convert directory to its truename"
+  "Convert directory to its truename."
   (let* ((length (length directory))
          (last (elt directory (1- length))))
     (if (char= last #\/)
@@ -51,21 +52,21 @@
         (concatenate 'string directory "/"))))
 
 (defun collect-files (directory)
-  "Collect valid existing files under DIRECTORY"
+  "Collect valid existing files under DIRECTORY."
   (loop :for file
         :in (mof:files directory)
         :when (file-really-exists-p file)
         :collect file))
 
 (defun list-dir-checksum (type directory)
-  "List the TYPE checksums of the files inside DIRECTORY"
+  "List the TYPE checksums of the files inside DIRECTORY."
   (mapcar #'first
           (mapcar #'(lambda (string) (cl-ppcre:split #\space string))
                   (mapcar #'(lambda (file) (file-checksum type file))
                           (collect-files directory)))))
 
 (defun concat (&rest args)
-  "Concatenate strings"
+  "Concatenate strings."
   (reduce #'(lambda (x y) (concatenate 'string x y)) args))
 
 (defun directory-checksum (type directory)
@@ -77,78 +78,86 @@
       (format-two (hash type value) path))))
 
 (defun get-opt (option)
-  "Get the value of OPTION from the context"
+  "Get the value of OPTION from the context."
   (getopt :short-name option :context (make-context)))
 
 (defun print-list (list)
-  "Output formatted string from LIST"
+  "Output formatted string from LIST."
   (format t "~{~A~%~}" list))
 
 (defun print-exit (list)
-  "Prints LIST then exit"
+  "Prints LIST then exit."
   (print-list list)
   (exit))
 
 (defun context-p (option)
-  "Check membership of option value in supported digests"
+  "Check membership of option value in supported digests."
   (member (intern (string-upcase (get-opt option)) "IRONCLAD")
           (ironclad:list-all-digests)))
 
 (defun first-context ()
-  "Get first element of (CONTEXT-P)"
+  "Get first element of (CONTEXT-P)."
   (first (context-p "t")))
 
 (defun file-really-exists-p (arg)
-  "Check if file really exists"
+  "Check if file really exists."
   (and (uiop:file-exists-p arg)
        (uiop:probe-file* (uiop:truenamize arg))))
 
 (defun file-context-p (arg)
-  "Check if file really exists and option value is valid"
+  "Check if file really exists and option value is valid."
   (and (context-p "t") (file-really-exists-p arg)))
 
 (defun directory-context-p (arg)
-  "Check if directory exists and option value is valid"
+  "Check if directory exists and option value is valid."
   (and (context-p "t") (uiop:directory-exists-p arg)))
 
-(defun option-with (arg)
-  "Create list, of the given type, of checksums of files and directories"
+(defun append-contents (arg type function)
+  "Append directory TYPE checksum to its file contents."
+  (append (cons (directory-checksum type (first arg)) (funcall function (rest arg) t))
+          (mof:files (uiop:truenamize (first arg)))))
+
+(defun option-with (arg verbose-p)
+  "Create list, of the given type, of checksums of files and directories."
   (cond ((null arg) nil)
         ((file-context-p (first arg))
-         (cons (file-checksum (first-context) (first arg)) (option-with (rest arg))))
+         (cons (file-checksum (first-context) (first arg)) (option-with (rest arg) verbose-p)))
+        ((and (directory-context-p (first arg)) verbose-p) (append-contents arg (first-context)
+                                                                            #'option-with))
         ((directory-context-p (first arg))
-         (cons (directory-checksum (first-context) (first arg)) (option-with (rest arg))))
+         (cons (directory-checksum (first-context) (first arg)) (option-with (rest arg) verbose-p)))
         (t nil)))
 
-(defun option-without (arg)
-  "Create list of SHA256 checksums of files and directories"
+(defun option-without (arg verbose-p)
+  "Create list of SHA256 checksums of files and directories."
   (cond ((null arg) nil)
         ((file-really-exists-p (first arg))
-         (cons (file-checksum *default-hash* (first arg)) (option-without (rest arg))))
-        ((uiop:directory-exists-p (first arg)) (cons (directory-checksum *default-hash*
-                                                                         (first arg))
-                                                     (option-without (rest arg))))
+         (cons (file-checksum *default-hash* (first arg)) (option-without (rest arg) verbose-p)))
+        ((and (uiop:directory-exists-p (first arg)) verbose-p) (append-contents arg *default-hash*
+                                                                                #'option-without))
+        ((uiop:directory-exists-p (first arg)) (cons (directory-checksum *default-hash* (first arg))
+                                                     (option-without (rest arg) verbose-p)))
         (t nil)))
 
 (defun string-with (arg)
-  "Create list, of the given type, of checksums of files and directories"
+  "Create list, of the given type, of checksums of files and directories."
   (cond ((null arg) nil)
         (t (cons (format-two (hash (first-context) (first arg)) (first arg))
                  (string-with (rest arg))))))
 
 (defun string-without (arg)
-  "Create list of SHA256 checksums of strings"
+  "Create list of SHA256 checksums of strings."
   (cond ((null arg) nil)
         (t (cons (format-two (hash *default-hash* (first arg)) (first arg))
                  (string-without (rest arg))))))
 
 (defun print-help ()
-  "Print help text"
+  "Print help text."
   (help)
   (exit))
 
 (defun print-digests ()
-  "Print list of supported digests"
+  "Print list of supported digests."
   (print-list (ironclad:list-all-digests)))
 
 (defun print-preserve (ffunction)
@@ -167,7 +176,7 @@
   (first (weird-p arg)))
 
 (defun weird-with (arg type)
-  "Create list, of the given type, of checksums of files and directories"
+  "Create list, of the given type, of checksums of files and directories."
   (cond ((null arg) nil)
         (t (cons (format-two (hash type (first arg)) (first arg))
                  (weird-with (rest arg) type)))))
@@ -180,8 +189,10 @@
            (print-exit (weird-with (rest args) (first-weird args))))
           ((and (get-opt "s") (get-opt "t")) (print-preserve #'string-with))
           ((and (get-opt "s") (remainder)) (print-exit (string-without (remainder))))
-          ((and (get-opt "t") (remainder)) (print-exit (option-with (remainder))))
-          ((remainder) (print-exit (option-without (remainder))))
+          ((and (get-opt "t") (get-opt "v") (remainder)) (print-exit (option-with (remainder) t)))
+          ((and (get-opt "t") (remainder)) (print-exit (option-with (remainder) nil)))
+          ((and (remainder) (get-opt "v")) (print-exit (option-without (remainder) t)))
+          ((remainder) (print-exit (option-without (remainder) nil)))
           ((get-opt "s") (print-preserve #'string-without))
           ((get-opt "l") (print-exit (ironclad:list-all-digests)))
           ((or (get-opt "h") (null (remainder))) (print-help))
