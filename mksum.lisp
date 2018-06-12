@@ -58,7 +58,7 @@
 
 (defun file-fast-print (arg)
   "Print file ARG immediately."
-  (format *query-io* "~a" arg)
+  (format *query-io* "~a" (uiop:truenamize arg))
   (force-output *query-io*)
   (terpri))
 
