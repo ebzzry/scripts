@@ -24,11 +24,11 @@ stdenv.mkDerivation {
     SDL2_ttf
     libffi
     ncurses
+
     freeglut
     mesa
     cairo
     glib
-    gdk_pixbuf
     gnome2.pango
     gnome3.gtk
     gnome3.libsoup
