@@ -52,21 +52,27 @@
 
 (defvar +screenshots-dir+ (home ".screenshots/"))
 
-(defun run-locale (locale &rest args)
+(defun run-with-locale (locale &rest args)
   "Run args with locale set to LOCALE"
   (setf (getenv "LANG") locale)
   (run/i `(,@args))
   (success))
 
-(defun run-nix-user (profile binary &rest args)
+(defun run-with-nix-user (profile binary &rest args)
   "Run binary under a separate profile"
   (let ((bin (home (format nil ".baf/profiles/~A/bin" profile))))
     (setf (getenv "PATH") (unix-namestring bin))
     (run/i `(,binary ,@args))))
 
-(defun run-nix-system (binary &rest args)
+(defun run-with-nix-system (binary &rest args)
   "Run binary without user paths"
   (setf (getenv "PATH") "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
+  (run/i `(,binary ,@args)))
+
+(defun run-with-xdg (binary &rest args)
+  "Run binary under a custom XDG_DATA_DIRS path"
+  (setf (getenv "XDG_DATA_DIRS")
+        (uiop:native-namestring (uiop:merge-pathnames* ".local/share/mime" (user-homedir-pathname))))
   (run/i `(,binary ,@args)))
 
 (exporting-definitions
@@ -85,14 +91,14 @@
   (% rm@ "shred -vfzun 10")
   (% par "parallel --will-cite")
   (% v "less")
-  (% bt "bluetoothctl")
-  (% kt "len krita"))
+  (% bt "bluetoothctl"))
 
 (exporting-definitions
-  (defun len (&rest args) (run-locale "en_US.UTF-8" args))
-  (defun leo (&rest args) (run-locale "eo.utf8" args))
-  (defun tox (&rest args) (run-nix-user "qtox" "qtox" args))
-  (defun vbox () (run-nix-system "VirtualBox"))
+  (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
+  (defun leo (&rest args) (run-with-locale "eo.utf8" args))
+  (defun tox (&rest args) (run-with-nix-user "qtox" "qtox" args))
+  (defun vbox () (run-with-nix-system "VirtualBox"))
+  (defun kt (&rest args) (run-with-xdg "krita" args))
 
   (defun raz! (&rest args)
     (apply-args-1 'raz args :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
