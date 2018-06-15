@@ -56,7 +56,7 @@
   (defun intuos-mode (value)
     "Use sudo to set the value of the LED file"
     (let ((command (format nil "echo ~A > ~A" value *intuos-led-file*)))
-      (sudo-sh command)))
+      (sush command)))
 
   (defun intuos-actions (action-1 action-2)
     "Bind actions to the ring"

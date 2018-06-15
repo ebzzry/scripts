@@ -14,6 +14,7 @@ stdenv.mkDerivation {
     clisp
     mkcl
     ncurses
+    libfixposix
   ];
 
   LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [
@@ -24,7 +25,6 @@ stdenv.mkDerivation {
     SDL2_ttf
     libffi
     ncurses
-
     freeglut
     mesa
     cairo
