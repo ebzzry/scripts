@@ -70,10 +70,17 @@
       (when mode
         (intuos-mode mode))
       (ecase (intuos-ring-status)
-        (0 (intuos-actions "button +4" "button +5"))                               ; scroll
-        (1 (intuos-actions "key +ctrl - -ctrl" "key +ctrl +shift = -ctrl -shift")) ; zoom
-        (2 (intuos-actions "key [" "key ]"))                                       ; brushes
-        (3 (intuos-actions "key PgUp" "key PgDn"))))                               ; miscellany
+        ;; scroll
+        (0 (intuos-actions "button +4" "button +5"))
+
+        ;; miscellany
+        (1 (intuos-actions "key PgUp" "key PgDn"))
+
+        ;; zoom
+        (2 (intuos-actions "key +ctrl - -ctrl" "key +ctrl +shift = -ctrl -shift"))
+
+        ;; brushes
+        (3 (intuos-actions "key [" "key ]"))))
     (success)))
 
 (register-commands :scripts/intuos)
