@@ -42,16 +42,16 @@
     value))
 
 (exporting-definitions
-  (defun intuos-map (name &rest args)
+  (defun intuos-map (&rest args)
     "Bind a button using xsetwacom"
-    (run/i `(xsetwacom "set" ,name ,@args)))
+    (let ((name (intuos-pad-name)))
+      (run/i `(xsetwacom "set" ,name ,@args))
+      (success)))
 
   (defun intuos-bind ()
     "Bind the middle selector key to the default value"
-    (let ((name (intuos-pad-name))
-          (key (format nil "key ~A" *intuos-selector-key*)))
-      (intuos-map name "Button" "1" key)
-      (success)))
+    (let ((key (format nil "key ~A" *intuos-selector-key*)))
+      (intuos-map "Button" "1" key)))
 
   (defun intuos-mode (value)
     "Use sudo to set the value of the LED file"
@@ -60,9 +60,8 @@
 
   (defun intuos-actions (action-1 action-2)
     "Bind actions to the ring"
-    (let ((name (intuos-pad-name)))
-      (intuos-map name "AbsWheelUp" action-1)
-      (intuos-map name "AbsWheelDown" action-2)))
+    (intuos-map "AbsWheelUp" action-1)
+    (intuos-map "AbsWheelDown" action-2))
 
   (defun intuos-ring (&optional mode)
     "Change the behavior of the ring depending on the current LED value"
