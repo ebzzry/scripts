@@ -27,7 +27,7 @@
            #:l1
            #:f
            #:lv
-           #:sudo-sh))
+           #:sush))
 
 (in-package :scripts/unix)
 
@@ -60,8 +60,8 @@
    (run/i `(pipe (l ,@args) (less)))
    (success))
 
- (defun sudo-sh (command)
-   (run/i `(sudo "sh" "-c" ,command))
+ (defun sush (&rest args)
+   (run/i `(sudo "sh" "-c" ,(format nil "~{~A~^ ~}" args)))
    (success)))
 
 (register-commands :scripts/unix)
