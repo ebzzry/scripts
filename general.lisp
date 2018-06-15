@@ -11,7 +11,8 @@
           #:cl-ppcre
           #:cl-launch/dispatch
           #:scripts/misc
-          #:scripts/utils)
+          #:scripts/utils
+          #:scripts/intuos)
   (:export #:ascii-hex-table
            #:ascii-oct-table
            #:rot13
@@ -59,9 +60,27 @@
           (xmap "ceteraj.dvorak")))
   (success))
 
-(defun load-xresources ()
+(defun load-keymap ()
+  (load-xmodmap "Kinesis Advantage PRO MPC/USB Keyboard"))
+
+(defun load-intuos ()
+  (run/i `(intuos-bind)))
+
+(defun load-resources ()
   (run `(xrdb ,(home ".Xresources")) :output :interactive :input :interactive :error-output nil :on-error nil)
   (success))
+
+(defun load-hostname ()
+  (let ((hostname (hostname))
+        (xdev-args '("pointer" "set-button-map" "1" "2" "3" "5" "4")))
+    (match hostname
+      ((ppcre "vulpo")
+       (scripts/touchpad:disable)
+       (trackpoint "TPPS/2 IBM TrackPoint")
+       (apply #'xdev (append '("Logitech USB Receiver") xdev-args)))
+      ((ppcre "pando")
+       (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
+      (_ (success)))))
 
 (exporting-definitions
   (defun ascii-hex-table ()
@@ -101,18 +120,11 @@
       (success)))
 
   (defun xxx ()
-    (let ((hostname (hostname))
-          (xdev-args '("pointer" "set-button-map" "1" "2" "3" "5" "4")))
-      (load-xmodmap "Kinesis Advantage PRO MPC/USB Keyboard")
-      (load-xresources)
-      (match hostname
-        ((ppcre "vulpo")
-         (scripts/touchpad:disable)
-         (trackpoint "TPPS/2 IBM TrackPoint")
-         (apply #'xdev (append '("Logitech USB Receiver") xdev-args)))
-        ((ppcre "pando")
-         (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
-        (_ (success)))))
+    (load-keymap)
+    (load-resources)
+    (load-intuos)
+    (load-hostname)
+    (success))
 
   (defun psg (&rest args)
     (run/i `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args))

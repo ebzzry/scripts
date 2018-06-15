@@ -26,7 +26,8 @@
            #:lh
            #:l1
            #:f
-           #:lv))
+           #:lv
+           #:sudo-sh))
 
 (in-package :scripts/unix)
 
@@ -57,6 +58,10 @@
 
  (defun lv (&rest args)
    (run/i `(pipe (l ,@args) (less)))
+   (success))
+
+ (defun sudo-sh (command)
+   (run/i `(sudo "sh" "-c" ,command))
    (success)))
 
 (register-commands :scripts/unix)

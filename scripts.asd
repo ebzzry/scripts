@@ -18,4 +18,5 @@
                "scripts/general"
                "scripts/apps"
                "scripts/unix"
-               "scripts/mksum"))
+               "scripts/mksum"
+               "scripts/intuos"))

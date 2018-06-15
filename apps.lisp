@@ -10,7 +10,8 @@
           #:optima.ppcre
           #:cl-launch/dispatch
           #:scripts/misc
-          #:scripts/utils)
+          #:scripts/utils
+          #:scripts/unix)
   (:export #:s
            #:e
            #:term
@@ -25,14 +26,14 @@
            #:rt
            #:rm@
            #:par
-           #:v
            #:bt
-           #:kt
 
            #:len
            #:leo
            #:tox
            #:vbox
+           #:kt
+
            #:raz!
            #:lispworks-gui
            #:lispworks-terminal
@@ -90,7 +91,6 @@
   (% rt "rtorrent")
   (% rm@ "shred -vfzun 10")
   (% par "parallel --will-cite")
-  (% v "less")
   (% bt "bluetoothctl"))
 
 (exporting-definitions
