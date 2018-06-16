@@ -8,7 +8,8 @@
           #:cl-launch/dispatch
           #:scripts/misc
           #:scripts/unix)
-  (:export #:intuos-map
+  (:export #:intuos-status
+           #:intuos-map
            #:intuos-bind
            #:intuos-mode
            #:intuos-actions
@@ -42,6 +43,10 @@
     value))
 
 (exporting-definitions
+  (defun intuos-status ()
+    (format t "~A" (intuos-ring-status))
+    (success))
+
   (defun intuos-map (&rest args)
     "Bind a button using xsetwacom"
     (let ((name (intuos-pad-name)))

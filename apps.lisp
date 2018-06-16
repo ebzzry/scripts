@@ -35,6 +35,7 @@
            #:kt
 
            #:raz!
+
            #:lispworks-gui
            #:lispworks-terminal
            #:lw
@@ -51,7 +52,7 @@
 
 (in-package :scripts/apps)
 
-(defvar +screenshots-dir+ (home ".screenshots/"))
+(defvar +screenshots-dir+ (home ".screenshots"))
 
 (defun run-with-locale (locale &rest args)
   "Run args with locale set to LOCALE"
@@ -139,28 +140,28 @@
     (shell "--command" (format nil " rlwrap -s 1000000 -c -b \"(){}[].,=&^%0\;|\" ~A" command)))
 
   (defun screenshot (mode)
-    (let* ((dir +screenshots-dir+)
+    (let* ((dir (uiop:truenamize +screenshots-dir+))
            (file (format nil "~A.png" (local-time:format-timestring nil (local-time:now))))
            (dest (format nil "mv $f ~A" dir))
            (image (format nil "~A~A" dir file)))
       (flet ((scrot (file dest &rest args)
                (run/i `(scrot ,@args ,file -e ,dest))))
         (match mode
-          ((ppcre "(full|tute)") (scrot file dest))
-          ((ppcre "(region|parte)") (scrot file dest '-s))
+          ((ppcre "(full)") (scrot file dest))
+          ((ppcre "(region)") (scrot file dest '-s))
           (_ (err (format nil "invalid mode ~A~%" mode))))
-        (run `(xclip -selection clipboard) :input (list image))
+        (run `("xclip" "-selection" "clipboard") :input (list image))
         (success)))))
 
 (exporting-definitions
   (defun sg2e (&rest args)
     (declare (ignore args))
-    (run/i `(stem "-X" ,(argv0) "steam://rungameid/245170"))
+    (run/i `("stem" "-X" ,(argv0) "steam://rungameid/245170"))
     (success))
 
   (defun smb (&rest args)
     (declare (ignore args))
-    (run/i `(stem "-s"  "steam://rungameid/40800"))
+    (run/i `("stem" "-s"  "steam://rungameid/40800"))
     (success)))
 
 (register-commands :scripts/apps)

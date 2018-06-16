@@ -46,9 +46,9 @@
       (success))))
 
 (defun xmap (keymap)
-  (run/i `(setxkbmap dvorak))
-  (run/i `(xset r rate 250))
-  (run/i `(xmodmap ,(home (format nil "hejmo/ktp/xmodmap/.Xmodmap.~A" keymap))))
+  (run/i `("setxkbmap" "dvorak"))
+  (run/i `("xset" "r" "rate" "250"))
+  (run/i `("xmodmap" ,(home (format nil "hejmo/ktp/xmodmap/.Xmodmap.~A" keymap))))
   (success))
 
 (defun load-xmodmap (device)
@@ -63,8 +63,18 @@
 (defun load-keymap ()
   (load-xmodmap "Kinesis Advantage PRO MPC/USB Keyboard"))
 
+(defun load-xset ()
+  (run/i `("xset" "s" "1800" "1800")))
+
 (defun load-intuos ()
-  (run/i `(intuos-bind)))
+  (run/i `(intuos-bind))
+  (dolist (cmd `(("2" "key +ctrl x -ctrl")
+                 ("3" "key +ctrl c -ctrl")
+                 ("8" "key +ctrl v -ctrl")
+                 ("9" "key +ctrl a -ctrl")
+                 ("10" "key +ctrl y -ctrl")
+                 ("11" "key +ctrl z -ctrl")))
+    (run/i (append (list "intuos-map" "Button") cmd))))
 
 (defun load-resources ()
   (run `(xrdb ,(home ".Xresources")) :output :interactive :input :interactive :error-output nil :on-error nil)
@@ -113,14 +123,15 @@
 
   (defun trackpoint (arg)
     (let ((device arg))
-      (run/i `(xinput set-prop ,device "Evdev Wheel Emulation" 1))
-      (run/i `(xinput set-prop ,device "Evdev Wheel Emulation Button" 2))
-      (run/i `(xinput set-prop ,device "Evdev Wheel Emulation Timeout" 200))
-      (run/i `(xinput set-prop ,device "Evdev Wheel Emulation Axes" 7 6 5 4))
+      (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation" 1))
+      (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Button" 2))
+      (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Timeout" 200))
+      (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Axes" 7 6 5 4))
       (success)))
 
   (defun xxx ()
     (load-keymap)
+    (load-xset)
     (load-resources)
     (load-intuos)
     (load-hostname)
