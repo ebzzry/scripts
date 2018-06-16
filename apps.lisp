@@ -27,6 +27,7 @@
            #:rm@
            #:par
            #:bt
+           #:xo
 
            #:len
            #:leo
@@ -92,7 +93,8 @@
   (% rt "rtorrent")
   (% rm@ "shred -vfzun 10")
   (% par "parallel --will-cite")
-  (% bt "bluetoothctl"))
+  (% bt "bluetoothctl")
+  (% xo "xournal"))
 
 (exporting-definitions
   (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
