@@ -17,13 +17,13 @@
 
 (in-package :scripts/intuos)
 
-(defparameter *intuos-led-file*
-  (first (directory #P"/sys/bus/usb/devices/*/*/wacom_led/status_led0_select"))
-  "The device for controlling the LED states of the ring")
-
 (defparameter *intuos-selector-key*
   "F10"
   "The key to bind the selector key to")
+
+(defun intuos-led-file ()
+  "Returns the device for controlling the LED states of the ring"
+  (first (directory #P"/sys/bus/usb/devices/*/*/wacom_led/status_led0_select")))
 
 (defun intuos-device-name (type)
   "Return the name of the tablet by type NAME"
@@ -39,12 +39,12 @@
 
 (defun intuos-ring-status ()
   "Return the current value of the LED file"
-  (let ((value (uiop:read-file-form *intuos-led-file*)))
+  (let ((value (uiop:read-file-form (intuos-led-file))))
     value))
 
 (exporting-definitions
   (defun intuos-status ()
-    (format t "~A" (intuos-ring-status))
+    (format t "~A~%" (intuos-ring-status))
     (success))
 
   (defun intuos-map (&rest args)
@@ -60,7 +60,7 @@
 
   (defun intuos-mode (value)
     "Use sudo to set the value of the LED file"
-    (let ((command (format nil "echo ~A > ~A" value *intuos-led-file*)))
+    (let ((command (format nil "echo ~A > ~A" value (intuos-led-file))))
       (sush command)))
 
   (defun intuos-actions (action-1 action-2)

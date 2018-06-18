@@ -33,6 +33,9 @@ stdenv.mkDerivation {
     gnome3.gtk
     gnome3.libsoup
     gnome3.webkitgtk
+
+    alsaLib
+    libpulseaudio
   ];
 
   shellHook = ''
