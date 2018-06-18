@@ -8,7 +8,8 @@
           #:cl-launch/dispatch
           #:scripts/misc
           #:scripts/unix)
-  (:export #:intuos-status
+  (:export #:intuos-ring-status
+           #:intuos-status
            #:intuos-map
            #:intuos-bind
            #:intuos-mode
@@ -18,7 +19,7 @@
 (in-package :scripts/intuos)
 
 (defparameter *intuos-selector-key*
-  "F10"
+  "Pause"
   "The key to bind the selector key to")
 
 (defun intuos-led-file ()
@@ -37,12 +38,12 @@
   "Return the pad name of tablet detected"
   (intuos-device-name "pad"))
 
-(defun intuos-ring-status ()
-  "Return the current value of the LED file"
-  (let ((value (uiop:read-file-form (intuos-led-file))))
-    value))
-
 (exporting-definitions
+  (defun intuos-ring-status ()
+    "Return the current value of the LED file"
+    (let ((value (uiop:read-file-form (intuos-led-file))))
+      value))
+
   (defun intuos-status ()
     (format t "~A~%" (intuos-ring-status))
     (success))
@@ -53,10 +54,10 @@
       (run/i `(xsetwacom "set" ,name ,@args))
       (success)))
 
-  (defun intuos-bind ()
+  (defun intuos-bind (&optional (key *intuos-selector-key*))
     "Bind the middle selector key to the default value"
-    (let ((key (format nil "key ~A" *intuos-selector-key*)))
-      (intuos-map "Button" "1" key)))
+    (let ((value (format nil "key ~A" key)))
+      (intuos-map "Button" "1" value)))
 
   (defun intuos-mode (value)
     "Use sudo to set the value of the LED file"
