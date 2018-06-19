@@ -22,6 +22,40 @@
   "Pause"
   "The key to bind the selector key to")
 
+(defparameter *intuos-default-config*
+  '((0 "button +4" "button +5")
+    (1 "key PgUp" "key PgDn")
+    (2 "key +ctrl - -ctrl" "key +ctrl +shift = -ctrl -shift")
+    (3 "button +5" "button +4"))
+  "The default configuration")
+
+(defun home (path)
+  "Retun path relative to user home directory"
+  (uiop:merge-pathnames* path (user-homedir-pathname)))
+
+(defparameter *intuos-default-config-file*
+  (home ".intuos.lisp")
+  "The location of the config file on the disk")
+
+(defun intuos-config-file-exists-p ()
+  (when (uiop:file-exists-p *intuos-default-config-file*)
+    t))
+
+(defun intuos-read-config-file ()
+  "Read the configuration file"
+  (uiop:read-file-forms *intuos-default-config-file*))
+
+(defun intuos-read-config ()
+  "Return the most proximate configuration"
+  (if (intuos-config-file-exists-p)
+      (intuos-read-config-file)
+      *intuos-default-config*))
+
+(defun intuos-config-value (index)
+  "Return the operations associated with an index"
+  (let ((config (intuos-read-config)))
+    (rest (assoc index config))))
+
 (defun intuos-led-file ()
   "Returns the device for controlling the LED states of the ring"
   (first (directory #P"/sys/bus/usb/devices/*/*/wacom_led/status_led0_select")))
@@ -71,21 +105,8 @@
 
   (defun intuos-ring (&optional mode)
     "Change the behavior of the ring depending on the current LED value"
-    (let ((name (intuos-pad-name)))
-      (when mode
-        (intuos-mode mode))
-      (ecase (intuos-ring-status)
-        ;; scroll
-        (0 (intuos-actions "button +4" "button +5"))
-
-        ;; miscellany
-        (1 (intuos-actions "key PgUp" "key PgDn"))
-
-        ;; zoom
-        (2 (intuos-actions "key +ctrl - -ctrl" "key +ctrl +shift = -ctrl -shift"))
-
-        ;; brushes
-        (3 (intuos-actions "key [" "key ]"))))
+    (when mode (intuos-mode mode))
+    (apply #'intuos-actions (intuos-config-value (intuos-ring-status)))
     (success)))
 
 (register-commands :scripts/intuos)
