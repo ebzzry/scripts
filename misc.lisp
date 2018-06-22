@@ -11,7 +11,7 @@
            #:create-symlinks
            #:help))
 
-(in-package :scripts/misc)
+(in-package #:scripts/misc)
 
 (exporting-definitions
   (defun getuid ()

@@ -13,10 +13,12 @@
                #:ironclad
                #:net.didierverna.clon
                #:mof
+               #:split-sequence
                "scripts/misc"
                "scripts/touchpad"
                "scripts/general"
                "scripts/apps"
                "scripts/unix"
                "scripts/mksum"
-               "scripts/intuos"))
+               "scripts/tablet"
+               "scripts/webcam"))

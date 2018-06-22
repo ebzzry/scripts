@@ -23,7 +23,7 @@
            #:disable
            #:enable))
 
-(in-package :scripts/touchpad)
+(in-package #:scripts/touchpad)
 
 (defun get-id ()
   (dolist (line (run/lines '(xinput list)))

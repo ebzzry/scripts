@@ -28,6 +28,8 @@
            #:par
            #:bt
            #:xo
+           #:pm
+           #:limnu
 
            #:len
            #:leo
@@ -51,7 +53,7 @@
            #:sg2e
            #:smb))
 
-(in-package :scripts/apps)
+(in-package #:scripts/apps)
 
 (defvar +screenshots-dir+ (home ".screenshots"))
 
@@ -94,7 +96,9 @@
   (% rm@ "shred -vfzun 10")
   (% par "parallel --will-cite")
   (% bt "bluetoothctl")
-  (% xo "xournal"))
+  (% xo "xournal")
+  (% pm "pulsemixer")
+  (% limnu "fire -new-window https://limnu.com/d/user.html"))
 
 (exporting-definitions
   (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))

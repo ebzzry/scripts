@@ -1,0 +1,109 @@
+;;;; webcam.lisp
+
+(uiop:define-package #:scripts/webcam
+    (:use #:cl
+          #:fare-utils
+          #:inferior-shell
+          #:cl-scripting
+          #:cl-launch/dispatch
+          #:scripts/misc
+          #:scripts/unix
+          #:scripts/utils)
+  (:export #:set-zoom
+           #:reset-zoom
+           #:decrease-zoom
+           #:increase-zoom
+           #:minimum-zoom
+           #:maximum-zoom))
+
+(in-package #:scripts/webcam)
+
+(defparameter *device*
+  "/dev/video0"
+  "The default webcam device")
+
+(mof:defcon +increments+
+  10
+  "The zoom increments.")
+
+(mof:defcon +program+
+  "v4l2-ctl"
+  "The program name to adjust webcam parameters")
+
+(defun run-command/i (device &rest args)
+  (inferior-shell:run/i `(,+program+ "-d" ,device ,@args)))
+
+(defun run-command/ss (device &rest args)
+  (inferior-shell:run/ss `(,+program+ "-d" ,device ,@args)))
+
+(defun current-zoom (&optional (device *device*))
+  "Return the current zoom settings."
+  (let* ((output (run-command/ss device "-C" "zoom_absolute"))
+         (value (parse-integer (second (split-sequence:split-sequence #\space output)))))
+    value))
+
+(defun zoom-settings (&optional (device *device*))
+  "Return the zoom settings from DEVICE."
+  (uiop:split-string
+   (first (remove-if-not #'(lambda (line)
+                             (search "zoom_absolute" line))
+                         (inferior-shell:run/lines
+                          `("v4l2-ctl" "-d" ,device "-l"))))
+   :separator '(#\space)))
+
+(defun zoom-value (type)
+  "Return the current absolute zoom value for TYPE."
+  (values
+   (parse-integer
+    (cl-ppcre:regex-replace
+     (format nil "~A=(.*)" type)
+     (first (remove-if-not #'(lambda (text) (search type text)) (zoom-settings)))
+     "\\1"))))
+
+(defparameter *default-zoom* (zoom-value "default")
+  "Return the default zoom value.")
+
+(defparameter *minimum-zoom* (zoom-value "min")
+  "Return the minimum zoom value for DEVICE.")
+
+(defparameter *maximum-zoom* (zoom-value "max")
+  "Return the maximum zoom value for DEVICE.")
+
+(exporting-definitions
+  (defun set-zoom (device value)
+    "Set a specific zoom value."
+    (run-command/i device "-c" (format nil "zoom_absolute=~A" value))
+    (current-zoom))
+
+  (defun reset-zoom (&optional (device *device*))
+    "Set the zoom to the default vaule."
+    (set-zoom device *default-zoom*)
+    (current-zoom))
+
+  (defun decrease-zoom (&optional (device *device*))
+    "Decrease the zoom setting."
+    (let* ((current (current-zoom))
+           (new (- current +increments+))
+           (value (if (< new *minimum-zoom*)
+                      *minimum-zoom*
+                      new)))
+      (set-zoom device value)))
+
+  (defun increase-zoom (&optional (device *device*))
+    "Decrease the zoom setting."
+    (let* ((current (current-zoom))
+           (new (+ current +increments+))
+           (value (if (> new *maximum-zoom*)
+                      *maximum-zoom*
+                      new)))
+      (set-zoom device value)))
+
+  (defun minimum-zoom (&optional (device *device*))
+    "Set the zoom to the lowest setting."
+    (set-zoom device *minimum-zoom*))
+
+  (defun maximum-zoom (&optional (device *device*))
+    "Set the zoom to the highest setting."
+    (set-zoom device *maximum-zoom*)))
+
+(register-commands :scripts/webcam)

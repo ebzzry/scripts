@@ -29,7 +29,7 @@
            #:lv
            #:sush))
 
-(in-package :scripts/unix)
+(in-package #:scripts/unix)
 
 (exporting-definitions
  (% x "zsh -c")
