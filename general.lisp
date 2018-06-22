@@ -12,7 +12,7 @@
           #:cl-launch/dispatch
           #:scripts/misc
           #:scripts/utils
-          #:scripts/intuos)
+          #:scripts/tablet)
   (:export #:ascii-hex-table
            #:ascii-oct-table
            #:rot13
@@ -23,7 +23,7 @@
            #:psk
            #:psk!))
 
-(in-package :scripts/general)
+(in-package #:scripts/general)
 
 (defvar *num-mode* "[31m")
 (defvar *colon-mode* "[34m")
@@ -66,7 +66,7 @@
 (defun load-xset ()
   (run/i `("xset" "s" "1800" "1800")))
 
-(defun load-intuos ()
+(defun load-tablet ()
   (run/i `(intuos-bind))
   (dolist (cmd `(("2" "key +ctrl x -ctrl")
                  ("3" "key +ctrl c -ctrl")
@@ -133,7 +133,7 @@
     (load-keymap)
     (load-xset)
     (load-resources)
-    (load-intuos)
+    (load-tablet)
     (load-hostname)
     (success))
 

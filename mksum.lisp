@@ -7,7 +7,7 @@
           #:net.didierverna.clon)
   (:export #:mksum))
 
-(in-package :scripts/mksum)
+(in-package #:scripts/mksum)
 
 (defvar *default-hash* :sha256 "Default hash function")
 

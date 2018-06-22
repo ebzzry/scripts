@@ -20,7 +20,7 @@
            #:find-binary
            #:%))
 
-(in-package :scripts/utils)
+(in-package #:scripts/utils)
 
 (defun char-display-char (c)
   (if (or (member c '(127 155))
