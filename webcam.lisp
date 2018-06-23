@@ -9,7 +9,8 @@
           #:scripts/misc
           #:scripts/unix
           #:scripts/utils)
-  (:export #:set-zoom
+  (:export #:disable-internal-webcam
+           #:set-zoom
            #:reset-zoom
            #:decrease-zoom
            #:increase-zoom
@@ -70,6 +71,10 @@
   "Return the maximum zoom value for DEVICE.")
 
 (exporting-definitions
+  (defun disable-internal-webcam ()
+    "Disable the internal webcam."
+    (sush "echo 2-8 > /sys/bus/usb/drivers/usb/bind"))
+
   (defun set-zoom (device value)
     "Set a specific zoom value."
     (run-command/i device "-c" (format nil "zoom_absolute=~A" value))
