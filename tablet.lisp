@@ -88,12 +88,12 @@
 
   (defun intuos-bind (&optional (key *intuos-selector-key*))
     "Bind the middle selector key to the default value."
-    (let ((value (format nil "key ~A" key)))
+    (let ((value (mof:fmt "key ~A" key)))
       (intuos-map "Button" "1" value)))
 
   (defun intuos-mode (value)
     "Use sudo to set the value of the LED file."
-    (let ((command (format nil "echo ~A > ~A" value (intuos-led-file))))
+    (let ((command (mof:fmt "echo ~A > ~A" value (intuos-led-file))))
       (sush command)))
 
   (defun intuos-actions (action-1 action-2)

@@ -31,13 +31,14 @@
 (defvar *normal-mode* "[0m")
 
 (defun xdev-id (name type)
-  (format nil "~A"
-          (regex-replace
-           (create-scanner ".*id=(.*?)	+.*")
-           (first (remove-if (complement
-                              #'(lambda (line)
-                                  (and (search name line) (search (format nil "slave  ~A" type) line))))
-                             (run-program '("xinput" "list") :output :lines))) "\\1")))
+  (mof:fmt
+   "~A"
+   (regex-replace
+    (create-scanner ".*id=(.*?)	+.*")
+    (first (remove-if (complement
+                       #'(lambda (line)
+                           (and (search name line) (search (mof:fmt "slave  ~A" type) line))))
+                      (run-program '("xinput" "list") :output :lines))) "\\1")))
 
 (defun xdev (name type command &rest args)
   (let ((id (xdev-id name type)))
@@ -48,7 +49,7 @@
 (defun xmap (keymap)
   (run/i `("setxkbmap" "dvorak"))
   (run/i `("xset" "r" "rate" "250"))
-  (run/i `("xmodmap" ,(home (format nil "hejmo/ktp/xmodmap/.Xmodmap.~A" keymap))))
+  (run/i `("xmodmap" ,(home (mof:fmt"hejmo/ktp/xmodmap/.Xmodmap.~A" keymap))))
   (success))
 
 (defun load-xmodmap (device)

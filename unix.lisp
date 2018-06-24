@@ -53,7 +53,7 @@
 
 (exporting-definitions
  (defun f (arg)
-   (run/i `(find "." -iname ,(format nil "*~A*" arg)))
+   (run/i `(find "." -iname ,(mof:fmt "*~A*" arg)))
    (success))
 
  (defun lv (&rest args)
@@ -61,7 +61,7 @@
    (success))
 
  (defun sush (&rest args)
-   (run/i `(sudo "sh" "-c" ,(format nil "~{~A~^ ~}" args)))
+   (run/i `(sudo "sh" "-c" ,(mof:fmt "~{~A~^ ~}" args)))
    (success)))
 
 (register-commands :scripts/unix)

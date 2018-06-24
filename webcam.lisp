@@ -57,7 +57,7 @@
   (values
    (parse-integer
     (cl-ppcre:regex-replace
-     (format nil "~A=(.*)" type)
+     (mof:fmt "~A=(.*)" type)
      (first (remove-if-not #'(lambda (text) (search type text)) (zoom-settings)))
      "\\1"))))
 
@@ -77,7 +77,7 @@
 
   (defun set-zoom (device value)
     "Set a specific zoom value."
-    (run-command/i device "-c" (format nil "zoom_absolute=~A" value))
+    (run-command/i device "-c" (mof:fmt "zoom_absolute=~A" value))
     (current-zoom))
 
   (defun reset-zoom (&optional (device *device*))
