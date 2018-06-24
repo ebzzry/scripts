@@ -60,7 +60,7 @@
 (defun run-with-locale (locale &rest args)
   "Run args with locale set to LOCALE"
   (setf (getenv "LANG") locale)
-  (run/i `(,@args))
+  (run/i `(,@(first args)))
   (success))
 
 (defun run-with-nix-user (profile binary &rest args)
