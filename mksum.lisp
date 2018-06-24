@@ -30,7 +30,7 @@
 
 (defun format-two (arg-1 arg-2)
   "Print the two arguments in aesthetic form."
-  (format nil "~A ~A" arg-1 arg-2))
+  (mof:fmt "~A ~A" arg-1 arg-2))
 
 (defun print-list (list)
   "Output formatted string from LIST."

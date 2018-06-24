@@ -65,7 +65,7 @@
 
 (defun run-with-nix-user (profile binary &rest args)
   "Run binary under a separate profile"
-  (let ((bin (home (format nil ".baf/profiles/~A/bin" profile))))
+  (let ((bin (home (mof:fmt ".baf/profiles/~A/bin" profile))))
     (setf (getenv "PATH") (unix-namestring bin))
     (run/i `(,binary ,@args))))
 
@@ -139,23 +139,23 @@
 
   (defun shell (&rest args)
     (let ((directory (pathname-directory-pathname (find-binary (argv0)))))
-      (run/i `(nix-shell --pure ,(format nil "~A/default.nix" directory) ,@args))
+      (run/i `(nix-shell --pure ,(mof:fmt "~A/default.nix" directory) ,@args))
       (success)))
 
   (defun rshell (command)
-    (shell "--command" (format nil " rlwrap -s 1000000 -c -b \"(){}[].,=&^%0\;|\" ~A" command)))
+    (shell "--command" (mof:fmt " rlwrap -s 1000000 -c -b \"(){}[].,=&^%0\;|\" ~A" command)))
 
   (defun screenshot (mode)
     (let* ((dir (uiop:truenamize +screenshots-dir+))
-           (file (format nil "~A.png" (local-time:format-timestring nil (local-time:now))))
-           (dest (format nil "mv $f ~A" dir))
-           (image (format nil "~A~A" dir file)))
+           (file (mof:fmt "~A.png" (local-time:format-timestring nil (local-time:now))))
+           (dest (mof:fmt "mv $f ~A" dir))
+           (image (mof:fmt "~A~A" dir file)))
       (flet ((scrot (file dest &rest args)
                (run/i `(scrot ,@args ,file -e ,dest))))
         (match mode
           ((ppcre "(full)") (scrot file dest))
           ((ppcre "(region)") (scrot file dest '-s))
-          (_ (err (format nil "invalid mode ~A~%" mode))))
+          (_ (err (mof:fmt "invalid mode ~A~%" mode))))
         (run `("xclip" "-selection" "clipboard") :input (list image))
         (success)))))
 
