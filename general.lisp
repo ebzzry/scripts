@@ -49,7 +49,7 @@
 (defun xmap (keymap)
   (run/i `("setxkbmap" "dvorak"))
   (run/i `("xset" "r" "rate" "250"))
-  (run/i `("xmodmap" ,(home (mof:fmt"hejmo/ktp/xmodmap/.Xmodmap.~A" keymap))))
+  (run/i `("xmodmap" ,(mof:home (mof:fmt "hejmo/ktp/xmodmap/.Xmodmap.~A" keymap))))
   (success))
 
 (defun load-xmodmap (device)
@@ -78,7 +78,7 @@
     (run/i (append (list "intuos-map" "Button") cmd))))
 
 (defun load-resources ()
-  (run `(xrdb ,(home ".Xresources")) :output :interactive :input :interactive :error-output nil :on-error nil)
+  (run `(xrdb ,(mof:home ".Xresources")) :output :interactive :input :interactive :error-output nil :on-error nil)
   (success))
 
 (defun load-hostname ()
