@@ -19,9 +19,9 @@
            #:battery
            #:trackpoint
            #:xxx
-           #:psg
-           #:psk
-           #:psk!))
+           #:pg
+           #:pk
+           #:pk!))
 
 (in-package #:scripts/general)
 
@@ -93,6 +93,9 @@
        (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
       (_ (success)))))
 
+(defun pgrep-lines (&rest args)
+  (run/lines `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args)))
+
 (exporting-definitions
   (defun ascii-hex-table ()
     (loop :for i :from 32 :to 255
@@ -138,16 +141,16 @@
     (load-hostname)
     (success))
 
-  (defun psg (&rest args)
+  (defun pg (&rest args)
     (run/i `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args))
     (success))
 
-  (defun psk (&rest args)
-    (let ((numbers (mapcar #'string-first (psg-lines (last args)))))
+  (defun pk (&rest args)
+    (let ((numbers (mapcar #'string-first (pgrep-lines (last args)))))
       (loop :for number :in numbers :do (run/i `(kill ,@(butlast args) ,number))))
     (success))
 
-  (defun psk! (&rest args)
-    (apply-args-1 'psk args :options '("-9"))))
+  (defun pk! (&rest args)
+    (apply-args-1 'pk args :options '("-9"))))
 
 (register-commands :scripts/general)

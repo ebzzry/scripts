@@ -15,7 +15,6 @@
            #:apply-args
            #:apply-args-1
            #:string-first
-           #:psg-lines
            #:find-binary
            #:%))
 
@@ -56,9 +55,6 @@
 (defun string-first (string)
   (let* ((space (position #\  string :test #'equal)))
     (subseq string 0 space)))
-
-(defun psg-lines (&rest args)
-  (run/lines `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args)))
 
 (defun find-binary (binary)
   (run/ss `(readlink -f ,(run/ss `(which ,binary)))))
