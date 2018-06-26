@@ -20,7 +20,7 @@
 (in-package #:scripts/tablet)
 
 (defparameter *intuos-selector-key*
-  "Pause"
+  "XF86Go"
   "The key to bind the selector key to.")
 
 (defparameter *intuos-default-config*
