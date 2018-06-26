@@ -31,7 +31,7 @@
   "The default configuration.")
 
 (defparameter *intuos-default-config-file*
-  (home ".intuos.lisp")
+  (mof:home ".intuos.lisp")
   "The location of the config file on the disk")
 
 (defun intuos-config-file-exists-p ()

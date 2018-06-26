@@ -55,7 +55,7 @@
 
 (in-package #:scripts/apps)
 
-(defvar +screenshots-dir+ (home ".screenshots"))
+(defvar +screenshots-dir+ (mof:home ".screenshots"))
 
 (defun run-with-locale (locale &rest args)
   "Run args with locale set to LOCALE"
@@ -65,7 +65,7 @@
 
 (defun run-with-nix-user (profile binary &rest args)
   "Run binary under a separate profile"
-  (let ((bin (home (mof:fmt ".baf/profiles/~A/bin" profile))))
+  (let ((bin (mof:home (mof:fmt ".baf/profiles/~A/bin" profile))))
     (setf (getenv "PATH") (unix-namestring bin))
     (run/i `(,binary ,@args))))
 
@@ -77,7 +77,7 @@
 (defun run-with-xdg (binary &rest args)
   "Run binary under a custom XDG_DATA_DIRS path"
   (setf (getenv "XDG_DATA_DIRS")
-        (uiop:native-namestring (uiop:merge-pathnames* ".local/share/mime" (user-homedir-pathname))))
+        (uiop:native-namestring (mof:home ".local/share/mime")))
   (run/i `(,binary ,@args)))
 
 (exporting-definitions

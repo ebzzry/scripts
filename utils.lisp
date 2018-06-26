@@ -11,7 +11,6 @@
   (:export #:char-display-char
            #:battery-status
            #:wine
-           #:home
            #:err
            #:apply-args
            #:apply-args-1
@@ -44,9 +43,6 @@
 
 (defun wine (path &rest args)
   (run/i `(wine ,path ,@args)))
-
-(defun home (path)
-  (subpathname (user-homedir-pathname) path))
 
 (defun err (message)
   (die 1 (format t "Error: ~A~%" message)))
