@@ -30,6 +30,8 @@
            #:xo
            #:pm
            #:limnu
+           #:wee
+           #:cam
 
            #:len
            #:leo
@@ -98,7 +100,9 @@
   (% bt "bluetoothctl")
   (% xo "xournal")
   (% pm "pulsemixer")
-  (% limnu "fire -new-window https://limnu.com/d/user.html"))
+  (% limnu "fire -new-window https://limnu.com/d/user.html")
+  (% wee "weechat")
+  (% cam "guvcview"))
 
 (exporting-definitions
   (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
