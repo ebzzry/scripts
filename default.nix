@@ -15,6 +15,7 @@ stdenv.mkDerivation {
     mkcl
     ncurses
     libfixposix
+    jdk10
   ];
 
   LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [

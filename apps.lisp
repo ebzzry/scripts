@@ -41,10 +41,9 @@
 
            #:raz!
 
-           #:lispworks-gui
-           #:lispworks-terminal
-           #:lw
-           #:lwt
+           #:lispworks-chroot-gui
+           #:lispworks-chroot-terminal
+           #:lispworks-docker-gui
 
            #:bt-air
            #:bt-pulse
@@ -115,19 +114,17 @@
     (apply-args-1 'raz args :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
     (success))
 
-  (defun lispworks-gui (&rest args)
+  (defun lispworks-chroot-gui (&rest args)
     (run/i `(zsh "-c" "cr /usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux" ,@args))
     (success))
 
-  (defun lispworks-terminal (&rest args)
+  (defun lispworks-chroot-terminal (&rest args)
     (run/i `(zsh "-c" "cr /home/pub/hejmo/apoj/lispworks/save-image/lispworks-terminal" ,@args))
     (success))
 
-  (defun lw (&rest args)
-    (apply #'lispworks-gui args))
-
-  (defun lwt (&rest args)
-    (apply #'lispworks-terminal args)))
+  (defun lispworks-docker-gui (&rest args)
+    (run/i `(sh "-c" ,(mof:home "hejmo/fkd/sxelo/lispworks/lispworks70_linux_x86") ,@args))
+    (success)))
 
 (exporting-definitions
   (defun bt-air ()
