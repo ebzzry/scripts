@@ -41,6 +41,7 @@
            #:kt
            #:cb
            #:eb
+           #:vl
 
            #:raz!
 
@@ -93,7 +94,6 @@
  (% term "len urxvt")
  (% fire "firefox")
  (% chrome "google-chrome-unstable")
- (% tele "telegram-desktop")
  (% keep "keepassxc")
  (% xrsync "rsync -rlptgoDHSx")
  (% ra "xrsync")
@@ -118,6 +118,8 @@
  (defun kt (&rest args) (run-with-xdg "krita" args))
  (defun cb (&rest args) (run-with-nix-user "calibre" "calibre" args))
  (defun eb (&rest args) (run-with-nix-user "calibre" "ebook-viewer" args))
+ (defun vl (&rest args) (run-with-nix-user "vlc" "vlc" args))
+ (defun tele (&rest args) (run-with-nix-user "tdesktop" "telegram-desktop" args))
 
  (defun raz! (&rest args)
    (apply-args-1 'raz args :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
