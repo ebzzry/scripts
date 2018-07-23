@@ -18,11 +18,9 @@
            #:fire
            #:chrome
            #:tele
-           #:keep
            #:xrsync
            #:ra
            #:raz
-           #:qp
            #:rt
            #:rm@
            #:par
@@ -32,61 +30,40 @@
            #:limnu
            #:wee
            #:cam
+           #:lx
+
+           #:qt
+           #:tx
+           #:cb
+           #:eb
+           #:vl
+           #:td
+           #:kp
+           #:qp
+           #:kt
 
            #:lc
            #:len
            #:leo
-           #:tox
-           #:vbox
-           #:kt
-           #:cb
-           #:eb
-           #:vl
+           #:vb
 
            #:raz!
-
            #:lispworks-chroot-gui
            #:lispworks-chroot-cli
            #:lispworks-docker-gui
 
-           #:bt-air
-           #:bt-pulse
            #:shell
            #:rshell
-
            #:screenshot
            #:sg2e
-           #:smb))
+           #:smb
+
+           #:bt-air
+           #:bt-pulse))
 
 (in-package #:scripts/apps)
 
 (defvar +screenshots-dir+ (mof:home ".screenshots"))
-
-(defun run-with-locale (locale &rest args)
-  "Run args with locale set to LOCALE"
-  (setf (getenv "LANG") locale)
-  (run/i `(,@(first args)))
-  (success))
-
-(defun run-with-nix-user (profile binary &rest args)
-  "Run binary under a separate profile"
-  (let ((bin (mof:home (mof:fmt ".baf/profiles/~A/bin" profile))))
-    (setf (getenv "PATH") (unix-namestring bin))
-    (run/i `(,binary ,@args))
-    (success)))
-
-(defun run-with-nix-system (binary &rest args)
-  "Run binary without user paths"
-  (setf (getenv "PATH") "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
-  (run/i `(,binary ,@args))
-  (success))
-
-(defun run-with-xdg (binary &rest args)
-  "Run binary under a custom XDG_DATA_DIRS path"
-  (setf (getenv "XDG_DATA_DIRS")
-        (uiop:native-namestring (mof:home ".local/share/mime")))
-  (run/i `(,binary ,@args))
-  (success))
 
 (exporting-definitions
   (% s "sudo")
@@ -94,36 +71,42 @@
   (% term "len urxvt")
   (% fire "firefox")
   (% chrome "google-chrome-unstable")
-  (% keep "keepassxc")
+  (% pm "pulsemixer")
+  (% bt "bluetoothctl")
   (% xrsync "rsync -rlptgoDHSx")
   (% ra "xrsync")
   (% raz "ra -z")
-  (% qp "qpdfview")
   (% rt "rtorrent")
   (% rm@ "shred -vfzun 10")
   (% par "parallel --will-cite")
-  (% bt "bluetoothctl")
   (% xo "xournal")
-  (% pm "pulsemixer")
   (% limnu "fire -new-window https://limnu.com/d/user.html")
   (% wee "weechat")
-  (% cam "guvcview"))
+  (% cam "guvcview")
+  (% lx "lxappearance"))
+
+(exporting-definitions
+  ($ qt "qt5ct")
+  ($ tx "qtox")
+  ($ cb "calibre")
+  ($ eb "ebook-viewer")
+  ($ vl "vlc")
+  ($ td "telegram-desktop")
+  ($ kp "keepassxc")
+  ($ qp "qpdfview")
+  ($ kt "krita"))
 
 (exporting-definitions
   (defun lc (&rest args) (run-with-locale "C" args))
   (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
   (defun leo (&rest args) (run-with-locale "eo.utf8" args))
-  (defun tox (&rest args) (run-with-nix-user "qtox" "qtox" args))
-  (defun vbox () (run-with-nix-system "VirtualBox"))
-  (defun kt (&rest args) (run-with-xdg "krita" args))
-  (defun cb (&rest args) (run-with-nix-user "calibre" "calibre" args))
-  (defun eb (&rest args) (run-with-nix-user "calibre" "ebook-viewer" args))
-  (defun vl (&rest args) (run-with-nix-user "vlc" "vlc" args))
-  (defun tele (&rest args) (run-with-nix-user "tdesktop" "telegram-desktop" args)))
+  (defun vb () (run-with-nix-system "VirtualBox")))
 
 (exporting-definitions
   (defun raz! (&rest args)
-    (apply-args-1 'raz args :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
+    (apply-args-1 'raz args
+                  :options
+                  '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
     (success))
 
   (defun lispworks-chroot-gui (&rest args)
@@ -139,17 +122,6 @@
     (success)))
 
 (exporting-definitions
-  (defun bt-air ()
-    (run/i `(pacmd "set-default-sink" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink"))
-    (run/i `(pacmd "set-default-source" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink.monitor"))
-    (run/i `(pacmd "set-port-latency-offset" "bluez_card.B8_D5_0B_8D_77_EB" "headphone-output" "250000"))
-    (success))
-
-  (defun bt-pulse ()
-    (run/i `(pacmd "set-default-sink" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
-    (run/i `(pacmd "set-default-source" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink.monitor"))
-    (success))
-
   (defun shell (&rest args)
     (let ((directory (pathname-directory-pathname (find-binary (argv0)))))
       (run/i `(nix-shell --pure ,(mof:fmt "~A/default.nix" directory) ,@args))
@@ -170,17 +142,26 @@
           ((ppcre "(region)") (scrot file dest '-s))
           (_ (err (mof:fmt "invalid mode ~A~%" mode))))
         (run `("xclip" "-selection" "clipboard") :input (list image))
-        (success)))))
+        (success))))
 
-(exporting-definitions
-  (defun sg2e (&rest args)
-    (declare (ignore args))
+  (defun bt-air ()
+    (run/i `(pacmd "set-default-sink" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink"))
+    (run/i `(pacmd "set-default-source" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink.monitor"))
+    (run/i `(pacmd "set-port-latency-offset" "bluez_card.B8_D5_0B_8D_77_EB" "headphone-output" "250000"))
+    (success))
+
+  (defun bt-pulse ()
+    (run/i `(pacmd "set-default-sink" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
+    (run/i `(pacmd "set-default-source" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink.monitor"))
+    (success))
+
+  (defun sg2e ()
     (run/i `("stem" "-X" ,(argv0) "steam://rungameid/245170"))
     (success))
 
-  (defun smb (&rest args)
-    (declare (ignore args))
+  (defun smb ()
     (run/i `("stem" "-s"  "steam://rungameid/40800"))
     (success)))
+
 
 (register-commands :scripts/apps)
