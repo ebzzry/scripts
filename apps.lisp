@@ -41,6 +41,7 @@
            #:kp
            #:qp
            #:kt
+           #:ob
 
            #:lc
            #:len
@@ -94,7 +95,8 @@
   ($ td "telegram-desktop")
   ($ kp "keepassxc")
   ($ qp "qpdfview")
-  ($ kt "krita"))
+  ($ kt "krita")
+  ($ ob "obs"))
 
 (exporting-definitions
   (defun lc (&rest args) (run-with-locale "C" args))
