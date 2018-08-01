@@ -31,6 +31,7 @@
            #:wee
            #:cam
            #:lx
+           #:aud
 
            #:qt
            #:tx
@@ -84,7 +85,8 @@
   (% limnu "fire -new-window https://limnu.com/d/user.html")
   (% wee "weechat")
   (% cam "guvcview")
-  (% lx "lxappearance"))
+  (% lx "lxappearance")
+  (% aud "audacity"))
 
 (exporting-definitions
   ($ qt "qt5ct")
