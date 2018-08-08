@@ -27,7 +27,8 @@
            #:bt
            #:xo
            #:pm
-           #:limnu
+           #:lim
+           #:del
            #:wee
            #:cam
            #:lx
@@ -82,7 +83,8 @@
   (% rm@ "shred -vfzun 10")
   (% par "parallel --will-cite")
   (% xo "xournal")
-  (% limnu "fire -new-window https://limnu.com/d/user.html")
+  (% lim "fire -new-window https://limnu.com/d/user.html")
+  (% del "deluge")
   (% wee "weechat")
   (% cam "guvcview")
   (% lx "lxappearance")
