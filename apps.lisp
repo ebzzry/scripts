@@ -39,6 +39,7 @@
            #:cb
            #:eb
            #:vl
+           #:vl!
            #:td
            #:kp
            #:qp
@@ -88,7 +89,8 @@
   (% wee "weechat")
   (% cam "guvcview")
   (% lx "lxappearance")
-  (% aud "audacity"))
+  (% aud "audacity")
+  (% vl! "vl --playlist-autostart"))
 
 (exporting-definitions
   ($ qt "qt5ct")
