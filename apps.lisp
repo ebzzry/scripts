@@ -45,6 +45,7 @@
            #:qp
            #:kt
            #:ob
+           #:sw
 
            #:lc
            #:len
@@ -102,7 +103,8 @@
   ($ kp "keepassxc")
   ($ qp "qpdfview")
   ($ kt "krita")
-  ($ ob "obs"))
+  ($ ob "obs")
+  ($ sw "Write"))
 
 (exporting-definitions
   (defun lc (&rest args) (run-with-locale "C" args))
