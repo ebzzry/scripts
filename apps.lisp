@@ -46,11 +46,12 @@
            #:kt
            #:ob
            #:sw
+           #:vb
 
            #:lc
            #:len
            #:leo
-           #:vb
+           #:vbox
 
            #:raz!
            #:lispworks-chroot-gui
@@ -104,13 +105,14 @@
   ($ qp "qpdfview")
   ($ kt "krita")
   ($ ob "obs")
-  ($ sw "Write"))
+  ($ sw "Write")
+  ($ vb "viber"))
 
 (exporting-definitions
   (defun lc (&rest args) (run-with-locale "C" args))
   (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
   (defun leo (&rest args) (run-with-locale "eo.utf8" args))
-  (defun vb () (run-with-nix-system "VirtualBox")))
+  (defun vbox () (run-with-nix-system "VirtualBox")))
 
 (exporting-definitions
   (defun raz! (&rest args)
