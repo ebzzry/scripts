@@ -14,10 +14,9 @@
           #:scripts/unix)
   (:export #:s
            #:e
-           #:term
-           #:fire
-           #:chrome
-           #:tele
+           #:te
+           #:ff
+           #:cb
            #:xrsync
            #:ra
            #:raz
@@ -33,13 +32,14 @@
            #:cam
            #:lx
            #:aud
+           #:vl!
+           #:dis
 
            #:qt
            #:tx
            #:cb
            #:eb
            #:vl
-           #:vl!
            #:td
            #:kp
            #:qp
@@ -74,9 +74,9 @@
 (exporting-definitions
   (% s "sudo")
   (% e "emacsclient -nw")
-  (% term "len urxvt")
-  (% fire "firefox")
-  (% chrome "google-chrome-unstable")
+  (% te "len urxvt")
+  (% ff "firefox")
+  (% cb "google-chrome-unstable")
   (% pm "pulsemixer")
   (% bt "bluetoothctl")
   (% xrsync "rsync -rlptgoDHSx")
@@ -86,18 +86,19 @@
   (% rm@ "shred -vfzun 10")
   (% par "parallel --will-cite")
   (% xo "xournal")
-  (% lim "fire -new-window https://limnu.com/d/user.html")
+  (% lim "ff -new-window https://limnu.com/d/user.html")
   (% del "deluge")
   (% wee "weechat")
-  (% cam "guvcview")
+  (% cv "guvcview")
   (% lx "lxappearance")
   (% aud "audacity")
-  (% vl! "vl --playlist-autostart"))
+  (% vl! "vl --playlist-autostart")
+  (% dis "Discord"))
 
 (exporting-definitions
   ($ qt "qt5ct")
   ($ tx "qtox")
-  ($ cb "calibre")
+  ($ ce "calibre")
   ($ eb "ebook-viewer")
   ($ vl "vlc")
   ($ td "telegram-desktop")
