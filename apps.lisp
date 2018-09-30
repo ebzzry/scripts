@@ -17,7 +17,6 @@
            #:te
            #:ff
            #:cb
-           #:xrsync
            #:ra
            #:raz
            #:rt
@@ -26,12 +25,12 @@
            #:bt
            #:xo
            #:pm
-           #:lim
+           #:lu
            #:del
-           #:wee
-           #:cam
+           #:wt
+           #:cv
            #:lx
-           #:aud
+           #:au
            #:vl!
            #:dis
 
@@ -79,19 +78,18 @@
   (% cb "google-chrome-unstable")
   (% pm "pulsemixer")
   (% bt "bluetoothctl")
-  (% xrsync "rsync -rlptgoDHSx")
-  (% ra "xrsync")
+  (% ra "rsync -rlptgoDHSx")
   (% raz "ra -z")
   (% rt "rtorrent")
   (% rm@ "shred -vfzun 10")
   (% par "parallel --will-cite")
   (% xo "xournal")
-  (% lim "ff -new-window https://limnu.com/d/user.html")
+  (% lu "ff -new-window https://limnu.com/d/user.html")
   (% del "deluge")
-  (% wee "weechat")
+  (% wt "weechat")
   (% cv "guvcview")
   (% lx "lxappearance")
-  (% aud "audacity")
+  (% au "audacity")
   (% vl! "vl --playlist-autostart")
   (% dis "Discord"))
 
