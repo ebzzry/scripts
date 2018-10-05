@@ -33,6 +33,7 @@
            #:au
            #:vl!
            #:dis
+           #:oa
 
            #:qt
            #:tx
@@ -91,7 +92,8 @@
   (% lx "lxappearance")
   (% au "audacity")
   (% vl! "vl --playlist-autostart")
-  (% dis "Discord"))
+  (% dis "Discord")
+  (% oa "docker run --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ebzzry/opera /usr/bin/opera --no-sandbox"))
 
 (exporting-definitions
   ($ qt "qt5ct")
