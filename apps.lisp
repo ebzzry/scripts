@@ -26,7 +26,7 @@
            #:xo
            #:pm
            #:lu
-           #:del
+           #:dg
            #:wt
            #:cv
            #:lx
@@ -34,6 +34,7 @@
            #:vl!
            #:dx
            #:oa
+           #:oad
            #:tb
 
            #:qt
@@ -87,14 +88,15 @@
   (% par "parallel --will-cite")
   (% xo "xournal")
   (% lu "ff -new-window https://limnu.com/d/user.html")
-  (% del "deluge")
+  (% dg "deluge")
   (% wt "weechat")
   (% cv "guvcview")
   (% lx "lxappearance")
   (% au "audacity")
   (% vl! "vl --playlist-autostart")
   (% dx "Discord")
-  (% oa "docker run --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ebzzry/opera /usr/bin/opera --no-sandbox")
+  (% oa "opera")
+  (% oad "docker run --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ebzzry/opera /usr/bin/opera --no-sandbox")
   (% tb "tor-browser"))
 
 (exporting-definitions
