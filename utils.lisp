@@ -124,7 +124,11 @@
   (setf (getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
   (run-with-nix-user "qt" command args))
 
-(defmacro $ (name command)
+(defmacro $ (command name &optional alias)
   "Define a runner in the QT profile."
-  `(defun ,name (&rest args)
-     (with-qt ,command args)))
+  `(progn
+     (defun ,name (&rest args)
+       (with-qt ,command args))
+     ,(when alias
+        `(defun ,alias (&rest args)
+           (with-qt ,command args)))))

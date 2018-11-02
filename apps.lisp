@@ -42,18 +42,20 @@
            #:re
            #:ni
 
-           #:qt
-           #:tx
-           #:cb
-           #:eb
-           #:vl
-           #:td
-           #:kp
-           #:qp
-           #:kt
-           #:ob
+           #:qt5ct #:qt
+           #:qtox #:tx
+           #:calibre #:cb
+           #:ebook-viewer #:eb
+           #:vlc #:vl
+           #:telegram-desktop #:td
+           #:keepassxc #:kp
+           #:qpdfview #:qp
+           #:krita #:kt
+           #:obs #:ob
            #:sw
-           #:vb
+           #:viber #:vb
+           #:scribus #:si
+           #:nomacs #:nomacs
 
            #:lc
            #:len
@@ -111,18 +113,20 @@
  (@ ni "Neat Image Standalone/NeatImage.exe"))
 
 (exporting-definitions
- ($ qt "qt5ct")
- ($ tx "qtox")
- ($ ce "calibre")
- ($ eb "ebook-viewer")
- ($ vl "vlc")
- ($ td "telegram-desktop")
- ($ kp "keepassxc")
- ($ qp "qpdfview")
- ($ kt "krita")
- ($ ob "obs")
- ($ sw "Write")
- ($ vb "viber"))
+ ($ "qt5ct" qt5ct qt)
+ ($ "qtox" qtox tx)
+ ($ "calibre" calibre ce)
+ ($ "ebook-viewer" ebook-viewer eb)
+ ($ "vlc" vlc vl)
+ ($ "telegram-desktop" telegram-desktop td)
+ ($ "keepassxc" keepassxc kp)
+ ($ "qpdfview" qpdfview qp)
+ ($ "krita" krita kt)
+ ($ "obs" obs ob)
+ ($ "Write" sw)
+ ($ "viber" viber vb)
+ ($ "scribus" scribus si)
+ ($ "nomacs" nomacs no))
 
 (exporting-definitions
  (defun lc (&rest args) (run-with-locale "C" args))
@@ -190,6 +194,5 @@
  (defun smb ()
    (run/i `("stem" "-s"  "steam://rungameid/40800"))
    (success)))
-
 
 (register-commands :scripts/apps)
