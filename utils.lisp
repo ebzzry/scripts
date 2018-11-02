@@ -21,8 +21,10 @@
            #:run-with-nix-system
            #:run-with-nix-user
            #:run-with-xdg
+           #:run-with-wine
            #:with-qt
            #:%
+           #:@
            #:$))
 
 (in-package #:scripts/utils)
@@ -93,11 +95,22 @@
   (run/i `(,binary ,@args))
   (success))
 
+(defun run-with-wine (location)
+  "Run LOCATION using Wine."
+  (setf (getenv "WINEDEBUG") "-all")
+  (run/i `("wine" ,(mof:home (mof:fmt ".wine/drive_c/Program Files/~A" location))))
+  (success))
+
 (defmacro % (name command)
   "Define a normal command runner."
   `(defun ,name (&rest args)
      (run/i (append (split "\\s+" ,command) args))
      (success)))
+
+(defmacro @ (name location)
+  "Define a wine runner."
+  `(defun ,name (&rest args)
+     (run-with-wine ,location)))
 
 (defun run-with-nix-user (profile binary args)
   "Run binary under a separate profile."
