@@ -36,6 +36,7 @@
            #:oa
            #:oad
            #:tb
+           #:o
 
            #:xu
            #:sp
@@ -49,13 +50,11 @@
            #:vlc #:vl
            #:telegram-desktop #:td
            #:keepassxc #:kp
-           #:qpdfview #:qp
            #:krita #:kt
            #:obs #:ob
            #:sw
            #:viber #:vb
            #:scribus #:si
-           #:nomacs #:nomacs
 
            #:lc
            #:len
@@ -85,7 +84,7 @@
  (% e "emacsclient -nw")
  (% te "len urxvt")
  (% ff "firefox")
- (% cb "google-chrome")
+ (% cb "google-chrome-stable")
  (% pm "pulsemixer")
  (% bt "bluetoothctl")
  (% ra "rsync -rlptgoDHSx")
@@ -104,7 +103,8 @@
  (% dx "Discord")
  (% oa "opera")
  (% oad "docker run --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ebzzry/opera /usr/bin/opera --no-sandbox")
- (% tb "tor-browser"))
+ (% tb "tor-browser")
+ (% o "zathura"))
 
 (exporting-definitions
  (@ xu "Xenu/Xenu.exe")
@@ -120,13 +120,11 @@
  ($ "vlc" vlc vl)
  ($ "telegram-desktop" telegram-desktop td)
  ($ "keepassxc" keepassxc kp)
- ($ "qpdfview" qpdfview qp)
  ($ "krita" krita kt)
  ($ "obs" obs ob)
  ($ "Write" sw)
  ($ "viber" viber vb)
- ($ "scribus" scribus si)
- ($ "nomacs" nomacs no))
+ ($ "scribus" scribus si))
 
 (exporting-definitions
  (defun lc (&rest args) (run-with-locale "C" args))
