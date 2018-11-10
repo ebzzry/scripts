@@ -37,24 +37,31 @@
            #:oad
            #:tb
            #:o
+           #:b
 
            #:xu
            #:sp
            #:re
            #:ni
 
-           #:qt5ct #:qt
-           #:qtox #:tx
-           #:calibre #:cb
+           #:qt5ct
+           #:qtox
+           #:calibre
            #:ebook-viewer #:eb
-           #:vlc #:vl
+           #:vlc
            #:telegram-desktop #:td
            #:keepassxc #:kp
            #:krita #:kt
-           #:obs #:ob
+           #:obs
            #:sw
-           #:viber #:vb
-           #:scribus #:si
+           #:viber
+           #:qtrecordmydesktop
+           #:scribus
+           #:masterpdfeditor
+           #:qutebrowser #:qb
+           #:phototonic
+           #:pencil
+           #:sqlitebrowser
 
            #:lc
            #:len
@@ -99,12 +106,13 @@
  (% cv "guvcview")
  (% lx "lxappearance")
  (% au "audacity")
- (% vl! "vl --playlist-autostart")
+ (% vl! "vlc --playlist-autostart")
  (% dx "Discord")
  (% oa "opera")
  (% oad "docker run --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ebzzry/opera /usr/bin/opera --no-sandbox")
  (% tb "tor-browser")
- (% o "zathura"))
+ (% o "zathura")
+ (% b "phototonic"))
 
 (exporting-definitions
  (@ xu "Xenu/Xenu.exe")
@@ -113,18 +121,24 @@
  (@ ni "Neat Image Standalone/NeatImage.exe"))
 
 (exporting-definitions
- ($ "qt5ct" qt5ct qt)
- ($ "qtox" qtox tx)
- ($ "calibre" calibre ce)
+ ($ "qt5ct" qt5ct)
+ ($ "qtox" qtox)
+ ($ "calibre" calibre)
  ($ "ebook-viewer" ebook-viewer eb)
- ($ "vlc" vlc vl)
+ ($ "vlc" vlc)
  ($ "telegram-desktop" telegram-desktop td)
  ($ "keepassxc" keepassxc kp)
  ($ "krita" krita kt)
- ($ "obs" obs ob)
+ ($ "obs" obs)
  ($ "Write" sw)
- ($ "viber" viber vb)
- ($ "scribus" scribus si))
+ ($ "viber" viber)
+ ($ "qt-recordMyDesktop" qtrecordmydesktop)
+ ($ "scribus" scribus)
+ ($ "masterpdfeditor5" masterpdfeditor)
+ ($ "qutebrowser" qutebrowser qb)
+ ($ "phototonic" phototonic)
+ ($ "pencil" pencil)
+ ($ "sqlitebrowser" sqlitebrowser))
 
 (exporting-definitions
  (defun lc (&rest args) (run-with-locale "C" args))
