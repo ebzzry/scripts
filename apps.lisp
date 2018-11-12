@@ -14,8 +14,8 @@
           #:scripts/unix)
   (:export #:s
            #:e
-           #:te
-           #:ff
+           #:cmd
+           #:fb
            #:cb
            #:ra
            #:raz
@@ -34,19 +34,22 @@
            #:vl!
            #:dx
            #:oa
-           #:oad
            #:tb
            #:o
+           #:p
            #:b
-
-           #:xu
-           #:sp
-           #:re
-           #:ni
+           #:lo
+           #:gpg
+           #:fs
+           #:dv
+           #:v
+           #:f
+           #:g
+           #:gi
 
            #:qt5ct
            #:qtox
-           #:calibre
+           #:calibre #:cb
            #:ebook-viewer #:eb
            #:vlc
            #:telegram-desktop #:td
@@ -62,6 +65,10 @@
            #:phototonic
            #:pencil
            #:sqlitebrowser
+
+           #:xu
+           #:re
+           #:ni
 
            #:lc
            #:len
@@ -89,8 +96,8 @@
 (exporting-definitions
  (% s "sudo")
  (% e "emacsclient -nw")
- (% te "len urxvt")
- (% ff "firefox")
+ (% cmd "len urxvt")
+ (% fb "firefox")
  (% cb "google-chrome-stable")
  (% pm "pulsemixer")
  (% bt "bluetoothctl")
@@ -100,7 +107,7 @@
  (% rm@ "shred -vfzun 10")
  (% par "parallel --will-cite")
  (% xo "xournal")
- (% lu "ff -new-window https://limnu.com/d/user.html")
+ (% lu "o https://limnu.com/d/user.html")
  (% dg "deluge")
  (% wt "weechat")
  (% cv "guvcview")
@@ -109,21 +116,23 @@
  (% vl! "vlc --playlist-autostart")
  (% dx "Discord")
  (% oa "opera")
- (% oad "docker run --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ebzzry/opera /usr/bin/opera --no-sandbox")
  (% tb "tor-browser")
- (% o "zathura")
- (% b "phototonic"))
-
-(exporting-definitions
- (@ xu "Xenu/Xenu.exe")
- (@ sp "SumatraPDF/SumatraPDF.exe")
- (@ re "The Regex Coach/The Regex Coach.exe")
- (@ ni "Neat Image Standalone/NeatImage.exe"))
+ (% o "qutebrowser")
+ (% p "zathura")
+ (% b "phototonic")
+ (% lo "libreoffice")
+ (% gpg "gpg2")
+ (% fs "gtk2fontsel")
+ (% dv "gdrive upload --recursive")
+ (% v "less")
+ (% f "fd")
+ (% g "rg --color auto")
+ (% gi "g -i"))
 
 (exporting-definitions
  ($ "qt5ct" qt5ct)
  ($ "qtox" qtox)
- ($ "calibre" calibre)
+ ($ "calibre" calibre cb)
  ($ "ebook-viewer" ebook-viewer eb)
  ($ "vlc" vlc)
  ($ "telegram-desktop" telegram-desktop td)
@@ -139,6 +148,11 @@
  ($ "phototonic" phototonic)
  ($ "pencil" pencil)
  ($ "sqlitebrowser" sqlitebrowser))
+
+(exporting-definitions
+ (@ xu "Xenu/Xenu.exe")
+ (@ re "The Regex Coach/The Regex Coach.exe")
+ (@ ni "Neat Image Standalone/NeatImage.exe"))
 
 (exporting-definitions
  (defun lc (&rest args) (run-with-locale "C" args))

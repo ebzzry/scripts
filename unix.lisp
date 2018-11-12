@@ -11,9 +11,7 @@
           #:cl-launch/dispatch
           #:scripts/misc
           #:scripts/utils)
-  (:export #:x
-           #:v
-           #:md
+  (:export #:md
            #:rm!
            #:ln!
            #:g
@@ -32,17 +30,11 @@
 (in-package #:scripts/unix)
 
 (exporting-definitions
- (% x "zsh -c")
- (% v "less")
-
  (% md "mkdir -p")
  (% rm! "rm -rf")
  (% ln! "ln -sf")
 
- (% g "egrep --color")
- (% gi "g -i")
-
- (% la "ls -A -F --color ")
+ (% la "ls -A -F --color")
  (% lk "la -l")
 
  (% l  "la -tr")
@@ -52,10 +44,6 @@
  (% l1 "l -1"))
 
 (exporting-definitions
- (defun f (arg)
-   (run/i `(find "." -iname ,(mof:fmt "*~A*" arg)))
-   (success))
-
  (defun lv (&rest args)
    (run/i `(pipe (l ,@args) (less)))
    (success))
