@@ -44,12 +44,12 @@
            #:dv
            #:v
            #:f
-           #:g
-           #:gi
+           #:za
+           #:ir
 
            #:qt5ct
            #:qtox
-           #:calibre #:cb
+           #:calibre
            #:ebook-viewer #:eb
            #:vlc
            #:telegram-desktop #:td
@@ -65,6 +65,7 @@
            #:phototonic
            #:pencil
            #:sqlitebrowser
+           #:xpdf
 
            #:xu
            #:re
@@ -118,7 +119,7 @@
  (% oa "opera")
  (% tb "tor-browser")
  (% o "qutebrowser")
- (% p "zathura")
+ (% p "xpdf")
  (% b "phototonic")
  (% lo "libreoffice")
  (% gpg "gpg2")
@@ -126,13 +127,13 @@
  (% dv "gdrive upload --recursive")
  (% v "less")
  (% f "fd")
- (% g "rg --color auto")
- (% gi "g -i"))
+ (% za "zathura")
+ (% ir "gimagereader"))
 
 (exporting-definitions
  ($ "qt5ct" qt5ct)
  ($ "qtox" qtox)
- ($ "calibre" calibre cb)
+ ($ "calibre" calibre)
  ($ "ebook-viewer" ebook-viewer eb)
  ($ "vlc" vlc)
  ($ "telegram-desktop" telegram-desktop td)
@@ -147,7 +148,8 @@
  ($ "qutebrowser" qutebrowser qb)
  ($ "phototonic" phototonic)
  ($ "pencil" pencil)
- ($ "sqlitebrowser" sqlitebrowser))
+ ($ "sqlitebrowser" sqlitebrowser)
+ ($ "xpdf" xpdf))
 
 (exporting-definitions
  (@ xu "Xenu/Xenu.exe")
