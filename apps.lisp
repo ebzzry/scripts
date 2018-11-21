@@ -58,7 +58,7 @@
            #:obs
            #:sw
            #:viber
-           #:qtrecordmydesktop
+           #:qtrecordmydesktop #:rmd
            #:scribus
            #:masterpdfeditor
            #:qutebrowser #:qb
@@ -66,6 +66,9 @@
            #:pencil
            #:sqlitebrowser
            #:xpdf
+           #:wpsd
+           #:wpsp
+           #:wpss
 
            #:xu
            #:re
@@ -74,7 +77,7 @@
            #:lc
            #:len
            #:leo
-           #:vbox
+           #:vb
 
            #:raz!
            #:lispworks-chroot-gui
@@ -142,14 +145,17 @@
  ($ "obs" obs)
  ($ "Write" sw)
  ($ "viber" viber)
- ($ "qt-recordMyDesktop" qtrecordmydesktop)
+ ($ "qt-recordMyDesktop" qtrecordmydesktop rmd)
  ($ "scribus" scribus)
  ($ "masterpdfeditor5" masterpdfeditor)
  ($ "qutebrowser" qutebrowser qb)
  ($ "phototonic" phototonic)
  ($ "pencil" pencil)
  ($ "sqlitebrowser" sqlitebrowser)
- ($ "xpdf" xpdf))
+ ($ "xpdf" xpdf)
+ ($ "wps" wpsd)
+ ($ "wpp" wpsp)
+ ($ "et" wpss))
 
 (exporting-definitions
  (@ xu "Xenu/Xenu.exe")
@@ -160,7 +166,7 @@
  (defun lc (&rest args) (run-with-locale "C" args))
  (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
  (defun leo (&rest args) (run-with-locale "eo.utf8" args))
- (defun vbox () (run-with-nix-system "VirtualBox")))
+ (defun vb () (run-with-nix-system "VirtualBox")))
 
 (exporting-definitions
  (defun raz! (&rest args)
