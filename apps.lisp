@@ -1,4 +1,4 @@
-;;;; apps.lisp
+;;; apps.lisp
 
 (uiop:define-package #:scripts/apps
     (:use #:cl
@@ -26,7 +26,6 @@
            #:xo
            #:pm
            #:lu
-           #:dg
            #:wt
            #:cv
            #:lx
@@ -46,6 +45,8 @@
            #:f
            #:za
            #:ir
+           #:xrun
+           #:xmsg
 
            #:qt5ct
            #:qtox
@@ -69,6 +70,7 @@
            #:wpsd
            #:wpsp
            #:wpss
+           #:qbittorrent #:qbt
 
            #:xu
            #:re
@@ -112,7 +114,6 @@
  (% par "parallel --will-cite")
  (% xo "xournal")
  (% lu "o https://limnu.com/d/user.html")
- (% dg "deluge")
  (% wt "weechat")
  (% cv "guvcview")
  (% lx "lxappearance")
@@ -131,7 +132,9 @@
  (% v "less")
  (% f "fd")
  (% za "zathura")
- (% ir "gimagereader"))
+ (% ir "gimagereader")
+ (% xrun "gmrun -geometry +0+0")
+ (% xmsg "gxmessage -center -geometry 400x50+0+0 -timeout 3 -buttons Bone"))
 
 (exporting-definitions
  ($ "qt5ct" qt5ct)
@@ -155,7 +158,8 @@
  ($ "xpdf" xpdf)
  ($ "wps" wpsd)
  ($ "wpp" wpsp)
- ($ "et" wpss))
+ ($ "et" wpss)
+ ($ "qbittorrent" qbittorrent qbt))
 
 (exporting-definitions
  (@ xu "Xenu/Xenu.exe")
