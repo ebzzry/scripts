@@ -44,7 +44,8 @@
            #:v
            #:f
            #:za
-           #:ir
+           #:av
+           #:zu
            #:xrun
            #:xmsg
 
@@ -132,9 +133,10 @@
  (% v "less")
  (% f "fd")
  (% za "zathura")
- (% ir "gimagereader")
- (% xrun "gmrun -geometry +0+0")
- (% xmsg "gxmessage -center -geometry 400x50+0+0 -timeout 3 -buttons Bone"))
+ (% av "ahoviewer")
+ (% zu "zoom-us")
+ (% xrun "fbrun -font Monospace-9 -title Run -w 300 -fg white -bg black")
+ (% xmsg "xmessage -geometry +0+0 -fn '-*-lucida-medium-r-normal-sans-14-*-*-*-*-*-*-*' -fg white -bg black -timeout 3 -buttons Bone:0"))
 
 (exporting-definitions
  ($ "qt5ct" qt5ct)
