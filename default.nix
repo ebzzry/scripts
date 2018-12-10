@@ -7,15 +7,29 @@ stdenv.mkDerivation {
 
   buildInputs = [
     rlwrap
+
     sbcl
     ccl
-    ecl
     cmucl_binary
+    ecl
     clisp
     mkcl
+    abcl
+
+    racket
+    gerbil-unstable
+    guile
+    chicken
+    scsh
+    chez
+    bigloo
+    scheme48
+
     ncurses
     libfixposix
     jdk10
+
+    binutils-unwrapped
   ];
 
   LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [
@@ -27,9 +41,9 @@ stdenv.mkDerivation {
     libffi
     ncurses
     freeglut
-    mesa
     cairo
     glib
+
     gnome2.pango
     gnome3.gtk
     gnome3.libsoup

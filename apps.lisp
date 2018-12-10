@@ -14,29 +14,25 @@
           #:scripts/unix)
   (:export #:s
            #:e
-           #:cmd
-           #:fb
+           #:o
+           #:b
+           #:p
+           #:rxvt
+           #:ob
            #:cb
+           #:tb
+           #:pm
+           #:btctl
            #:ra
            #:raz
-           #:rt
            #:rm@
            #:par
-           #:bt
            #:xo
-           #:pm
            #:lu
            #:wt
            #:cv
            #:lx
            #:au
-           #:vl!
-           #:dx
-           #:oa
-           #:tb
-           #:o
-           #:p
-           #:b
            #:lo
            #:gpg
            #:fs
@@ -44,34 +40,32 @@
            #:v
            #:f
            #:za
+           #:ev
            #:av
            #:zu
-           #:xrun
-           #:xmsg
-
-           #:qt5ct
-           #:qtox
-           #:calibre
-           #:ebook-viewer #:eb
-           #:vlc
-           #:telegram-desktop #:td
-           #:keepassxc #:kp
-           #:krita #:kt
+           #:qct
+           #:qtx
+           #:bt
+           #:ec
+           #:eb
+           #:vl
+           #:td
+           #:kp
+           #:kt
            #:obs
            #:sw
-           #:viber
-           #:qtrecordmydesktop #:rmd
-           #:scribus
-           #:masterpdfeditor
-           #:qutebrowser #:qb
-           #:phototonic
-           #:pencil
-           #:sqlitebrowser
-           #:xpdf
+           #:vr
+           #:rmd
+           #:scr
+           #:sqlite
            #:wpsd
            #:wpsp
            #:wpss
-           #:qbittorrent #:qbt
+           #:sm
+           #:sp
+           #:earth
+           #:vv
+           #:rl
 
            #:xu
            #:re
@@ -90,11 +84,12 @@
            #:shell
            #:rshell
            #:screenshot
+           #:xmsg
+           #:xrun
+
            #:sg2e
            #:smb
-
-           #:bt-air
-           #:bt-pulse))
+           #:fightcade))
 
 (in-package #:scripts/apps)
 
@@ -103,14 +98,17 @@
 (exporting-definitions
  (% s "sudo")
  (% e "emacsclient -nw")
- (% cmd "len urxvt")
- (% fb "firefox")
+ (% o "qutebrowser")
+ (% b "phototonic")
+ (% p "mpv --fs")
+ (% rxvt "len urxvt")
+ (% ob "opera --private")
  (% cb "google-chrome-stable")
+ (% tb "tor-browser")
  (% pm "pulsemixer")
- (% bt "bluetoothctl")
+ (% btctl "bluetoothctl")
  (% ra "rsync -rlptgoDHSx")
  (% raz "ra -z")
- (% rt "rtorrent")
  (% rm@ "shred -vfzun 10")
  (% par "parallel --will-cite")
  (% xo "xournal")
@@ -119,13 +117,7 @@
  (% cv "guvcview")
  (% lx "lxappearance")
  (% au "audacity")
- (% vl! "vlc --playlist-autostart")
- (% dx "Discord")
- (% oa "opera")
- (% tb "tor-browser")
- (% o "qutebrowser")
- (% p "xpdf")
- (% b "phototonic")
+ (% vl "vlc --playlist-autostart")
  (% lo "libreoffice")
  (% gpg "gpg2")
  (% fs "gtk2fontsel")
@@ -133,35 +125,31 @@
  (% v "less")
  (% f "fd")
  (% za "zathura")
+ (% ev "evince")
  (% av "ahoviewer")
  (% zu "zoom-us")
- (% xrun "fbrun -font Monospace-9 -title Run -w 300 -fg white -bg black")
- (% xmsg "xmessage -geometry +0+0 -fn '-*-lucida-medium-r-normal-sans-14-*-*-*-*-*-*-*' -fg white -bg black -timeout 3 -buttons Bone:0"))
-
-(exporting-definitions
- ($ "qt5ct" qt5ct)
- ($ "qtox" qtox)
- ($ "calibre" calibre)
- ($ "ebook-viewer" ebook-viewer eb)
- ($ "vlc" vlc)
- ($ "telegram-desktop" telegram-desktop td)
- ($ "keepassxc" keepassxc kp)
- ($ "krita" krita kt)
- ($ "obs" obs)
- ($ "Write" sw)
- ($ "viber" viber)
- ($ "qt-recordMyDesktop" qtrecordmydesktop rmd)
- ($ "scribus" scribus)
- ($ "masterpdfeditor5" masterpdfeditor)
- ($ "qutebrowser" qutebrowser qb)
- ($ "phototonic" phototonic)
- ($ "pencil" pencil)
- ($ "sqlitebrowser" sqlitebrowser)
- ($ "xpdf" xpdf)
- ($ "wps" wpsd)
- ($ "wpp" wpsp)
- ($ "et" wpss)
- ($ "qbittorrent" qbittorrent qbt))
+ (% qct "qt5ct")
+ (% bt "qbittorrent")
+ (% qtx "qtox")
+ (% ec "calibre")
+ (% eb "ebook-viewer")
+ (% td "telegram-desktop")
+ (% kp "keepassxc")
+ (% kt "krita")
+ (% obs "obs")
+ (% sw "Write")
+ (% vr "viber")
+ (% rmd "qt-recordMyDesktop")
+ (% scr "scribus")
+ (% sqlite "sqlitebrowser")
+ (% wpsd "wps")
+ (% wpsp "wpp")
+ (% wpss "et")
+ (% sm "stellarium")
+ (% sp "speedcrunch")
+ (% earth "googleearth")
+ (% vv "vncviewer")
+ (% rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\""))
 
 (exporting-definitions
  (@ xu "Xenu/Xenu.exe")
@@ -216,23 +204,31 @@
        (run `("xclip" "-selection" "clipboard") :input (list image))
        (success))))
 
- (defun bt-air ()
-   (run/i `(pacmd "set-default-sink" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink"))
-   (run/i `(pacmd "set-default-source" "bluez_sink.B8_D5_0B_8D_77_EB.a2dp_sink.monitor"))
-   (run/i `(pacmd "set-port-latency-offset" "bluez_card.B8_D5_0B_8D_77_EB" "headphone-output" "250000"))
+ (defun xmsg (&rest args)
+   (run/i `("xmessage"
+            "-fn" "-*-speedy-*-*-*-*-12-*-*-*-*-*-*-*"
+            "-fg" "white" "-bg" "black"
+            "-timeout" "2" "-buttons" ""
+            ,@args))
    (success))
 
- (defun bt-pulse ()
-   (run/i `(pacmd "set-default-sink" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink"))
-   (run/i `(pacmd "set-default-source" "bluez_sink.04_FE_A1_31_0B_7E.a2dp_sink.monitor"))
-   (success))
+ (defun xrun (&rest args)
+   (run/i `("gmrun" "-geometry" "+0+0"
+            ,@args))
+   (success)))
 
+(exporting-definitions
  (defun sg2e ()
    (run/i `("stem" "-X" ,(argv0) "steam://rungameid/245170"))
    (success))
 
  (defun smb ()
-   (run/i `("stem" "-s"  "steam://rungameid/40800"))
+   (run/i `("stem" "-s" "steam://rungameid/40800"))
+   (success))
+
+ (defun fightcade ()
+   (run/i `("stem" "-x" "fightcade"))
+   (run-with-wine "/pub/ludoj/emu/fightcade/FightCade.exe")
    (success)))
 
 (register-commands :scripts/apps)

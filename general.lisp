@@ -18,7 +18,7 @@
            #:rot13
            #:battery
            #:trackpoint
-           #:xxx
+           #:x
            #:pg
            #:pk
            #:pk!))
@@ -133,7 +133,7 @@
       (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Axes" 7 6 5 4))
       (success)))
 
-  (defun xxx ()
+  (defun x ()
     (load-keymap)
     (load-xset)
     (load-resources)
