@@ -22,7 +22,7 @@
            #:cb
            #:tb
            #:pm
-           #:btctl
+           #:bt
            #:ra
            #:raz
            #:rm@
@@ -45,10 +45,11 @@
            #:zu
            #:qct
            #:qtx
-           #:bt
            #:ec
            #:eb
            #:vl
+           #:vl@
+           #:muz@
            #:td
            #:kp
            #:kt
@@ -58,14 +59,13 @@
            #:rmd
            #:scr
            #:sqlite
-           #:wpsd
-           #:wpsp
-           #:wpss
            #:sm
            #:sp
            #:earth
            #:vv
            #:rl
+           #:zx
+           #:us
 
            #:xu
            #:re
@@ -106,7 +106,7 @@
  (% cb "google-chrome-stable")
  (% tb "tor-browser")
  (% pm "pulsemixer")
- (% btctl "bluetoothctl")
+ (% bt "bluetoothctl")
  (% ra "rsync -rlptgoDHSx")
  (% raz "ra -z")
  (% rm@ "shred -vfzun 10")
@@ -117,7 +117,9 @@
  (% cv "guvcview")
  (% lx "lxappearance")
  (% au "audacity")
- (% vl "vlc --playlist-autostart")
+ (% vl "vlc -I ncurses --playlist-autostart")
+ (% vl@ "vlc -I qt --playlist-autostart")
+ (% muz@ "vl@ /pub/muz/flac/Klasikaj/")
  (% lo "libreoffice")
  (% gpg "gpg2")
  (% fs "gtk2fontsel")
@@ -129,7 +131,6 @@
  (% av "ahoviewer")
  (% zu "zoom-us")
  (% qct "qt5ct")
- (% bt "qbittorrent")
  (% qtx "qtox")
  (% ec "calibre")
  (% eb "ebook-viewer")
@@ -142,14 +143,13 @@
  (% rmd "qt-recordMyDesktop")
  (% scr "scribus")
  (% sqlite "sqlitebrowser")
- (% wpsd "wps")
- (% wpsp "wpp")
- (% wpss "et")
  (% sm "stellarium")
  (% sp "speedcrunch")
  (% earth "googleearth")
  (% vv "vncviewer")
- (% rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\""))
+ (% rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\"")
+ (% zx "zsh -c")
+ (% us "usync --one-way --prefer-local"))
 
 (exporting-definitions
  (@ xu "Xenu/Xenu.exe")
