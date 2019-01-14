@@ -17,6 +17,7 @@
            #:o
            #:b
            #:p
+           #:p@
            #:rxvt
            #:ob
            #:cb
@@ -101,6 +102,7 @@
  (% o "qutebrowser")
  (% b "phototonic")
  (% p "mpv --fs")
+ (% p@ "p --mute")
  (% rxvt "len urxvt")
  (% ob "opera --private")
  (% cb "google-chrome-stable")
