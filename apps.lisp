@@ -14,6 +14,7 @@
           #:scripts/unix)
   (:export #:s
            #:e
+           #:e@
            #:o
            #:b
            #:p
@@ -65,8 +66,11 @@
            #:earth
            #:vv
            #:rl
-           #:zx
            #:us
+           #:sicp@
+           #:lisp@
+           #:discord
+           #:zx
 
            #:xu
            #:re
@@ -99,6 +103,7 @@
 (exporting-definitions
  (% s "sudo")
  (% e "emacsclient -nw")
+ (% e@ "emacs -nw -Q")
  (% o "qutebrowser")
  (% b "phototonic")
  (% p "mpv --fs")
@@ -121,7 +126,6 @@
  (% au "audacity")
  (% vl "vlc -I ncurses --playlist-autostart")
  (% vl@ "vlc -I qt --playlist-autostart")
- (% muz@ "vl@ /pub/muz/flac/Klasikaj/")
  (% lo "libreoffice")
  (% gpg "gpg2")
  (% fs "gtk2fontsel")
@@ -151,7 +155,10 @@
  (% vv "vncviewer")
  (% rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\"")
  (% zx "zsh -c")
- (% us "usync --one-way --prefer-local"))
+ (% us "usync --one-way --prefer-local")
+ (% sicp@ "za /home/ebzzry/l/dok/sicp.pdf")
+ (% lisp@ "za /home/ebzzry/l/dok/lisp.pdf")
+ (% discord "Discord"))
 
 (exporting-definitions
  (@ xu "Xenu/Xenu.exe")
@@ -221,11 +228,7 @@
 
 (exporting-definitions
  (defun sg2e ()
-   (run/i `("stem" "-X" ,(argv0) "steam://rungameid/245170"))
-   (success))
-
- (defun smb ()
-   (run/i `("stem" "-s" "steam://rungameid/40800"))
+   (run/i `("stem" "-X" ,(argv0) "--" "-applaunch" "245170"))
    (success))
 
  (defun fightcade ()
