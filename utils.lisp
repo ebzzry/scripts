@@ -23,6 +23,7 @@
            #:run-with-xdg
            #:run-with-wine
            #:with-qt
+           #:with-qt-profile
            #:%
            #:@
            #:$))
@@ -116,6 +117,11 @@
   `(defun ,name (&rest args)
      (run-with-wine-program-files ,location)))
 
+(defmacro $ (name command)
+  "Define a command with wine."
+  `(defun ,name (&rest args)
+     (run-with-wine ,command)))
+
 (defun run-with-nix-user (profile binary args)
   "Run binary under a separate profile."
   (let ((bin (mof:home (mof:fmt ".baf/profiles/~A/bin" profile))))
@@ -128,7 +134,7 @@
   (setf (getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
   (run-with-nix-user "qt" command args))
 
-(defmacro $ (command name &optional alias)
+(defmacro with-qt-profile (command name &optional alias)
   "Define a runner in the QT profile."
   `(progn
      (defun ,name (&rest args)
