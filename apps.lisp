@@ -15,8 +15,10 @@
   (:export #:s
            #:e
            #:e@
-           #:o
-           #:b
+           #:v
+           #:f
+           #:g
+           #:gi
            #:p
            #:p@
            #:rxvt
@@ -39,29 +41,31 @@
            #:gpg
            #:fs
            #:dv
-           #:v
-           #:f
            #:za
            #:ev
            #:av
            #:zu
-           #:qct
-           #:qtx
-           #:eb
-           #:vl
-           #:vl@
-           #:td
-           #:kp
-           #:kt
-           #:rmd
            #:sm
            #:sp
            #:earth
            #:vv
            #:rl
+           #:zx
            #:us
            #:ds
-           #:zx
+
+           #:o
+           #:b
+           #:qct
+           #:qtx
+           #:qbt
+           #:eb
+           #:td
+           #:kp
+           #:kt
+           #:rmd
+           #:vl
+           #:vl@
 
            #:sicp@
            #:lisp@
@@ -78,7 +82,6 @@
 
            #:raz!
            #:shell
-           #:rshell
            #:screenshot
            #:xmsg
            #:xrun
@@ -95,8 +98,10 @@
  (% s "sudo")
  (% e "emacsclient -nw")
  (% e@ "emacs -nw -Q")
- (% o "qutebrowser")
- (% b "phototonic")
+ (% v "less")
+ (% f "fd")
+ (% g "rg --color auto")
+ (% gi "g -i")
  (% p "mpv --fs")
  (% p@ "p --mute")
  (% rxvt "len urxvt")
@@ -115,25 +120,14 @@
  (% cv "guvcview")
  (% lx "lxappearance")
  (% au "audacity")
- (% vl "vlc -I ncurses --playlist-autostart")
- (% vl@ "vlc -I qt --playlist-autostart")
  (% lo "libreoffice")
  (% gpg "gpg2")
  (% fs "gtk2fontsel")
  (% dv "gdrive upload --recursive")
- (% v "less")
- (% f "fd")
  (% za "zathura")
  (% ev "evince")
  (% av "ahoviewer")
  (% zu "zoom-us")
- (% qct "qt5ct")
- (% qtx "qtox")
- (% eb "ebook-viewer")
- (% td "telegram-desktop")
- (% kp "keepassxc")
- (% kt "krita")
- (% rmd "qt-recordMyDesktop")
  (% sm "stellarium")
  (% sp "speedcrunch")
  (% earth "googleearth")
@@ -144,14 +138,28 @@
  (% ds "Discord"))
 
 (exporting-definitions
+ ($ o "qutebrowser")
+ ($ b "phototonic")
+ ($ qct "qt5ct")
+ ($ qtx "qtox")
+ ($ qbt "qbittorrent")
+ ($ eb "ebook-viewer")
+ ($ td "telegram-desktop")
+ ($ kp "keepassxc")
+ ($ kt "krita")
+ ($ rmd "qt-recordMyDesktop")
+ ($ vl "vlc -I ncurses --playlist-autostart")
+ ($ vl@ "vlc -I qt --playlist-autostart"))
+
+(exporting-definitions
  (% sicp@ "zathura /home/ebzzry/l/dok/sicp.pdf")
  (% lisp@ "zathura /home/ebzzry/l/dok/lisp.pdf"))
 
 (exporting-definitions
- (@ xu "Xenu/Xenu.exe")
- (@ re "The Regex Coach/The Regex Coach.exe")
- (@ ni "Neat Image Standalone/NeatImage.exe")
- ($ ui "uninstaller"))
+ (@ ui "uninstaller")
+ (@+ xu "Xenu/Xenu.exe")
+ (@+ re "The Regex Coach/The Regex Coach.exe")
+ (@+ ni "Neat Image Standalone/NeatImage.exe"))
 
 (exporting-definitions
  (defun lc (&rest args) (run-with-locale "C" args))
@@ -161,18 +169,15 @@
 
 (exporting-definitions
  (defun raz! (&rest args)
-   (apply-args-1 'raz args
-                 :options
-                 '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
+   (apply-args-1
+    'raz args
+    :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
    (success))
 
  (defun shell (&rest args)
    (let ((directory (pathname-directory-pathname (find-binary (argv0)))))
-     (run/i `(nix-shell --pure ,(mof:fmt "~A/default.nix" directory) ,@args))
+     (run/i `("nix-shell" "--pure" ,(mof:fmt "~A/default.nix" directory) ,@args))
      (success)))
-
- (defun rshell (command)
-   (shell "--command" (mof:fmt " rlwrap -s 1000000 -c -b \"(){}[].,=&^%0\;|\" ~A" command)))
 
  (defun screenshot (mode)
    (let* ((dir (uiop:truenamize +screenshots-dir+))
@@ -180,7 +185,7 @@
           (dest (mof:fmt "mv $f ~A" dir))
           (image (mof:fmt "~A~A" dir file)))
      (flet ((scrot (file dest &rest args)
-              (run/i `(scrot ,@args ,file -e ,dest))))
+              (run/i `("scrot" ,@args ,file -e ,dest))))
        (match mode
               ((ppcre "(full)") (scrot file dest))
               ((ppcre "(region)") (scrot file dest '-s))
@@ -197,8 +202,7 @@
    (success))
 
  (defun xrun (&rest args)
-   (run/i `("gmrun" "-geometry" "+0+0"
-            ,@args))
+   (run/i `("gmrun" "-geometry" "+0+0" ,@args))
    (success)))
 
 (exporting-definitions

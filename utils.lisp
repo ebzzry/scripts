@@ -22,10 +22,9 @@
            #:run-with-nix-user
            #:run-with-xdg
            #:run-with-wine
-           #:with-qt
-           #:with-qt-profile
            #:%
            #:@
+           #:@+
            #:$))
 
 (in-package #:scripts/utils)
@@ -43,14 +42,13 @@
   (let ((base-dir "/sys/class/power_supply/*")
         (exclude-string "/AC/"))
     (with-output (s nil)
-      (loop
-        :for dir :in (remove-if #'(lambda (path)
-                                    (search exclude-string (native-namestring path)))
-                                (directory* base-dir))
-        :for battery = (first (last (pathname-directory dir)))
-        :for capacity = (read-file-line (subpathname dir "capacity"))
-        :for status = (read-file-line (subpathname dir "status"))
-        :do (format s "~A: ~A% (~A)~%" battery capacity status)))))
+      (loop :for dir :in (remove-if #'(lambda (path)
+                                        (search exclude-string (native-namestring path)))
+                                    (directory* base-dir))
+            :for battery = (first (last (pathname-directory dir)))
+            :for capacity = (read-file-line (subpathname dir "capacity"))
+            :for status = (read-file-line (subpathname dir "status"))
+            :do (format s "~A: ~A% (~A)~%" battery capacity status)))))
 
 (defun wine (path &rest args)
   "Run PATH to wine."
@@ -112,15 +110,15 @@
      (run/i (append (split "\\s+" ,command) args))
      (success)))
 
-(defmacro @ (name location)
-  "Define a wine runner."
-  `(defun ,name (&rest args)
-     (run-with-wine-program-files ,location)))
-
-(defmacro $ (name command)
+(defmacro @ (name command)
   "Define a command with wine."
   `(defun ,name (&rest args)
      (run-with-wine ,command)))
+
+(defmacro @+ (name location)
+  "Define a wine runner."
+  `(defun ,name (&rest args)
+     (run-with-wine-program-files ,location)))
 
 (defun run-with-nix-user (profile binary args)
   "Run binary under a separate profile."
@@ -134,11 +132,9 @@
   (setf (getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
   (run-with-nix-user "qt" command args))
 
-(defmacro with-qt-profile (command name &optional alias)
-  "Define a runner in the QT profile."
-  `(progn
-     (defun ,name (&rest args)
-       (with-qt ,command args))
-     ,(when alias
-        `(defun ,alias (&rest args)
-           (with-qt ,command args)))))
+(defmacro $ (name command)
+  "Define a runner with the QT_QPA environment."
+  `(defun ,name (&rest args)
+     (setf (getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
+     (run/i (append (split "\\s+" ,command) args))
+     (success)))
