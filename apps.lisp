@@ -47,34 +47,29 @@
            #:zu
            #:qct
            #:qtx
-           #:ec
            #:eb
            #:vl
            #:vl@
-           #:muz@
            #:td
            #:kp
            #:kt
-           #:obs
-           #:sw
-           #:vr
            #:rmd
-           #:scr
-           #:sqlite
            #:sm
            #:sp
            #:earth
            #:vv
            #:rl
            #:us
+           #:ds
+           #:zx
+
            #:sicp@
            #:lisp@
-           #:discord
-           #:zx
 
            #:xu
            #:re
            #:ni
+           #:ui
 
            #:lc
            #:len
@@ -82,10 +77,6 @@
            #:vb
 
            #:raz!
-           #:lispworks-chroot-gui
-           #:lispworks-chroot-cli
-           #:lispworks-docker-gui
-
            #:shell
            #:rshell
            #:screenshot
@@ -138,17 +129,11 @@
  (% zu "zoom-us")
  (% qct "qt5ct")
  (% qtx "qtox")
- (% ec "calibre")
  (% eb "ebook-viewer")
  (% td "telegram-desktop")
  (% kp "keepassxc")
  (% kt "krita")
- (% obs "obs")
- (% sw "Write")
- (% vr "viber")
  (% rmd "qt-recordMyDesktop")
- (% scr "scribus")
- (% sqlite "sqlitebrowser")
  (% sm "stellarium")
  (% sp "speedcrunch")
  (% earth "googleearth")
@@ -156,14 +141,17 @@
  (% rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\"")
  (% zx "zsh -c")
  (% us "usync --one-way --prefer-local")
- (% sicp@ "za /home/ebzzry/l/dok/sicp.pdf")
- (% lisp@ "za /home/ebzzry/l/dok/lisp.pdf")
- (% discord "Discord"))
+ (% ds "Discord"))
+
+(exporting-definitions
+ (% sicp@ "zathura /home/ebzzry/l/dok/sicp.pdf")
+ (% lisp@ "zathura /home/ebzzry/l/dok/lisp.pdf"))
 
 (exporting-definitions
  (@ xu "Xenu/Xenu.exe")
  (@ re "The Regex Coach/The Regex Coach.exe")
- (@ ni "Neat Image Standalone/NeatImage.exe"))
+ (@ ni "Neat Image Standalone/NeatImage.exe")
+ ($ ui "uninstaller"))
 
 (exporting-definitions
  (defun lc (&rest args) (run-with-locale "C" args))
@@ -178,19 +166,6 @@
                  '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
    (success))
 
- (defun lispworks-chroot-gui (&rest args)
-   (run/i `(zsh "-c" "cr /usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux" ,@args))
-   (success))
-
- (defun lispworks-chroot-cli (&rest args)
-   (run/i `(zsh "-c" "cr /home/pub/hejmo/apoj/lispworks/save-image/lispworks-cli" ,@args))
-   (success))
-
- (defun lispworks-docker-gui (&rest args)
-   (run/i `(sh "-c" ,(mof:home "hejmo/fkd/sxelo/lispworks/lispworks70_linux_x86") ,@args))
-   (success)))
-
-(exporting-definitions
  (defun shell (&rest args)
    (let ((directory (pathname-directory-pathname (find-binary (argv0)))))
      (run/i `(nix-shell --pure ,(mof:fmt "~A/default.nix" directory) ,@args))
