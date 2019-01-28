@@ -71,7 +71,6 @@
            #:lisp@
 
            #:xu
-           #:re
            #:ni
            #:ui
 
@@ -158,7 +157,6 @@
 (exporting-definitions
  (@ ui "uninstaller")
  (@+ xu "Xenu/Xenu.exe")
- (@+ re "The Regex Coach/The Regex Coach.exe")
  (@+ ni "Neat Image Standalone/NeatImage.exe"))
 
 (exporting-definitions
