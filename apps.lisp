@@ -26,6 +26,8 @@
            #:cb
            #:tb
            #:pm
+           #:pc
+           #:pe
            #:bt
            #:ra
            #:raz
@@ -67,9 +69,6 @@
            #:vl
            #:vl@
 
-           #:sicp@
-           #:lisp@
-
            #:xu
            #:ni
            #:ui
@@ -108,6 +107,8 @@
  (% cb "google-chrome-stable")
  (% tb "tor-browser")
  (% pm "pulsemixer")
+ (% pc "pavucontrol")
+ (% pe "pulseeffects")
  (% bt "bluetoothctl")
  (% ra "rsync -rlptgoDHSx")
  (% raz "ra -z")
@@ -149,10 +150,6 @@
  ($ rmd "qt-recordMyDesktop")
  ($ vl "vlc -I ncurses --playlist-autostart")
  ($ vl@ "vlc -I qt --playlist-autostart"))
-
-(exporting-definitions
- (% sicp@ "zathura /home/ebzzry/l/dok/sicp.pdf")
- (% lisp@ "zathura /home/ebzzry/l/dok/lisp.pdf"))
 
 (exporting-definitions
  (@ ui "uninstaller")
