@@ -54,7 +54,7 @@ $ make install
 Miscellany
 ----------
 
-The file `default.nix` is used with by the `shell` and `rshell` scripts to spawn a nix-shell
+The file `default.nix` is used with by the `shell` script to spawn a nix-shell
 containing programs and library dependencies conducive to Common Lisp development.
 
 To load it directly, change to this repository’s directory then run:
