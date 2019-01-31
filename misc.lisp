@@ -16,7 +16,12 @@
 (exporting-definitions
   (defun getuid ()
     #+sbcl (sb-posix:getuid)
-    #-sbcl (error "no getuid")) ;; use iolib?
+    #+cmu (unix:unix-getuid)
+    #+clisp (posix:uid)
+    #+ecl (ext:getuid)
+    #+ccl (ccl::getuid)
+    #+allegro (excl.osi:getuid)
+    #-(or sbcl cmu clisp ecl ccl allegro) (error "no getuid"))
 
   (defun create-symlinks (src)
     (let* ((directory (or (getenv "DEST") "~/bin"))
