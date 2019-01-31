@@ -29,6 +29,7 @@
            #:pc
            #:pe
            #:bt
+           #:bm
            #:ra
            #:raz
            #:rm@
@@ -110,6 +111,7 @@
  (% pc "pavucontrol")
  (% pe "pulseeffects")
  (% bt "bluetoothctl")
+ (% bm "blueman-manager")
  (% ra "rsync -rlptgoDHSx")
  (% raz "ra -z")
  (% rm@ "shred -vfzun 10")
@@ -185,7 +187,7 @@
               ((ppcre "(full)") (scrot file dest))
               ((ppcre "(region)") (scrot file dest '-s))
               (_ (err (mof:fmt "invalid mode ~A~%" mode))))
-       (run `("xclip" "-selection" "clipboard") :input (list image))
+       (run `("xclip" "-selection" "clipboard" "-t" "image/png" ,image))
        (success))))
 
  (defun xmsg (&rest args)
