@@ -34,11 +34,11 @@
  (% rm! "rm -rf")
  (% ln! "ln -sf")
 
- (% la "ls -A -F --color")
- (% lk "la -l")
+ (% l  "exa --all --time modified --sort newest")
+ (% ll "l --long --git --time-style long-iso --group-directories-first")
+ (% la "exa --all ")
+ (% lk "la --long --git --time-style long-iso --group-directories-first")
 
- (% l  "la -tr")
- (% ll "l -l")
  (% l! "l -R")
  (% lh "l -H")
  (% l1 "l -1"))
