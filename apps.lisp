@@ -56,6 +56,7 @@
            #:zx
            #:us
            #:ds
+           #:xscan
 
            #:o
            #:b
@@ -69,6 +70,7 @@
            #:rmd
            #:vl
            #:vl@
+           #:skan
 
            #:xu
            #:ni
@@ -137,7 +139,8 @@
  (% rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\"")
  (% zx "zsh -c")
  (% us "usync --one-way --prefer-local")
- (% ds "Discord"))
+ (% ds "Discord")
+ (% xscan "simple-scan"))
 
 (exporting-definitions
  ($ o "qutebrowser")
@@ -151,7 +154,8 @@
  ($ kt "krita")
  ($ rmd "qt-recordMyDesktop")
  ($ vl "vlc -I ncurses --playlist-autostart")
- ($ vl@ "vlc -I qt --playlist-autostart"))
+ ($ vl@ "vlc -I qt --playlist-autostart")
+ ($ skan "skanlite"))
 
 (exporting-definitions
  (@ ui "uninstaller")
@@ -199,7 +203,7 @@
    (success))
 
  (defun xrun (&rest args)
-   (run/i `("gmrun" "-geometry" "+0+0" ,@args))
+   (run/i `("rofi" "-show" "run" ,@args))
    (success)))
 
 (exporting-definitions
