@@ -107,7 +107,10 @@
 (defmacro % (name command)
   "Define a normal command runner."
   `(defun ,name (&rest args)
-     (run/i (append (split "\\s+" ,command) args))
+     ;; (run/i (append (split "\\s+" ,command) args))
+     (run (append (split "\\s+" ,command) args)
+          :output :interactive :input :interactive
+          :error-output nil :on-error nil)
      (success)))
 
 (defmacro @ (name command)
@@ -136,5 +139,8 @@
   "Define a runner with the QT_QPA environment."
   `(defun ,name (&rest args)
      (setf (getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
-     (run/i (append (split "\\s+" ,command) args))
+     ;; (run/i (append (split "\\s+" ,command) args))
+     (run (append (split "\\s+" ,command) args)
+          :output :interactive :input :interactive
+          :error-output nil :on-error nil)
      (success)))

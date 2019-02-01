@@ -203,7 +203,7 @@
    (success))
 
  (defun xrun (&rest args)
-   (run/i `("rofi" "-show" "run" ,@args))
+   (run/i `("gmrun" "-geometry" "+0+0" ,@args))
    (success)))
 
 (exporting-definitions
