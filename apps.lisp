@@ -117,7 +117,7 @@
  (% ra "rsync -rlptgoDHSx")
  (% raz "ra -z")
  (% rm@ "shred -vfzun 10")
- (% par "parallel --will-cite")
+ (% par "parallel")
  (% xo "xournal")
  (% lu "o https://limnu.com/d/user.html")
  (% wt "weechat")
