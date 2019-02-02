@@ -132,7 +132,7 @@
 
 (defun with-qt (command args)
   "Run a program in the QT profile."
-  (setf (getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
+  (setf (getenv "QT_QPA_PLATFORMTHEME") "gtk2")
   (run-with-nix-user "qt" command args))
 
 (defmacro $ (name command)

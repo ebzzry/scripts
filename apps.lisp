@@ -57,10 +57,12 @@
            #:us
            #:ds
            #:xscan
+           #:mx
 
            #:o
            #:b
-           #:qct
+           #:qt4
+           #:qt5
            #:qtx
            #:qbt
            #:eb
@@ -69,8 +71,7 @@
            #:kt
            #:rmd
            #:vl
-           #:vl@
-           #:skan
+           #:mb
 
            #:xu
            #:ni
@@ -140,12 +141,14 @@
  (% zx "zsh -c")
  (% us "usync --one-way --prefer-local")
  (% ds "Discord")
- (% xscan "simple-scan"))
+ (% xscan "simple-scan")
+ (% mx "len wxmaxima"))
 
 (exporting-definitions
  ($ o "qutebrowser")
  ($ b "phototonic")
- ($ qct "qt5ct")
+ ($ qt4 "qtconfig")
+ ($ qt5 "qt5ct")
  ($ qtx "qtox")
  ($ qbt "qbittorrent")
  ($ eb "ebook-viewer")
@@ -154,8 +157,7 @@
  ($ kt "krita")
  ($ rmd "qt-recordMyDesktop")
  ($ vl "vlc -I ncurses --playlist-autostart")
- ($ vl@ "vlc -I qt --playlist-autostart")
- ($ skan "skanlite"))
+ ($ mb "mumble"))
 
 (exporting-definitions
  (@ ui "uninstaller")
