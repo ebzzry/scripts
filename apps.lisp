@@ -12,66 +12,65 @@
           #:scripts/misc
           #:scripts/utils
           #:scripts/unix)
-  (:export #:s
+  (:export #:bt
+           #:dv
            #:e
            #:e@
-           #:v
            #:f
            #:g
            #:gi
-           #:p
-           #:p@
-           #:rxvt
-           #:ob
-           #:cb
-           #:tb
+           #:gpg
+           #:par
            #:pm
+           #:rz
+           #:rl
+           #:rm@
+           #:s
+           #:us
+           #:v
+           #:zx
+
+           #:au
+           #:av
+           #:bm
+           #:cb
+           #:cv
+           #:ds
+           #:earth
+           #:ev
+           #:fs
+           #:lo
+           #:lu
+           #:lx
+           #:mx
+           #:ob
+           #:p
            #:pc
            #:pe
-           #:bt
-           #:bm
-           #:ra
-           #:raz
-           #:rm@
-           #:par
-           #:xo
-           #:lu
-           #:wt
-           #:cv
-           #:lx
-           #:au
-           #:lo
-           #:gpg
-           #:fs
-           #:dv
-           #:za
-           #:ev
-           #:av
-           #:zu
+           #:rxvt
            #:sm
            #:sp
-           #:earth
+           #:tb
            #:vv
-           #:rl
-           #:zx
-           #:us
-           #:ds
-           #:xscan
-           #:mx
+           #:xo
+           #:xs
+           #:za
+           #:zu
 
-           #:o
            #:b
+           #:ca
+           #:eb
+           #:kp
+           #:kt
+           #:mb
+           #:o
+           #:qbt
            #:qt4
            #:qt5
            #:qtx
-           #:qbt
-           #:eb
-           #:td
-           #:kp
-           #:kt
            #:rmd
+           #:td
            #:vl
-           #:mb
 
            #:xu
            #:ni
@@ -82,7 +81,7 @@
            #:leo
            #:vb
 
-           #:raz!
+           #:rz!
            #:shell
            #:screenshot
            #:xmsg
@@ -97,67 +96,66 @@
 (defvar +screenshots-dir+ (mof:home ".screenshots"))
 
 (exporting-definitions
- (% s "sudo")
+ (% bt "bluetoothctl")
+ (% dv "gdrive upload --recursive")
  (% e "emacsclient -nw")
  (% e@ "emacs -nw -Q")
- (% v "less")
  (% f "fd")
  (% g "rg --color auto")
  (% gi "g -i")
- (% p "mpv --fs")
- (% p@ "p --mute")
- (% rxvt "len urxvt")
- (% ob "opera --private")
- (% cb "google-chrome-stable")
- (% tb "tor-browser")
+ (% gpg "gpg2")
+ (% par "parallel")
  (% pm "pulsemixer")
+ (% rz "rsync -rlptgoD -HAX -x -z")
+ (% rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\"")
+ (% rm@ "shred -vfzun 10")
+ (% s "sudo")
+ (% us "usync --one-way --prefer-local")
+ (% v "less")
+ (% zx "zsh -c")
+
+ (% au "audacity")
+ (% av "ahoviewer")
+ (% bm "blueman-manager")
+ (% cb "google-chrome-stable")
+ (% cv "guvcview")
+ (% ds "Discord")
+ (% earth "googleearth")
+ (% ev "evince")
+ (% fs "gtk2fontsel")
+ (% lo "libreoffice")
+ (% lu "o https://limnu.com/d/user.html")
+ (% lx "lxappearance")
+ (% mx "len wxmaxima")
+ (% ob "opera --private")
+ (% p "mpv --fs")
  (% pc "pavucontrol")
  (% pe "pulseeffects")
- (% bt "bluetoothctl")
- (% bm "blueman-manager")
- (% ra "rsync -rlptgoDHSx")
- (% raz "ra -z")
- (% rm@ "shred -vfzun 10")
- (% par "parallel")
- (% xo "xournal")
- (% lu "o https://limnu.com/d/user.html")
- (% wt "weechat")
- (% cv "guvcview")
- (% lx "lxappearance")
- (% au "audacity")
- (% lo "libreoffice")
- (% gpg "gpg2")
- (% fs "gtk2fontsel")
- (% dv "gdrive upload --recursive")
- (% za "zathura")
- (% ev "evince")
- (% av "ahoviewer")
- (% zu "zoom-us")
+ (% rxvt "len urxvt")
  (% sm "stellarium")
  (% sp "speedcrunch")
- (% earth "googleearth")
+ (% tb "tor-browser")
  (% vv "vncviewer")
- (% rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\"")
- (% zx "zsh -c")
- (% us "usync --one-way --prefer-local")
- (% ds "Discord")
- (% xscan "simple-scan")
- (% mx "len wxmaxima"))
+ (% xo "xournal")
+ (% xs "simple-scan")
+ (% za "zathura")
+ (% zu "zoom-us"))
 
 (exporting-definitions
- ($ o "qutebrowser")
  ($ b "phototonic")
+ ($ ca "calibre")
+ ($ eb "ebook-viewer")
+ ($ kp "keepassxc")
+ ($ kt "krita")
+ ($ mb "mumble")
+ ($ o "qutebrowser")
+ ($ qbt "qbittorrent")
  ($ qt4 "qtconfig")
  ($ qt5 "qt5ct")
  ($ qtx "qtox")
- ($ qbt "qbittorrent")
- ($ eb "ebook-viewer")
- ($ td "telegram-desktop")
- ($ kp "keepassxc")
- ($ kt "krita")
  ($ rmd "qt-recordMyDesktop")
- ($ vl "vlc -I ncurses --playlist-autostart")
- ($ mb "mumble"))
+ ($ td "telegram-desktop")
+ ($ vl "vlc -I ncurses --playlist-autostart"))
 
 (exporting-definitions
  (@ ui "uninstaller")
@@ -171,9 +169,9 @@
  (defun vb () (run-with-nix-system "VirtualBox")))
 
 (exporting-definitions
- (defun raz! (&rest args)
+ (defun rz! (&rest args)
    (apply-args-1
-    'raz args
+    'rz args
     :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
    (success))
 
