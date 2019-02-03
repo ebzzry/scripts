@@ -14,8 +14,6 @@
   (:export #:md
            #:rm!
            #:ln!
-           #:g
-           #:gi
            #:la
            #:lk
            #:l
