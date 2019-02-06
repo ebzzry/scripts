@@ -28,6 +28,7 @@
            #:s
            #:us
            #:v
+           #:vg
            #:zx
 
            #:au
@@ -113,6 +114,7 @@
  (% s "sudo")
  (% us "usync --one-way --prefer-local")
  (% v "less")
+ (% vg "vagrant")
  (% zx "zsh -c")
 
  (% au "audacity")
