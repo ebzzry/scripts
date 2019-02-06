@@ -55,7 +55,6 @@
            #:xo
            #:xs
            #:za
-           #:zu
 
            #:b
            #:ca
@@ -64,6 +63,7 @@
            #:kt
            #:mb
            #:o
+           #:ok
            #:qbt
            #:qt4
            #:qt5
@@ -80,6 +80,7 @@
            #:len
            #:leo
            #:vb
+           #:zu
 
            #:rz!
            #:shell
@@ -128,7 +129,7 @@
  (% lx "lxappearance")
  (% mx "len wxmaxima")
  (% ob "opera --private")
- (% p "mpv --fs")
+ (% p "mpv --fs --mute")
  (% pc "pavucontrol")
  (% pe "pulseeffects")
  (% rxvt "len urxvt")
@@ -149,6 +150,7 @@
  ($ kt "krita")
  ($ mb "mumble")
  ($ o "qutebrowser")
+ ($ ok "okular")
  ($ qbt "qbittorrent")
  ($ qt4 "qtconfig")
  ($ qt5 "qt5ct")
@@ -166,7 +168,8 @@
  (defun lc (&rest args) (run-with-locale "C" args))
  (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
  (defun leo (&rest args) (run-with-locale "eo.utf8" args))
- (defun vb () (run-with-nix-system "VirtualBox")))
+ (defun vb () (run-with-nix-system "VirtualBox"))
+ (defun zu (&rest args) (run-with-libgl-always-software "zoom-us" args)))
 
 (exporting-definitions
  (defun rz! (&rest args)

@@ -22,6 +22,7 @@
            #:run-with-nix-user
            #:run-with-xdg
            #:run-with-wine
+           #:run-with-libgl-always-software
            #:%
            #:@
            #:@+
@@ -103,6 +104,12 @@
 (defun run-with-wine-program-files (path)
   "Run PATH under Program Files using Wine."
   (run-with-wine (mof:home (mof:fmt ".wine/drive_c/Program Files/~A" path))))
+
+(defun run-with-libgl-always-software (binary &rest args)
+  "Run BINARY using some LIBGL flags"
+  (setf (getenv "LIBGL_ALWAYS_SOFTWARE") "1")
+  (run/i `(,binary ,@args))
+  (success))
 
 (defmacro % (name command)
   "Define a normal command runner."
