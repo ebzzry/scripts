@@ -71,6 +71,7 @@
            #:qtx
            #:rmd
            #:td
+           #:vb
            #:vl
 
            #:xu
@@ -80,7 +81,7 @@
            #:lc
            #:len
            #:leo
-           #:vb
+           #:vb@
            #:zu
 
            #:rz!
@@ -159,6 +160,7 @@
  ($ qtx "qtox")
  ($ rmd "qt-recordMyDesktop")
  ($ td "telegram-desktop")
+ ($ vb "VirtualBox")
  ($ vl "vlc -I ncurses --playlist-autostart"))
 
 (exporting-definitions
@@ -170,7 +172,7 @@
  (defun lc (&rest args) (run-with-locale "C" args))
  (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
  (defun leo (&rest args) (run-with-locale "eo.utf8" args))
- (defun vb () (run-with-nix-system "VirtualBox"))
+ (defun vb@ () (run-with-nix-system "VirtualBox"))
  (defun zu (&rest args) (run-with-libgl-always-software "zoom-us" args)))
 
 (exporting-definitions
