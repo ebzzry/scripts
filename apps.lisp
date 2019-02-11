@@ -85,7 +85,6 @@
            #:zu
 
            #:rz!
-           #:shell
            #:screenshot
            #:xmsg
            #:xrun
@@ -181,11 +180,6 @@
     'rz args
     :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
    (success))
-
- (defun shell (&rest args)
-   (let ((directory (pathname-directory-pathname (find-binary (argv0)))))
-     (run/i `("nix-shell" "--pure" ,(mof:fmt "~A/default.nix" directory) ,@args))
-     (success)))
 
  (defun screenshot (mode)
    (let* ((dir (uiop:truenamize +screenshots-dir+))
