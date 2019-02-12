@@ -53,6 +53,7 @@
            #:sp
            #:tb
            #:vv
+           #:xb
            #:xo
            #:xs
            #:za
@@ -139,6 +140,7 @@
  (% sp "speedcrunch")
  (% tb "tor-browser")
  (% vv "vncviewer")
+ (% xb "chromium")
  (% xo "xournal")
  (% xs "simple-scan")
  (% za "zathura")

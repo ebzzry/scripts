@@ -117,7 +117,7 @@
      ;; (run/i (append (split "\\s+" ,command) args))
      (run (append (split "\\s+" ,command) args)
           :output :interactive :input :interactive
-          :error-output nil :on-error nil)
+          :error-output t :on-error nil)
      (success)))
 
 (defmacro @ (name command)
@@ -149,5 +149,5 @@
      ;; (run/i (append (split "\\s+" ,command) args))
      (run (append (split "\\s+" ,command) args)
           :output :interactive :input :interactive
-          :error-output nil :on-error nil)
+          :error-output t :on-error nil)
      (success)))
