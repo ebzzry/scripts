@@ -15,7 +15,6 @@
   (:export #:bt
            #:dv
            #:e
-           #:e@
            #:f
            #:g
            #:gi
@@ -53,6 +52,7 @@
            #:sp
            #:tb
            #:vv
+           #:vvv
            #:xb
            #:xo
            #:xs
@@ -71,6 +71,7 @@
            #:qt5
            #:qtx
            #:rmd
+           #:sw
            #:td
            #:vb
            #:vl
@@ -102,7 +103,6 @@
  (% bt "bluetoothctl")
  (% dv "gdrive upload --recursive")
  (% e "emacsclient -nw")
- (% e@ "emacs -nw -Q")
  (% f "fd")
  (% g "rg --color auto")
  (% gi "g -i")
@@ -116,8 +116,9 @@
  (% us "usync --one-way --prefer-local")
  (% v "less")
  (% vg "vagrant")
- (% zx "zsh -c")
+ (% zx "zsh -c"))
 
+(exporting-definitions
  (% au "audacity")
  (% av "ahoviewer")
  (% bm "blueman-manager")
@@ -140,6 +141,7 @@
  (% sp "speedcrunch")
  (% tb "tor-browser")
  (% vv "vncviewer")
+ (% vvv "vncviewer -ViewOnly=1")
  (% xb "chromium")
  (% xo "xournal")
  (% xs "simple-scan")
@@ -160,6 +162,7 @@
  ($ qt5 "qt5ct")
  ($ qtx "qtox")
  ($ rmd "qt-recordMyDesktop")
+ ($ sw "Write")
  ($ td "telegram-desktop")
  ($ vb "VirtualBox")
  ($ vl "vlc -I ncurses --playlist-autostart"))
