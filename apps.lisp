@@ -30,6 +30,7 @@
            #:vg
            #:zx
 
+           #:ae
            #:au
            #:av
            #:bm
@@ -119,6 +120,7 @@
  (% zx "zsh -c"))
 
 (exporting-definitions
+ (% ae "aegisub")
  (% au "audacity")
  (% av "ahoviewer")
  (% bm "blueman-manager")
