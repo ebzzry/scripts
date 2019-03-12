@@ -41,7 +41,6 @@
            #:ev
            #:fs
            #:lo
-           #:lu
            #:lx
            #:mx
            #:ob
@@ -131,7 +130,6 @@
  (% ev "evince")
  (% fs "gtk2fontsel")
  (% lo "libreoffice")
- (% lu "o https://limnu.com/d/user.html")
  (% lx "lxappearance")
  (% mx "len wxmaxima")
  (% ob "opera --private")
