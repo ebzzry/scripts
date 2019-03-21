@@ -28,6 +28,7 @@
            #:us
            #:v
            #:vg
+           #:xf
            #:zx
 
            #:ae
@@ -116,6 +117,7 @@
  (% us "usync --one-way --prefer-local")
  (% v "less")
  (% vg "vagrant")
+ (% xf "xmllint --format")
  (% zx "zsh -c"))
 
 (exporting-definitions
