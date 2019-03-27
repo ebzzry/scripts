@@ -147,8 +147,7 @@
  (% xb "chromium")
  (% xo "xournal")
  (% xs "simple-scan")
- (% za "zathura")
- (% zu "zoom-us"))
+ (% za "zathura"))
 
 (exporting-definitions
  ($ b "phototonic")
