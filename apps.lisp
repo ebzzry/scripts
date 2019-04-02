@@ -48,7 +48,7 @@
            #:p
            #:pc
            #:pe
-           #:rxvt
+           #:tx
            #:sm
            #:sp
            #:tb
@@ -138,7 +138,7 @@
  (% p "mpv --fs --mute")
  (% pc "pavucontrol")
  (% pe "pulseeffects")
- (% rxvt "len urxvt")
+ (% tx "len urxvt -e tmux")
  (% sm "stellarium")
  (% sp "speedcrunch")
  (% tb "tor-browser")
