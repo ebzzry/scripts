@@ -40,6 +40,7 @@
            #:ds
            #:earth
            #:ev
+           #:fb
            #:fs
            #:lo
            #:lx
@@ -53,7 +54,6 @@
            #:sp
            #:tb
            #:vv
-           #:vvv
            #:xb
            #:xo
            #:xs
@@ -74,7 +74,6 @@
            #:rmd
            #:sw
            #:td
-           #:vb
            #:vl
 
            #:xu
@@ -84,7 +83,7 @@
            #:lc
            #:len
            #:leo
-           #:vb@
+           #:vb
            #:zu
 
            #:rz!
@@ -130,6 +129,7 @@
  (% ds "Discord")
  (% earth "googleearth")
  (% ev "evince")
+ (% fb "firefox")
  (% fs "gtk2fontsel")
  (% lo "libreoffice")
  (% lx "lxappearance")
@@ -138,12 +138,11 @@
  (% p "mpv --fs --mute")
  (% pc "pavucontrol")
  (% pe "pulseeffects")
- (% tx "len urxvt -e tmux")
+ (% tx "len urxvt")
  (% sm "stellarium")
  (% sp "speedcrunch")
  (% tb "tor-browser")
- (% vv "vncviewer")
- (% vvv "vncviewer -ViewOnly=1")
+ (% vv "vncviewer -ViewOnly=1")
  (% xb "chromium")
  (% xo "xournal")
  (% xs "simple-scan")
@@ -165,7 +164,6 @@
  ($ rmd "qt-recordMyDesktop")
  ($ sw "Write")
  ($ td "telegram-desktop")
- ($ vb "VirtualBox")
  ($ vl "vlc -I ncurses --playlist-autostart"))
 
 (exporting-definitions
@@ -177,7 +175,7 @@
  (defun lc (&rest args) (run-with-locale "C" args))
  (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
  (defun leo (&rest args) (run-with-locale "eo.utf8" args))
- (defun vb@ () (run-with-nix-system "VirtualBox"))
+ (defun vb () (run-with-nix-system "VirtualBox"))
  (defun zu (&rest args) (run-with-libgl-always-software "zoom-us" args)))
 
 (exporting-definitions
