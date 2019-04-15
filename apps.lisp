@@ -15,9 +15,6 @@
   (:export #:bt
            #:dv
            #:e
-           #:f
-           #:g
-           #:gi
            #:gpg
            #:par
            #:pm
@@ -26,9 +23,9 @@
            #:rm@
            #:s
            #:us
-           #:v
            #:vg
            #:xf
+           #:xm
            #:zx
 
            #:ae
@@ -50,6 +47,7 @@
            #:pc
            #:pe
            #:tx
+           #:ty
            #:sm
            #:sp
            #:tb
@@ -93,7 +91,10 @@
 
            #:sg2e
            #:smb
-           #:fightcade))
+           #:fightcade
+           #:xm
+
+           #:hp))
 
 (in-package #:scripts/apps)
 
@@ -103,9 +104,6 @@
  (% bt "bluetoothctl")
  (% dv "gdrive upload --recursive")
  (% e "emacsclient -nw")
- (% f "fd")
- (% g "rg --color auto")
- (% gi "g -i")
  (% gpg "gpg2")
  (% par "parallel")
  (% pm "pulsemixer")
@@ -114,7 +112,6 @@
  (% rm@ "shred -vfzun 10")
  (% s "sudo")
  (% us "usync --one-way --prefer-local")
- (% v "less")
  (% vg "vagrant")
  (% xf "xmllint --format")
  (% zx "zsh -c"))
@@ -139,6 +136,7 @@
  (% pc "pavucontrol")
  (% pe "pulseeffects")
  (% tx "len urxvt")
+ (% ty "terminator")
  (% sm "stellarium")
  (% sp "speedcrunch")
  (% tb "tor-browser")
@@ -219,6 +217,14 @@
  (defun fightcade ()
    (run/i `("stem" "-x" "fightcade"))
    (run-with-wine "/pub/ludoj/emu/fightcade/FightCade.exe")
+   (success))
+
+ (defun xm (&rest args)
+   (run/i `("xmonad" "--recompile"))
+   (run/i `("xmonad" "--restart"))
    (success)))
+
+(exporting-definitions
+ (% hp "zsh -c hp"))
 
 (register-commands :scripts/apps)

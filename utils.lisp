@@ -11,9 +11,11 @@
   (:export #:char-display-char
            #:battery-status
            #:wine
+
            #:err
            #:apply-args
            #:apply-args-1
+
            #:string-first
            #:find-binary
 
@@ -82,6 +84,10 @@
   (run/i `(,@(first args)))
   (success))
 
+(defun run-with-locale-en (args)
+  "Run args with locale set to "
+  (run-with-locale "en_US.UTF-8" args))
+
 (defun run-with-nix-system (binary &rest args)
   "Run binary without user paths."
   (setf (getenv "PATH") "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
@@ -114,7 +120,6 @@
 (defmacro % (name command)
   "Define a normal command runner."
   `(defun ,name (&rest args)
-     ;; (run/i (append (split "\\s+" ,command) args))
      (run (append (split "\\s+" ,command) args)
           :output :interactive :input :interactive
           :error-output t :on-error nil)
@@ -146,7 +151,6 @@
   "Define a runner with the QT_QPA environment."
   `(defun ,name (&rest args)
      (setf (getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
-     ;; (run/i (append (split "\\s+" ,command) args))
      (run (append (split "\\s+" ,command) args)
           :output :interactive :input :interactive
           :error-output t :on-error nil)
