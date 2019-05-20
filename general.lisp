@@ -12,7 +12,7 @@
           #:cl-launch/dispatch
           #:scripts/misc
           #:scripts/utils
-          #:scripts/tablet)
+          #:scripts/touch-ring)
   (:export #:ascii-hex-table
            #:ascii-oct-table
            #:rot13
@@ -67,15 +67,15 @@
 (defun load-xset ()
   (run/i `("xset" "s" "1800" "1800")))
 
-(defun load-tablet ()
-  (run/i `(intuos-bind))
+(defun load-touch-ring ()
+  (run/i `(touch-ring-bind))
   (dolist (cmd `(("2" "key +ctrl x -ctrl")
                  ("3" "key +ctrl c -ctrl")
                  ("8" "key +ctrl v -ctrl")
                  ("9" "key +ctrl a -ctrl")
                  ("10" "key +ctrl y -ctrl")
                  ("11" "key +ctrl z -ctrl")))
-    (run/i (append (list "intuos-map" "Button") cmd))))
+    (run/i (append (list "touch-ring-map" "Button") cmd))))
 
 (defun load-resources ()
   (run `(xrdb ,(mof:home ".Xresources")) :output :interactive :input :interactive :error-output nil :on-error nil)
@@ -137,7 +137,7 @@
     (load-keymap)
     (load-xset)
     (load-resources)
-    (load-tablet)
+    (load-touch-ring)
     (load-hostname)
     (success))
 

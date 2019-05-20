@@ -34,7 +34,7 @@
            #:bm
            #:cb
            #:cv
-           #:ds
+           #:dc
            #:earth
            #:ev
            #:fb
@@ -46,12 +46,13 @@
            #:p
            #:pc
            #:pe
+           #:sg2e
+           #:smb
            #:tx
            #:ty
            #:sm
            #:sp
            #:tb
-           #:vv
            #:xb
            #:xo
            #:xs
@@ -59,6 +60,7 @@
 
            #:b
            #:ca
+           #:demu
            #:eb
            #:kp
            #:kt
@@ -74,27 +76,23 @@
            #:td
            #:vl
 
-           #:xu
-           #:ni
+           #:fcade
            #:ui
+           #:ni
+           #:xu
 
            #:lc
            #:len
            #:leo
            #:vb
+           #:vr
            #:zu
 
            #:rz!
            #:screenshot
            #:xmsg
            #:xrun
-
-           #:sg2e
-           #:smb
-           #:fightcade
-           #:xm
-
-           #:hp))
+           #:xm))
 
 (in-package #:scripts/apps)
 
@@ -123,7 +121,7 @@
  (% bm "blueman-manager")
  (% cb "google-chrome-stable")
  (% cv "guvcview")
- (% ds "Discord")
+ (% dc "Discord")
  (% earth "googleearth")
  (% ev "evince")
  (% fb "firefox")
@@ -132,15 +130,16 @@
  (% lx "lxappearance")
  (% mx "len wxmaxima")
  (% ob "opera --private")
- (% p "mpv --fs --mute")
+ (% p "mpv --mute")
  (% pc "pavucontrol")
  (% pe "pulseeffects")
+ (% sg2e "steam -applaunch 245170")
+ (% smb "steam -applaunch 40800")
  (% tx "len urxvt")
  (% ty "terminator")
  (% sm "stellarium")
  (% sp "speedcrunch")
  (% tb "tor-browser")
- (% vv "vncviewer -ViewOnly=1")
  (% xb "chromium")
  (% xo "xournal")
  (% xs "simple-scan")
@@ -149,6 +148,7 @@
 (exporting-definitions
  ($ b "phototonic")
  ($ ca "calibre")
+ ($ demu "dolphin-emu-master")
  ($ eb "ebook-viewer")
  ($ kp "keepassxc")
  ($ kt "krita")
@@ -162,18 +162,21 @@
  ($ rmd "qt-recordMyDesktop")
  ($ sw "Write")
  ($ td "telegram-desktop")
+ ($ vr "viber")
  ($ vl "vlc -I ncurses --playlist-autostart"))
 
 (exporting-definitions
+ (@ fcade "/pub/ludoj/emu/fightcade/FightCade.exe")
  (@ ui "uninstaller")
- (@+ xu "Xenu/Xenu.exe")
- (@+ ni "Neat Image Standalone/NeatImage.exe"))
+ (@+ ni "Neat Image Standalone/NeatImage.exe")
+ (@+ xu "Xenu/Xenu.exe"))
 
 (exporting-definitions
  (defun lc (&rest args) (run-with-locale "C" args))
  (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
  (defun leo (&rest args) (run-with-locale "eo.utf8" args))
  (defun vb () (run-with-nix-system "VirtualBox"))
+ (defun vr () (run-with-docker-x "viber"))
  (defun zu (&rest args) (run-with-libgl-always-software "zoom-us" args)))
 
 (exporting-definitions
@@ -201,30 +204,17 @@
    (run/i `("xmessage"
             "-fn" "-*-speedy-*-*-*-*-12-*-*-*-*-*-*-*"
             "-fg" "white" "-bg" "black"
-            "-timeout" "2" "-buttons" ""
+            "-timeout" "5" "-buttons" ""
             ,@args))
    (success))
 
  (defun xrun (&rest args)
    (run/i `("gmrun" "-geometry" "+0+0" ,@args))
-   (success)))
-
-(exporting-definitions
- (defun sg2e ()
-   (run/i `("stem" "-X" ,(argv0) "--" "-applaunch" "245170"))
-   (success))
-
- (defun fightcade ()
-   (run/i `("stem" "-x" "fightcade"))
-   (run-with-wine "/pub/ludoj/emu/fightcade/FightCade.exe")
    (success))
 
  (defun xm (&rest args)
    (run/i `("xmonad" "--recompile"))
    (run/i `("xmonad" "--restart"))
    (success)))
-
-(exporting-definitions
- (% hp "zsh -c hp"))
 
 (register-commands :scripts/apps)
