@@ -26,5 +26,5 @@
                "scripts/apps"
                "scripts/unix"
                "scripts/mksum"
-               "scripts/tablet"
+               "scripts/touch-ring"
                "scripts/webcam"))

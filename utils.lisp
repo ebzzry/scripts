@@ -28,7 +28,8 @@
            #:%
            #:@
            #:@+
-           #:$))
+           #:$
+           #:run-with-docker-x))
 
 (in-package #:scripts/utils)
 
@@ -155,3 +156,25 @@
           :output :interactive :input :interactive
           :error-output t :on-error nil)
      (success)))
+
+(defun xdg-dir (spec)
+  "Return the appropriate XDG directory specified by SPEC."
+  (string-trim '(#\Space #\Tab #\Newline)
+               (inferior-shell:run/s `("xdg-user-dir" ,spec))))
+
+(defun paths (x y)
+  "Merge path namestrings."
+  (mof:cat (uiop:native-namestring (mof:expand-pathname x))
+           ":"
+           y))
+
+(defun run-with-docker-x (binary &rest args)
+  "Run command with Docker."
+  (run/i `("docker" "run" "--rm" "--env" "DISPLAY"
+           "--device" "/dev/dri:/dev/dri"
+           "--volume" "/tmp/.X11-unix:/tmp/.X11-unix"
+           "--volume" ,(paths "~/.ViberPC/" "/root/.ViberPC/")
+           "--volume" ,(paths (xdg-dir "DESKTOP") "/root/Desktop/")
+           "--volume" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/")
+           ,binary ,@args))
+  (success))
