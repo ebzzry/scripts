@@ -162,7 +162,6 @@
  ($ rmd "qt-recordMyDesktop")
  ($ sw "Write")
  ($ td "telegram-desktop")
- ($ vr "viber")
  ($ vl "vlc -I ncurses --playlist-autostart"))
 
 (exporting-definitions
