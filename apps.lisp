@@ -32,6 +32,7 @@
            #:au
            #:av
            #:bm
+           #:bb
            #:cb
            #:cv
            #:dc
@@ -119,6 +120,7 @@
  (% au "audacity")
  (% av "ahoviewer")
  (% bm "blueman-manager")
+ (% bb "brave")
  (% cb "google-chrome-stable")
  (% cv "guvcview")
  (% dc "Discord")
