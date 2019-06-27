@@ -32,23 +32,17 @@
            #:au
            #:av
            #:bm
-           #:bb
-           #:cb
            #:cv
            #:dc
            #:earth
            #:ev
-           #:fb
            #:fs
            #:lo
            #:lx
            #:mx
-           #:ob
            #:p
            #:pc
            #:pe
-           #:sg2e
-           #:smb
            #:tx
            #:ty
            #:sm
@@ -58,6 +52,10 @@
            #:xo
            #:xs
            #:za
+
+           #:bb
+           #:cb
+           #:fb
 
            #:b
            #:ca
@@ -93,7 +91,14 @@
            #:screenshot
            #:xmsg
            #:xrun
-           #:xm))
+           #:xm
+
+           #:ds
+
+           #:sg2e
+           #:smb
+           #:hk
+           #:cel))
 
 (in-package #:scripts/apps)
 
@@ -120,23 +125,17 @@
  (% au "audacity")
  (% av "ahoviewer")
  (% bm "blueman-manager")
- (% bb "brave")
- (% cb "google-chrome-stable")
  (% cv "guvcview")
  (% dc "Discord")
  (% earth "googleearth")
  (% ev "evince")
- (% fb "firefox")
  (% fs "gtk2fontsel")
  (% lo "libreoffice")
  (% lx "lxappearance")
  (% mx "len wxmaxima")
- (% ob "opera --private")
  (% p "mpv --mute")
  (% pc "pavucontrol")
  (% pe "pulseeffects")
- (% sg2e "steam -applaunch 245170")
- (% smb "steam -applaunch 40800")
  (% tx "len urxvt")
  (% ty "terminator")
  (% sm "stellarium")
@@ -146,6 +145,11 @@
  (% xo "xournal")
  (% xs "simple-scan")
  (% za "zathura"))
+
+(exporting-definitions
+ (% bb "brave")
+ (% cb "google-chrome-stable")
+ (% fb "firefox"))
 
 (exporting-definitions
  ($ b "phototonic")
@@ -216,6 +220,18 @@
  (defun xm (&rest args)
    (run/i `("xmonad" "--recompile"))
    (run/i `("xmonad" "--restart"))
+   (success))
+
+ (defun ds (&rest args)
+   (run `("sudo" "pkill" "-9" "ds4drv") :output :interactive :on-error nil)
+   (run `("sudo" "rm" "-f" "/tmp/ds4drv.pid") :output :interactive :on-error nil)
+   (run/i `("sudo" "ds4drv" "--daemon" "--config" ,(mof:expand-pathname "~/.config/ds4drv.conf")))
    (success)))
+
+(exporting-definitions
+ (% sg2e "steam -applaunch 245170")
+ (% smb "steam -applaunch 40800")
+ (% hk "steam -applaunch 367520")
+ (% cel "steam -applaunch 504230"))
 
 (register-commands :scripts/apps)

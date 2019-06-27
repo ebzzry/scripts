@@ -18,7 +18,7 @@
            #:rot13
            #:battery
            #:trackpoint
-           #:x
+           #:config-x
            #:pg
            #:pk
            #:pk!))
@@ -93,6 +93,9 @@
        (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
       (_ (success)))))
 
+(defun load-pointer ()
+  (run/i `("xsetroot" "-cursor_name" "left_ptr")))
+
 (defun pgrep-lines (&rest args)
   (run/lines `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args)))
 
@@ -133,12 +136,13 @@
       (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Axes" 7 6 5 4))
       (success)))
 
-  (defun x ()
+  (defun config-x ()
     (load-keymap)
     (load-xset)
     (load-resources)
     (load-touch-ring)
     (load-hostname)
+    (load-pointer)
     (success))
 
   (defun pg (&rest args)
