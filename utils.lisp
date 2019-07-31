@@ -23,13 +23,15 @@
            #:run-with-nix-system
            #:run-with-nix-user
            #:run-with-xdg
+           #:xdg-dir
            #:run-with-wine
            #:run-with-libgl-always-software
            #:%
            #:@
            #:@+
            #:$
-           #:run-with-docker-x))
+           #:run-with-docker-x
+           #:build-command))
 
 (in-package #:scripts/utils)
 
@@ -183,3 +185,9 @@
                       ,name ,@args))
     (run/i `("xhost" ,(mof:cat "-" permissions))))
   (success))
+
+(defun build-command (command args)
+  "Return a string suitable for RUN/I."
+  (if args
+      (mof:cat command " " (reduce #'(lambda (x y) (concatenate 'string x " " y)) args))
+      command))
