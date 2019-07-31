@@ -94,11 +94,15 @@
            #:xm
 
            #:ds
-
            #:sg2e
            #:smb
            #:hk
-           #:cel))
+           #:cel
+
+           #:lw
+           #:lwc
+           #:xp
+           #:sbcl!))
 
 (in-package #:scripts/apps)
 
@@ -168,7 +172,8 @@
  ($ rmd "qt-recordMyDesktop")
  ($ sw "Write")
  ($ td "telegram-desktop")
- ($ vl "vlc -I ncurses --playlist-autostart"))
+ ($ vl "vlc -I ncurses --playlist-autostart")
+ ($ vbw "VirtualBox --startvm 'Windows\ XP\ (64-bit)'"))
 
 (exporting-definitions
  (@ fcade "/pub/ludoj/emu/fightcade/FightCade.exe")
@@ -233,5 +238,25 @@
  (% smb "steam -applaunch 40800")
  (% hk "steam -applaunch 367520")
  (% cel "steam -applaunch 504230"))
+
+(exporting-definitions
+ (defun lw (&rest args)
+   (run/i `(zsh "-c" "cr /usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux" ,@args))
+   (success))
+
+ (defun lwc (&rest args)
+   (run/i `(zsh "-c" "cr /home/pub/hejmo/apoj/lispworks/save-image/lispworks-cli" ,@args))
+   (success))
+
+ (defun xp (&rest args)
+   (run/i `("VirtualBox" "--startvm" "Windows XP (64-bit)"))
+   (success))
+
+ (defun sbcl! (&rest args)
+   (let* ((path (mof:cat (xdg-dir "TEMPLATES") "/nix-shell/lisp/"))
+          (command (build-command "sbcl" args)))
+     (uiop:chdir path)
+     (run/i `("baf" "shell" "--run" ,command))
+     (success))))
 
 (register-commands :scripts/apps)
