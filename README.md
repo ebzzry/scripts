@@ -37,7 +37,7 @@ You may install the above with:
 ```
 $ sbcl --noinform --eval "(mapc #'ql:quickload '(:inferior-shell :local-time :ironclad :clon :cl-launch :fare-utils :cl-scripting))" --quit
 $ cd ~/common-lisp
-$ git clone https://github.com/ebzzry/mof.git
+$ git clone https://github.com/a1b10/mof.git
 ```
 
 
