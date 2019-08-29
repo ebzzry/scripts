@@ -102,7 +102,9 @@
            #:lw
            #:lwc
            #:xp
-           #:sbcl!))
+           #:sbcl!
+
+           #:smallcaps))
 
 (in-package #:scripts/apps)
 
@@ -257,6 +259,46 @@
           (command (build-command "sbcl" args)))
      (uiop:chdir path)
      (run/i `("baf" "shell" "--run" ,command))
+     (success))))
+
+(defvar *smallcaps-alist*
+  '((#\a . #\ᴀ)
+    (#\b . #\ʙ)
+    (#\c . #\ᴄ)
+    (#\d . #\ᴅ)
+    (#\e . #\ᴇ)
+    (#\f . #\ꜰ)
+    (#\g . #\ɢ)
+    (#\h . #\ʜ)
+    (#\i . #\ɪ)
+    (#\j . #\ᴊ)
+    (#\k . #\ᴋ)
+    (#\l . #\ʟ)
+    (#\m . #\ᴍ)
+    (#\n . #\ɴ)
+    (#\o . #\ᴏ)
+    (#\p . #\ᴘ)
+    (#\q . #\ǫ)
+    (#\r . #\ʀ)
+    (#\s . #\s)
+    (#\t . #\ᴛ)
+    (#\u . #\ᴜ)
+    (#\v . #\ᴠ)
+    (#\w . #\ᴡ)
+    (#\x . #\x)
+    (#\y . #\ʏ)
+    (#\z . #\ᴢ)))
+
+(exporting-definitions
+ (defun smallcaps (text)
+   "Output the smallcaps version of TEXT."
+   (labels ((fn (base)
+              "Return the smallcaps version of BASE."
+              (let ((value (cdr (assoc base *smallcaps-alist*))))
+                (if (and value (lower-case-p base))
+                    value
+                    base))))
+     (loop :for char :across text :do (format t "~A" (fn char)))
      (success))))
 
 (register-commands :scripts/apps)
