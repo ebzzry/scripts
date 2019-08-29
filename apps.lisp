@@ -48,6 +48,7 @@
            #:sm
            #:sp
            #:tb
+           #:vbm
            #:xb
            #:xo
            #:xs
@@ -147,6 +148,7 @@
  (% sm "stellarium")
  (% sp "speedcrunch")
  (% tb "tor-browser")
+ (% vbm "VBoxManage")
  (% xb "chromium")
  (% xo "xournal")
  (% xs "simple-scan")
