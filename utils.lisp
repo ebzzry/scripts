@@ -148,12 +148,14 @@
 (defun with-qt (command args)
   "Run a program in the QT profile."
   (setf (getenv "QT_QPA_PLATFORMTHEME") "gtk2")
+  (setf (getenv "QT_STYLE_OVERRIDE") "gtk2")
   (run-with-nix-user "qt" command args))
 
 (defmacro $ (name command)
   "Define a runner with the QT_QPA environment."
   `(defun ,name (&rest args)
-     (setf (getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
+     (setf (getenv "QT_QPA_PLATFORMTHEME") "gtk2")
+     (setf (getenv "QT_STYLE_OVERRIDE") "gtk2")
      (run (append (split "\\s+" ,command) args)
           :output :interactive :input :interactive
           :error-output t :on-error nil)
