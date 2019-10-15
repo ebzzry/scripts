@@ -49,7 +49,9 @@
            #:sp
            #:tb
            #:vbm
+           #:vl
            #:xb
+           #:xmind
            #:xo
            #:xs
            #:za
@@ -74,7 +76,6 @@
            #:rmd
            #:sw
            #:td
-           #:vl
 
            #:fcade
            #:ui
@@ -100,9 +101,10 @@
            #:hk
            #:cel
 
+           #:kb
            #:lw
            #:lwc
-           #:xp
+           #:tresorit
            #:sbcl!
 
            #:smallcaps))
@@ -149,7 +151,9 @@
  (% sp "speedcrunch")
  (% tb "tor-browser")
  (% vbm "VBoxManage")
+ (% vl "vlc -I ncurses --playlist-autostart")
  (% xb "chromium")
+ (% xmind "XMind")
  (% xo "xournal")
  (% xs "simple-scan")
  (% za "zathura"))
@@ -175,9 +179,7 @@
  ($ qtx "qtox")
  ($ rmd "qt-recordMyDesktop")
  ($ sw "Write")
- ($ td "telegram-desktop")
- ($ vl "vlc -I ncurses --playlist-autostart")
- ($ vbw "VirtualBox --startvm 'Windows\ XP\ (64-bit)'"))
+ ($ td "telegram-desktop"))
 
 (exporting-definitions
  (@ fcade "/pub/ludoj/emu/fightcade/FightCade.exe")
@@ -244,6 +246,11 @@
  (% cel "steam -applaunch 504230"))
 
 (exporting-definitions
+ (defun kb (&rest args)
+   (setf (getenv "NIX_SKIP_KEYBASE_CHECKS") "1")
+   (run/i `("keybase-gui" ,@args))
+   (success))
+
  (defun lw (&rest args)
    (run/i `(zsh "-c" "cr /usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux" ,@args))
    (success))
@@ -252,8 +259,8 @@
    (run/i `(zsh "-c" "cr /home/pub/hejmo/apoj/lispworks/save-image/lispworks-cli" ,@args))
    (success))
 
- (defun xp (&rest args)
-   (run/i `("VirtualBox" "--startvm" "Windows XP (64-bit)"))
+ (defun tresorit (&rest args)
+   (run/i `(zsh "-c" "cr /home/ebzzry/.local/share/tresorit/tresorit" ,@args))
    (success))
 
  (defun sbcl! (&rest args)
