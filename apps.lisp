@@ -105,6 +105,7 @@
            #:lw
            #:lwc
            #:tresorit
+           #:edraw
            #:sbcl!
 
            #:smallcaps))
@@ -245,6 +246,11 @@
  (% hk "steam -applaunch 367520")
  (% cel "steam -applaunch 504230"))
 
+(defun run-with-chroot (program args)
+  "Run PROGRAM inside the chroot."
+  (run/i `("zsh" "-c" ,(mof:cat "cr " program) ,args))
+  (success))
+
 (exporting-definitions
  (defun kb (&rest args)
    (setf (getenv "NIX_SKIP_KEYBASE_CHECKS") "1")
@@ -252,16 +258,16 @@
    (success))
 
  (defun lw (&rest args)
-   (run/i `(zsh "-c" "cr /usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux" ,@args))
-   (success))
+   (run-with-chroot "/usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux"))
 
  (defun lwc (&rest args)
-   (run/i `(zsh "-c" "cr /home/pub/hejmo/apoj/lispworks/save-image/lispworks-cli" ,@args))
-   (success))
+   (run-with-chroot "/home/pub/hejmo/apoj/lispworks/save-image/lispworks-cli"))
 
  (defun tresorit (&rest args)
-   (run/i `(zsh "-c" "cr /home/ebzzry/.local/share/tresorit/tresorit" ,@args))
-   (success))
+   (run-with-chroot "/home/ebzzry/.local/share/tresorit/tresorit"))
+
+ (defun edraw (&rest args)
+   (run-with-chroot "edrawmax" args))
 
  (defun sbcl! (&rest args)
    (let* ((path (mof:cat (xdg-dir "TEMPLATES") "/nix-shell/lisp/"))
