@@ -30,6 +30,7 @@
            #:@
            #:@+
            #:$
+           #:$$
            #:run-with-docker-x
            #:build-command))
 
@@ -154,8 +155,17 @@
 (defmacro $ (name command)
   "Define a runner with the QT_QPA environment."
   `(defun ,name (&rest args)
-     (setf (getenv "QT_QPA_PLATFORMTHEME") "gtk2")
-     (setf (getenv "QT_STYLE_OVERRIDE") "gtk2")
+     (setf (getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
+     (run (append (split "\\s+" ,command) args)
+          :output :interactive :input :interactive
+          :error-output t :on-error nil)
+     (success)))
+
+(defmacro $$ (name command)
+  "Define a runner without the QT_QPA environment."
+  `(defun ,name (&rest args)
+     (setf (getenv "QT_QPA_PLATFORMTHEME") "")
+     (setf (getenv "QT_STYLE_OVERRIDE") "")
      (run (append (split "\\s+" ,command) args)
           :output :interactive :input :interactive
           :error-output t :on-error nil)
@@ -174,8 +184,8 @@
 (defun run-with-docker-x (name &rest args)
   "Run command with Docker."
   (let* ((id (mof:trim-whitespace
-             (inferior-shell:run/s
-              `("docker" "inspect" "--format={{ .Config.Hostname }}" ,name))))
+              (inferior-shell:run/s
+               `("docker" "inspect" "--format={{ .Config.Hostname }}" ,name))))
          (permissions (mof:cat "local:" id)))
     (run/i `("xhost" ,(mof:cat "+" permissions)))
     (run/i `("docker" "run" "--rm" "-e" "DISPLAY"

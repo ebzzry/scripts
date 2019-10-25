@@ -31,6 +31,7 @@
            #:ae
            #:au
            #:av
+           #:b
            #:bm
            #:cv
            #:dc
@@ -50,6 +51,7 @@
            #:tb
            #:vbm
            #:vl
+           #:vl!
            #:xb
            #:xmind
            #:xo
@@ -60,9 +62,7 @@
            #:cb
            #:fb
 
-           #:b
            #:ca
-           #:demu
            #:eb
            #:kp
            #:kt
@@ -75,6 +75,8 @@
            #:qtx
            #:rmd
            #:sw
+           #:vp
+
            #:td
 
            #:fcade
@@ -104,7 +106,7 @@
            #:kb
            #:lw
            #:lwc
-           #:tresorit
+           #:ts
            #:edraw
            #:sbcl!
 
@@ -134,6 +136,7 @@
  (% ae "aegisub")
  (% au "audacity")
  (% av "ahoviewer")
+ (% b "gqview")
  (% bm "blueman-manager")
  (% cv "guvcview")
  (% dc "Discord")
@@ -152,7 +155,8 @@
  (% sp "speedcrunch")
  (% tb "tor-browser")
  (% vbm "VBoxManage")
- (% vl "vlc -I ncurses --playlist-autostart")
+ (% vl "vlc -I ncurses")
+ (% vl! "vl --random --loop --playlist-autostart")
  (% xb "chromium")
  (% xmind "XMind")
  (% xo "xournal")
@@ -165,9 +169,7 @@
  (% fb "firefox"))
 
 (exporting-definitions
- ($ b "phototonic")
  ($ ca "calibre")
- ($ demu "dolphin-emu-master")
  ($ eb "ebook-viewer")
  ($ kp "keepassxc")
  ($ kt "krita")
@@ -180,7 +182,10 @@
  ($ qtx "qtox")
  ($ rmd "qt-recordMyDesktop")
  ($ sw "Write")
- ($ td "telegram-desktop"))
+ ($ vp "vlc"))
+
+(exporting-definitions
+ ($$ td "telegram-desktop"))
 
 (exporting-definitions
  (@ fcade "/pub/ludoj/emu/fightcade/FightCade.exe")
@@ -248,7 +253,7 @@
 
 (defun run-with-chroot (program args)
   "Run PROGRAM inside the chroot."
-  (run/i `("zsh" "-c" ,(mof:cat "cr " program) ,args))
+  (run/i `("zsh" "-c" ,(mof:cat "cr " (namestring program)) ,args))
   (success))
 
 (exporting-definitions
@@ -258,13 +263,13 @@
    (success))
 
  (defun lw (&rest args)
-   (run-with-chroot "/usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux"))
+   (run-with-chroot "/usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux" args))
 
  (defun lwc (&rest args)
-   (run-with-chroot "/home/pub/hejmo/apoj/lispworks/save-image/lispworks-cli"))
+   (run-with-chroot "/home/pub/hejmo/apoj/lispworks/save-image/lispworks-cli" args))
 
- (defun tresorit (&rest args)
-   (run-with-chroot "/home/ebzzry/.local/share/tresorit/tresorit"))
+ (defun ts (&rest args)
+   (run-with-chroot (mof:home ".local/share/tresorit/tresorit") args))
 
  (defun edraw (&rest args)
    (run-with-chroot "edrawmax" args))
