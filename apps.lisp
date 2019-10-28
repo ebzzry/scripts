@@ -109,6 +109,7 @@
            #:ts
            #:edraw
            #:sbcl!
+           #:shell
 
            #:smallcaps))
 
@@ -279,6 +280,18 @@
           (command (build-command "sbcl" args)))
      (uiop:chdir path)
      (run/i `("baf" "shell" "--run" ,command))
+     (success)))
+
+ (defun shell (&rest args)
+   (destructuring-bind (base &rest arguments)
+       args
+     (let* ((path (mof:cat (xdg-dir "TEMPLATES") "/shell/"))
+            (directory (mof:cat path base)))
+       (when (uiop:directory-exists-p directory)
+         (uiop:chdir directory)
+         (if arguments
+             (run/i `("baf" "shell" "--run" ,@arguments))
+             (run/i `("baf" "shell")))))
      (success))))
 
 (defvar *smallcaps-alist*
