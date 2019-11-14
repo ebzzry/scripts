@@ -76,7 +76,6 @@
            #:rmd
            #:sw
            #:vp
-
            #:td
 
            #:fcade
@@ -183,10 +182,8 @@
  ($ qtx "qtox")
  ($ rmd "qt-recordMyDesktop")
  ($ sw "Write")
- ($ vp "vlc"))
-
-(exporting-definitions
- ($$ td "telegram-desktop"))
+ ($ vp "vlc")
+ ($ td "telegram-desktop"))
 
 (exporting-definitions
  (@ fcade "/pub/ludoj/emu/fightcade/FightCade.exe")

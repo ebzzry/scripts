@@ -31,6 +31,7 @@
            #:@+
            #:$
            #:$$
+           #:$%
            #:run-with-docker-x
            #:build-command))
 
@@ -153,6 +154,15 @@
   (run-with-nix-user "qt" command args))
 
 (defmacro $ (name command)
+  "Define a runner with the QT_QPA environment set to GTK2."
+  `(defun ,name (&rest args)
+     (setf (getenv "QT_QPA_PLATFORMTHEME") "gtk2")
+     (run (append (split "\\s+" ,command) args)
+          :output :interactive :input :interactive
+          :error-output t :on-error nil)
+     (success)))
+
+(defmacro $$ (name command)
   "Define a runner with the QT_QPA environment."
   `(defun ,name (&rest args)
      (setf (getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
@@ -161,7 +171,7 @@
           :error-output t :on-error nil)
      (success)))
 
-(defmacro $$ (name command)
+(defmacro $% (name command)
   "Define a runner without the QT_QPA environment."
   `(defun ,name (&rest args)
      (setf (getenv "QT_QPA_PLATFORMTHEME") "")
@@ -189,6 +199,7 @@
          (permissions (mof:cat "local:" id)))
     (run/i `("xhost" ,(mof:cat "+" permissions)))
     (run/i `("docker" "run" "--rm" "-e" "DISPLAY"
+                      "--name" ,name
                       "--device=/dev/dri:/dev/dri"
                       "-v" "/tmp/.X11-unix:/tmp/.X11-unix"
                       "-v" ,(paths "~/.ViberPC/" "/root/.ViberPC/")
