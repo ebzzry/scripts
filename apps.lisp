@@ -1,4 +1,4 @@
-;;; apps.lisp
+;;;; apps.lisp
 
 (uiop:define-package #:scripts/apps
     (:use #:cl
@@ -14,6 +14,7 @@
           #:scripts/unix)
   (:export #:bt
            #:dv
+           #:ds
            #:e
            #:gpg
            #:par
@@ -46,6 +47,7 @@
            #:pe
            #:tx
            #:ty
+           #:sg2e
            #:sm
            #:sp
            #:tb
@@ -70,10 +72,10 @@
            #:o
            #:ok
            #:qbt
+           #:qrd
            #:qt4
            #:qt5
            #:qtx
-           #:rmd
            #:sw
            #:vp
            #:td
@@ -87,7 +89,7 @@
            #:len
            #:leo
            #:vb
-           #:vr
+           #:viber
            #:zu
 
            #:rz!
@@ -95,12 +97,6 @@
            #:xmsg
            #:xrun
            #:xm
-
-           #:ds
-           #:sg2e
-           #:smb
-           #:hk
-           #:cel
 
            #:kb
            #:lw
@@ -123,7 +119,7 @@
  (% gpg "gpg2")
  (% par "parallel")
  (% pm "pulsemixer")
- (% rz "rsync -rlptgoD -HAX -x -z")
+ (% rz "rsync -az")
  (% rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\"")
  (% rm@ "shred -vfzun 10")
  (% s "sudo")
@@ -151,6 +147,7 @@
  (% pe "pulseeffects")
  (% tx "len urxvt")
  (% ty "terminator")
+ (% sg2e "steam -applaunch 245170")
  (% sm "stellarium")
  (% sp "speedcrunch")
  (% tb "tor-browser")
@@ -177,10 +174,10 @@
  ($ o "qutebrowser")
  ($ ok "okular")
  ($ qbt "qbittorrent")
+ ($ qrd "qt-recordMyDesktop")
  ($ qt4 "qtconfig")
  ($ qt5 "qt5ct")
  ($ qtx "qtox")
- ($ rmd "qt-recordMyDesktop")
  ($ sw "Write")
  ($ vp "vlc")
  ($ td "telegram-desktop"))
@@ -196,7 +193,7 @@
  (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
  (defun leo (&rest args) (run-with-locale "eo.utf8" args))
  (defun vb () (run-with-nix-system "VirtualBox"))
- (defun vr () (run-with-docker-x "viber"))
+ (defun viber () (run-with-docker-x "viber"))
  (defun zu (&rest args) (run-with-libgl-always-software "zoom-us" args)))
 
 (exporting-definitions
@@ -242,12 +239,6 @@
    (run `("sudo" "rm" "-f" "/tmp/ds4drv.pid") :output :interactive :on-error nil)
    (run/i `("sudo" "ds4drv" "--daemon" "--config" ,(mof:expand-pathname "~/.config/ds4drv.conf")))
    (success)))
-
-(exporting-definitions
- (% sg2e "steam -applaunch 245170")
- (% smb "steam -applaunch 40800")
- (% hk "steam -applaunch 367520")
- (% cel "steam -applaunch 504230"))
 
 (defun run-with-chroot (program args)
   "Run PROGRAM inside the chroot."
