@@ -101,9 +101,8 @@
            #:kb
            #:lw
            #:lwc
-           #:ts
+           #:tresorit
            #:edraw
-           #:sbcl!
            #:shell
 
            #:smallcaps))
@@ -257,18 +256,12 @@
  (defun lwc (&rest args)
    (run-with-chroot "/home/pub/hejmo/apoj/lispworks/save-image/lispworks-cli" args))
 
- (defun ts (&rest args)
-   (run-with-chroot (mof:home ".local/share/tresorit/tresorit") args))
+ (defun tresorit (&rest args)
+   (run/i `("make" "-C" ,(mof:home "mimix/fkd/tresorit") "run"))
+   (success))
 
  (defun edraw (&rest args)
    (run-with-chroot "edrawmax" args))
-
- (defun sbcl! (&rest args)
-   (let* ((path (mof:cat (xdg-dir "TEMPLATES") "/nix-shell/lisp/"))
-          (command (build-command "sbcl" args)))
-     (uiop:chdir path)
-     (run/i `("baf" "shell" "--run" ,command))
-     (success)))
 
  (defun shell (&rest args)
    (destructuring-bind (base &rest arguments)
