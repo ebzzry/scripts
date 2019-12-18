@@ -185,27 +185,16 @@
   "Return the appropriate XDG directory specified by SPEC."
   (mof:trim-whitespace (inferior-shell:run/s `("xdg-user-dir" ,spec))))
 
-(defun paths (x y)
-  "Merge path namestrings."
-  (mof:cat (uiop:native-namestring (mof:expand-pathname x))
-           ":"
-           y))
-
-(defun run-with-docker-x (name &rest args)
+(defun run-with-docker-x (docker-args name &rest program-args)
   "Run command with Docker."
   (let* ((id (mof:trim-whitespace
               (inferior-shell:run/s
                `("docker" "inspect" "--format={{ .Config.Hostname }}" ,name))))
          (permissions (mof:cat "local:" id)))
     (run/i `("xhost" ,(mof:cat "+" permissions)))
-    (run/i `("docker" "run" "--rm" "-e" "DISPLAY"
-                      "--name" ,name
-                      "--device=/dev/dri:/dev/dri"
-                      "-v" "/tmp/.X11-unix:/tmp/.X11-unix"
-                      "-v" ,(paths "~/.ViberPC/" "/root/.ViberPC/")
-                      "-v" ,(paths (xdg-dir "DESKTOP") "/root/Desktop/")
-                      "-v" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/")
-                      ,name ,@args))
+    (run/i `("docker" "run" "--rm" "-e" "DISPLAY" "--name" ,name
+                      "-v" "/tmp/.X11-unix:/tmp/.X11-unix" "--device=/dev/dri:/dev/dri"
+                      ,@docker-args ,name ,@program-args))
     (run/i `("xhost" ,(mof:cat "-" permissions))))
   (success))
 

@@ -89,8 +89,8 @@
            #:len
            #:leo
            #:vb
+
            #:viber
-           #:zu
 
            #:rz!
            #:screenshot
@@ -191,9 +191,31 @@
  (defun lc (&rest args) (run-with-locale "C" args))
  (defun len (&rest args) (run-with-locale "en_US.UTF-8" args))
  (defun leo (&rest args) (run-with-locale "eo.utf8" args))
- (defun vb () (run-with-nix-system "VirtualBox"))
- (defun viber () (run-with-docker-x "viber"))
- (defun zu (&rest args) (run-with-libgl-always-software "zoom-us" args)))
+ (defun vb () (run-with-nix-system "VirtualBox")))
+
+(defun paths (x y)
+  "Merge path namestrings."
+  (mof:cat (uiop:native-namestring (mof:expand-pathname x))
+           ":"
+           y))
+
+(exporting-definitions
+  (defun tresorit ()
+    (run-with-docker-x
+     `("-v" ,(paths "~/.local/share/tresorit/Profiles" "/home/tresorit/.local/share/tresorit/Profiles")
+       "-v" ,(paths "~/.local/share/tresorit/Logs" "/home/tresorit/.local/share/tresorit/Logs")
+       "-v" ,(paths "~/.local/share/tresorit/Reports" "/home/tresorit/.local/share/tresorit/Reports")
+       "-v" ,(paths "~/.local/share/tresorit/Temp" "/home/tresorit/.local/share/tresorit/Temp")
+       "-v" ,(paths "~/.config/Tresorit" "/home/tresorit/.config/Tresorit")
+       "-v" ,(paths "~/Tresors" "/home/tresorit/Tresors"))
+     "tresorit"))
+
+  (defun viber ()
+    (run-with-docker-x
+     `("-v" ,(paths "~/.ViberPC/" "/root/.ViberPC/")
+       "-v" ,(paths (xdg-dir "DESKTOP") "/root/Desktop/")
+       "-v" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/"))
+     "viber")))
 
 (exporting-definitions
  (defun rz! (&rest args)
@@ -255,10 +277,6 @@
 
  (defun lwc (&rest args)
    (run-with-chroot "/home/pub/hejmo/apoj/lispworks/save-image/lispworks-cli" args))
-
- (defun tresorit (&rest args)
-   (run/i `("make" "-C" ,(mof:home "mimix/fkd/tresorit") "run"))
-   (success))
 
  (defun edraw (&rest args)
    (run-with-chroot "edrawmax" args))
