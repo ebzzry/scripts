@@ -292,12 +292,11 @@
        args
      (let* ((cwd (uiop:getcwd))
             (path (mof:cat (xdg-dir "TEMPLATES") "/shell/"))
-            (directory (mof:cat path base)))
+            (directory (mof:cat path base))
+            (default-command (or arguments "bash")))
        (when (uiop:directory-exists-p directory)
          (uiop:chdir directory)
-         (if arguments
-             (run/i `("baf" "shell" "--run" ,@arguments))
-             (run/i `("baf" "shell" "--run" ,(format nil "sh -c \"cd ~A; bash\"" cwd))))))
+         (run/i `("baf" "shell" "--run" ,(format nil "sh -c \"cd ~A; ~A\"" cwd default-command)))))
      (success))))
 
 (defvar *smallcaps-alist*
