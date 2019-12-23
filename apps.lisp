@@ -39,7 +39,6 @@
            #:earth
            #:ev
            #:fs
-           #:lo
            #:lx
            #:mx
            #:p
@@ -139,7 +138,6 @@
  (% earth "googleearth")
  (% ev "evince")
  (% fs "gtk2fontsel")
- (% lo "libreoffice")
  (% lx "lxappearance")
  (% mx "len wxmaxima")
  (% p "mpv --mute")
@@ -292,13 +290,14 @@
  (defun shell (&rest args)
    (destructuring-bind (base &rest arguments)
        args
-     (let* ((path (mof:cat (xdg-dir "TEMPLATES") "/shell/"))
+     (let* ((cwd (uiop:getcwd))
+            (path (mof:cat (xdg-dir "TEMPLATES") "/shell/"))
             (directory (mof:cat path base)))
        (when (uiop:directory-exists-p directory)
          (uiop:chdir directory)
          (if arguments
              (run/i `("baf" "shell" "--run" ,@arguments))
-             (run/i `("baf" "shell")))))
+             (run/i `("baf" "shell" "--run" ,(format nil "sh -c \"cd ~A; bash\"" cwd))))))
      (success))))
 
 (defvar *smallcaps-alist*
