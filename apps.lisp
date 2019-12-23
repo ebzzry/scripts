@@ -63,13 +63,13 @@
            #:bb
            #:cb
            #:fb
+           #:qb
 
            #:ca
            #:eb
            #:kp
            #:kt
            #:mb
-           #:o
            #:ok
            #:qbt
            #:qrd
@@ -99,8 +99,9 @@
            #:xm
 
            #:kb
-           #:lw
-           #:lwc
+           #:lispworks
+           #:lispworks-cli
+           #:ts
            #:tresorit
            #:edraw
            #:shell
@@ -162,7 +163,8 @@
 (exporting-definitions
  (% bb "brave")
  (% cb "google-chrome-stable")
- (% fb "firefox"))
+ (% fb "firefox")
+ ($ qb "qutebrowser"))
 
 (exporting-definitions
  ($ ca "calibre")
@@ -170,7 +172,6 @@
  ($ kp "keepassxc")
  ($ kt "krita")
  ($ mb "mumble")
- ($ o "qutebrowser")
  ($ ok "okular")
  ($ qbt "qbittorrent")
  ($ qrd "qt-recordMyDesktop")
@@ -200,22 +201,25 @@
            y))
 
 (exporting-definitions
-  (defun tresorit ()
-    (run-with-docker-x
-     `("-v" ,(paths "~/.local/share/tresorit/Profiles" "/home/tresorit/.local/share/tresorit/Profiles")
-       "-v" ,(paths "~/.local/share/tresorit/Logs" "/home/tresorit/.local/share/tresorit/Logs")
-       "-v" ,(paths "~/.local/share/tresorit/Reports" "/home/tresorit/.local/share/tresorit/Reports")
-       "-v" ,(paths "~/.local/share/tresorit/Temp" "/home/tresorit/.local/share/tresorit/Temp")
-       "-v" ,(paths "~/.config/Tresorit" "/home/tresorit/.config/Tresorit")
-       "-v" ,(paths "~/Tresors" "/home/tresorit/Tresors"))
-     "tresorit"))
+ (defun ts (&rest args)
+   (run-with-chroot (mof:home ".local/share/tresorit/tresorit") args))
 
-  (defun viber ()
-    (run-with-docker-x
-     `("-v" ,(paths "~/.ViberPC/" "/root/.ViberPC/")
-       "-v" ,(paths (xdg-dir "DESKTOP") "/root/Desktop/")
-       "-v" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/"))
-     "viber")))
+ (defun tresorit ()
+   (run-with-docker-x
+    `("-v" ,(paths "~/.local/share/tresorit/Profiles" "/home/tresorit/.local/share/tresorit/Profiles")
+           "-v" ,(paths "~/.local/share/tresorit/Logs" "/home/tresorit/.local/share/tresorit/Logs")
+           "-v" ,(paths "~/.local/share/tresorit/Reports" "/home/tresorit/.local/share/tresorit/Reports")
+           "-v" ,(paths "~/.local/share/tresorit/Temp" "/home/tresorit/.local/share/tresorit/Temp")
+           "-v" ,(paths "~/.config/Tresorit" "/home/tresorit/.config/Tresorit")
+           "-v" ,(paths "~/Tresors" "/home/tresorit/Tresors"))
+    "tresorit"))
+
+ (defun viber ()
+   (run-with-docker-x
+    `("-v" ,(paths "~/.ViberPC/" "/root/.ViberPC/")
+           "-v" ,(paths (xdg-dir "DESKTOP") "/root/Desktop/")
+           "-v" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/"))
+    "viber")))
 
 (exporting-definitions
  (defun rz! (&rest args)
@@ -246,7 +250,11 @@
             ,@args))
    (success))
 
- (defun xrun (&rest args)
+ ;; (defun xrun (&rest args)
+ ;;   (run/i `("gmrun" "-geometry" "+0+0" ,@args))
+ ;;   (success))
+
+ (defcommand xrun (&rest args)
    (run/i `("gmrun" "-geometry" "+0+0" ,@args))
    (success))
 
@@ -272,10 +280,10 @@
    (run/i `("keybase-gui" ,@args))
    (success))
 
- (defun lw (&rest args)
+ (defun lispworks (&rest args)
    (run-with-chroot "/usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux" args))
 
- (defun lwc (&rest args)
+ (defun lispworks-cli (&rest args)
    (run-with-chroot "/home/pub/hejmo/apoj/lispworks/save-image/lispworks-cli" args))
 
  (defun edraw (&rest args)
