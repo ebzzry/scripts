@@ -26,6 +26,8 @@
            #:xdg-dir
            #:run-with-wine
            #:run-with-libgl-always-software
+
+           #:defcommand
            #:%
            #:@
            #:@+
@@ -122,9 +124,24 @@
   (run/i `(,binary ,@args))
   (success))
 
+(defmacro defcommand (name args &rest body)
+  "Define a function with SIGINT handler."
+  `(defun ,name ,args
+     (handler-case (progn ,@body)
+       (#+sbcl sb-sys:interactive-interrupt
+        #+ccl ccl:interrupt-signal-condition
+        #+clisp system::simple-interrupt-condition
+        #+ecl ext:interactive-interrupt
+        #+allegro excl:interrupt-signal
+        #+lispworks mp:process-interrupt
+        () nil)
+       (error (c)
+         (format t "Oops, an unknown error occured:~&~A~&" c)))
+     (success)))
+
 (defmacro % (name command)
   "Define a normal command runner."
-  `(defun ,name (&rest args)
+  `(defcommand ,name (&rest args)
      (run (append (split "\\s+" ,command) args)
           :output :interactive :input :interactive
           :error-output t :on-error nil)
@@ -132,12 +149,12 @@
 
 (defmacro @ (name command)
   "Define a command with wine."
-  `(defun ,name (&rest args)
+  `(defcommand ,name (&rest args)
      (run-with-wine ,command)))
 
 (defmacro @+ (name location)
   "Define a wine runner."
-  `(defun ,name (&rest args)
+  `(defcommand ,name (&rest args)
      (run-with-wine-program-files ,location)))
 
 (defun run-with-nix-user (profile binary args)
@@ -155,7 +172,7 @@
 
 (defmacro $ (name command)
   "Define a runner with the QT_QPA environment set to GTK2."
-  `(defun ,name (&rest args)
+  `(defcommand ,name (&rest args)
      (setf (getenv "QT_QPA_PLATFORMTHEME") "gtk2")
      (run (append (split "\\s+" ,command) args)
           :output :interactive :input :interactive
@@ -164,7 +181,7 @@
 
 (defmacro $$ (name command)
   "Define a runner with the QT_QPA environment."
-  `(defun ,name (&rest args)
+  `(defcommand ,name (&rest args)
      (setf (getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
      (run (append (split "\\s+" ,command) args)
           :output :interactive :input :interactive
@@ -173,7 +190,7 @@
 
 (defmacro $% (name command)
   "Define a runner without the QT_QPA environment."
-  `(defun ,name (&rest args)
+  `(defcommand ,name (&rest args)
      (setf (getenv "QT_QPA_PLATFORMTHEME") "")
      (setf (getenv "QT_STYLE_OVERRIDE") "")
      (run (append (split "\\s+" ,command) args)
@@ -194,6 +211,7 @@
     (run/i `("xhost" ,(mof:cat "+" permissions)))
     (run/i `("docker" "run" "--rm" "-e" "DISPLAY" "--name" ,name
                       "-v" "/tmp/.X11-unix:/tmp/.X11-unix" "--device=/dev/dri:/dev/dri"
+                      "--memory" "1024m" "--cpus" ".5"
                       ,@docker-args ,name ,@program-args))
     (run/i `("xhost" ,(mof:cat "-" permissions))))
   (success))
