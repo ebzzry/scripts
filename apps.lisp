@@ -71,10 +71,10 @@
            #:mb
            #:ok
            #:qbt
-           #:qrd
            #:qt4
            #:qt5
            #:qtx
+           #:rd
            #:sw
            #:vp
            #:td
@@ -172,10 +172,10 @@
  ($ mb "mumble")
  ($ ok "okular")
  ($ qbt "qbittorrent")
- ($ qrd "qt-recordMyDesktop")
  ($ qt4 "qtconfig")
  ($ qt5 "qt5ct")
  ($ qtx "qtox")
+ ($ rd "qt-recordMyDesktop")
  ($ sw "Write")
  ($ vp "vlc")
  ($ td "telegram-desktop"))
@@ -194,9 +194,7 @@
 
 (defun paths (x y)
   "Merge path namestrings."
-  (mof:cat (uiop:native-namestring (mof:expand-pathname x))
-           ":"
-           y))
+  (mof:cat (uiop:native-namestring (mof:expand-pathname x)) ":" y))
 
 (exporting-definitions
  (defcommand ts (&rest args)
@@ -205,18 +203,18 @@
  (defcommand tresorit ()
    (run-with-docker-x
     `("-v" ,(paths "~/.local/share/tresorit/Profiles" "/home/tresorit/.local/share/tresorit/Profiles")
-           "-v" ,(paths "~/.local/share/tresorit/Logs" "/home/tresorit/.local/share/tresorit/Logs")
-           "-v" ,(paths "~/.local/share/tresorit/Reports" "/home/tresorit/.local/share/tresorit/Reports")
-           "-v" ,(paths "~/.local/share/tresorit/Temp" "/home/tresorit/.local/share/tresorit/Temp")
-           "-v" ,(paths "~/.config/Tresorit" "/home/tresorit/.config/Tresorit")
-           "-v" ,(paths "~/Tresors" "/home/tresorit/Tresors"))
+      "-v" ,(paths "~/.local/share/tresorit/Logs" "/home/tresorit/.local/share/tresorit/Logs")
+      "-v" ,(paths "~/.local/share/tresorit/Reports" "/home/tresorit/.local/share/tresorit/Reports")
+      "-v" ,(paths "~/.local/share/tresorit/Temp" "/home/tresorit/.local/share/tresorit/Temp")
+      "-v" ,(paths "~/.config/Tresorit" "/home/tresorit/.config/Tresorit")
+      "-v" ,(paths "~/Tresors" "/home/tresorit/Tresors"))
     "tresorit"))
 
  (defcommand viber ()
    (run-with-docker-x
     `("-v" ,(paths "~/.ViberPC/" "/root/.ViberPC/")
-           "-v" ,(paths (xdg-dir "DESKTOP") "/root/Desktop/")
-           "-v" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/"))
+      "-v" ,(paths (xdg-dir "DESKTOP") "/root/Desktop/")
+      "-v" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/"))
     "viber")))
 
 (exporting-definitions
