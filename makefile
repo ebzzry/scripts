@@ -9,7 +9,8 @@ CL=cl-launch
 all: $(NAME)
 
 $(NAME):
-	@$(CL) --output $(NAME) --dump ! --lisp sbcl --quicklisp --dispatch-system $(NAME)/touchpad --system $(NAME)
+	@$(CL) --output $(NAME) --dump ! --lisp sbcl \
+	--quicklisp --dispatch-system $(NAME)/main --system $(NAME)
 
 install: $(NAME)
 	@ln -sf $(SCRIPT) $(BINARY)

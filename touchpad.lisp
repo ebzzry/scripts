@@ -8,53 +8,40 @@
 ;; Or use make-multi.sh to create a multi-call binary that includes touchpad support.
 
 (uiop:define-package #:scripts/touchpad
-    (:use #:cl
-          #:fare-utils
-          #:uiop
-          #:inferior-shell
-          #:optima
-          #:optima.ppcre
-          #:cl-scripting)
-  (:export #:help
-           #:get-id
-           #:id
-           #:enabledp
-           #:toggle
-           #:disable
-           #:enable))
+  (:use #:cl
+        #:inferior-shell
+        #:cl-scripting
+        #:optima
+        #:optima.ppcre
+        #:marie))
 
 (in-package #:scripts/touchpad)
 
-(defun get-id ()
+(defun* (get-id t) ()
   (dolist (line (run/lines '(xinput list)))
     (match line
       ((ppcre "(TouchPad|\\sSYNA.*)\\s+id\=([0-9]{1,2})\\s+" _ x)
        (return (values (parse-integer x)))))))
 
-(defun id (&rest args) (apply #'get-id args))
+(defun* (id t) (&rest args) (apply #'get-id args))
 
 (defun enabledp (&optional (id (get-id)))
   (dolist (line (run/lines `(xinput list-props ,id)))
     (match line
       ((ppcre "Device Enabled\\s+[():0-9]+\\s+([01])" x) (return (equal x "1"))))))
 
-(defun toggle (&optional (id (get-id)) (on :toggle))
+(defun* (toggle t) (&optional (id (get-id)) (on :toggle))
   (let ((state (ecase on
                  ((:toggle) (not (enabledp id)))
                  ((nil t) on))))
     (run `(xinput ,(if state 'enable 'disable) ,id)))
   (success))
 
-(defun enable (&optional (id (get-id)))
-  (toggle id t))
-
-(defun disable (&optional (id (get-id)))
+(defun* (disable t) (&optional (id (get-id)))
   (toggle id nil))
 
-(defun help (&optional (output *standard-output*))
-  (format output "touchpad functions: ~{~(~A~)~^ ~}~%"
-          (package-functions :scripts/touchpad))
-  (success))
+(defun* (enable t) (&optional (id (get-id)))
+  (toggle id t))
 
 (defun main (argv) ;; TODO: use command-line-arguments, or CLON
   (cond

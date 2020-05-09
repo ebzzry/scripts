@@ -7,24 +7,22 @@
 
 (defsystem :scripts
   :name "scripts"
-  :version "1.0.0"
+  :version "1.0.1"
   :description "Common Lisp scripts"
   :license "CC0"
-  :author "Rommel Martinez <ebzzry@ebzzry.io>"
+  :author "Rommel MARTINEZ <rom@mimix.io>"
   :class :package-inferred-system
-  :depends-on ((:version "cl-scripting" "0.1")
-               (:version "inferior-shell" "2.0.3.3")
-               (:version "fare-utils" "1.0.0.5")
+  :depends-on (#:cl-ppcre
                #:local-time
                #:ironclad
-               #:net.didierverna.clon
-               #:mof
-               #:split-sequence
+               "scripts/common"
                "scripts/misc"
                "scripts/touchpad"
                "scripts/general"
                "scripts/apps"
                "scripts/unix"
                "scripts/mksum"
-               "scripts/touch-ring"
-               "scripts/webcam"))
+               "scripts/webcam"
+               "scripts/touchring"
+               "scripts/main"
+               "scripts/driver"))
