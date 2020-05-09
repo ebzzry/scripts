@@ -3,9 +3,8 @@
 (uiop:define-package #:scripts/mksum
     (:use #:cl
           #:cl-scripting
-          #:fare-utils
-          #:net.didierverna.clon)
-  (:export #:mksum))
+          #:net.didierverna.clon
+          #:marie))
 
 (in-package #:scripts/mksum)
 
@@ -30,7 +29,7 @@
 
 (defun format-two (arg-1 arg-2)
   "Print the two arguments in aesthetic form."
-  (mof:fmt "~A ~A" arg-1 arg-2))
+  (marie:fmt "~A ~A" arg-1 arg-2))
 
 (defun print-list (list)
   "Output formatted string from LIST."
@@ -128,7 +127,7 @@
 (defun collect-files (directory)
   "Collect valid existing files under DIRECTORY."
   (loop :for file
-        :in (mof:files directory)
+        :in (marie:files directory)
         :when (file-really-exists-p file)
         :collect file))
 
@@ -185,17 +184,16 @@
         (t (cons (format-two (hash (first-context) (first arg)) (first arg))
                  (string-with (rest arg))))))
 
-(exporting-definitions
-  (defun mksum (&rest args)
-    "The top-level function"
-    (cond ((and (get-opt "s") (get-opt "t") (remainder)) (print-exit (string-with (remainder))))
-          ((options-everywhere-p args) (print-exit (weird-with args (first-weird args))))
-          ((valued-string-p) (print-preserve #'string-with))
-          ((and (get-opt "s") (remainder)) (print-exit (string-without (remainder))))
-          ((and (get-opt "t") (remainder)) (print-exit (option-with (remainder))))
-          ((remainder) (print-exit (option-without (remainder))))
-          ((string-flag-p) (print-preserve #'string-without))
-          ((list-flag-p) (print-exit (ironclad:list-all-digests)))
-          (t (print-help)))))
+(defun* (mksum t) (&rest args)
+  "The top-level function"
+  (cond ((and (get-opt "s") (get-opt "t") (remainder)) (print-exit (string-with (remainder))))
+        ((options-everywhere-p args) (print-exit (weird-with args (first-weird args))))
+        ((valued-string-p) (print-preserve #'string-with))
+        ((and (get-opt "s") (remainder)) (print-exit (string-without (remainder))))
+        ((and (get-opt "t") (remainder)) (print-exit (option-with (remainder))))
+        ((remainder) (print-exit (option-without (remainder))))
+        ((string-flag-p) (print-preserve #'string-without))
+        ((list-flag-p) (print-exit (ironclad:list-all-digests)))
+        (t (print-help))))
 
 (register-commands :scripts/mksum)
