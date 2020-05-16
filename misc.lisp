@@ -9,7 +9,7 @@
 
 (in-package #:scripts/misc)
 
-(defun* (create-symlinks t) (src)
+(defun* create-symlinks (src)
   (let* ((directory (or (uiop:getenv "DEST") "~/bin"))
          (destination (uiop:truenamize directory)))
     (uiop:with-current-directory (destination)
@@ -17,7 +17,7 @@
         (run `(ln -sf ,src ,i)))))
   (success))
 
-(defun* (help t) ()
+(defun* help ()
   (format! t "~A commands: ~{~A~^ ~}~%" (get-name) (all-entry-names))
   (success))
 

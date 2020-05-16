@@ -17,11 +17,11 @@
   "/sys/bus/usb/devices/*/product"
   "The pathname wildcard for the USB devices")
 
-(define-constant* +increments+
+(defconstant* +increments+
   10
   "The zoom increments.")
 
-(define-constant* +program+
+(defconstant* +program+
   "v4l2-ctl"
   "The program name to adjust webcam parameters")
 
@@ -84,29 +84,29 @@
   "Return the ID of the integrated camera."
   (search-device-id "Integrated Camera"))
 
-(defun* (enable-integrated-webcam t) ()
+(defun* enable-integrated-webcam ()
   "Enable the integrated webcam."
   (let* ((id (get-integrated-camera-id))
          (fmt (fmt "echo ~A > /sys/bus/usb/drivers/usb/bind" id)))
     (sush fmt)))
 
-(defun* (disable-integrated-webcam t) ()
+(defun* disable-integrated-webcam ()
   "Disable the integrated webcam."
   (let* ((id (get-integrated-camera-id))
          (fmt (fmt "echo ~A > /sys/bus/usb/drivers/usb/unbind" id)))
     (sush fmt)))
 
-(defun* (set-zoom t) (device value)
+(defun* set-zoom (device value)
   "Set a specific zoom value."
   (run-command/i device "-c" (fmt "zoom_absolute=~A" value))
   (current-zoom))
 
-(defun* (reset-zoom t) (&optional (device *device*))
+(defun* reset-zoom (&optional (device *device*))
   "Set the zoom to the default vaule."
   (set-zoom device (get-default-zoom))
   (current-zoom))
 
-(defun* (decrease-zoom t) (&optional (device *device*))
+(defun* decrease-zoom (&optional (device *device*))
   "Decrease the zoom setting."
   (let* ((current (current-zoom))
          (new (- current +increments+))
@@ -115,7 +115,7 @@
                     new)))
     (set-zoom device value)))
 
-(defun* (increase-zoom t) (&optional (device *device*))
+(defun* increase-zoom (&optional (device *device*))
   "Decrease the zoom setting."
   (let* ((current (current-zoom))
          (new (+ current +increments+))
@@ -124,11 +124,11 @@
                     new)))
     (set-zoom device value)))
 
-(defun* (minimum-zoom t) (&optional (device *device*))
+(defun* minimum-zoom (&optional (device *device*))
   "Set the zoom to the lowest setting."
   (set-zoom device (get-minimum-zoom)))
 
-(defun* (maximum-zoom t) (&optional (device *device*))
+(defun* maximum-zoom (&optional (device *device*))
   "Set the zoom to the highest setting."
   (set-zoom device (get-maximum-zoom)))
 
