@@ -45,14 +45,12 @@
    pe "pulseeffects"
    tx "len urxvt"
    ty "terminator"
-   sg2e "steam -applaunch 245170"
    sm "stellarium"
    sp "speedcrunch"
    tb "tor-browser"
    vbm "VBoxManage"
    vl "vlc -I ncurses"
    vl! "vl --random --loop --playlist-autostart"
-   xb "chromium"
    xmind "XMind"
    xo "xournal"
    xs "simple-scan"
@@ -60,6 +58,7 @@
 
 (% bb "brave"
    cb "google-chrome-stable"
+   xb "chromium"
    fb "firefox")
 ($ qb "qutebrowser")
 
@@ -99,18 +98,18 @@
 (defcommand tresorit ()
   (run-with-docker-x
    `("-v" ,(paths "~/.local/share/tresorit/Profiles" "/home/tresorit/.local/share/tresorit/Profiles")
-          "-v" ,(paths "~/.local/share/tresorit/Logs" "/home/tresorit/.local/share/tresorit/Logs")
-          "-v" ,(paths "~/.local/share/tresorit/Reports" "/home/tresorit/.local/share/tresorit/Reports")
-          "-v" ,(paths "~/.local/share/tresorit/Temp" "/home/tresorit/.local/share/tresorit/Temp")
-          "-v" ,(paths "~/.config/Tresorit" "/home/tresorit/.config/Tresorit")
-          "-v" ,(paths "~/Tresors" "/home/tresorit/Tresors"))
+     "-v" ,(paths "~/.local/share/tresorit/Logs" "/home/tresorit/.local/share/tresorit/Logs")
+     "-v" ,(paths "~/.local/share/tresorit/Reports" "/home/tresorit/.local/share/tresorit/Reports")
+     "-v" ,(paths "~/.local/share/tresorit/Temp" "/home/tresorit/.local/share/tresorit/Temp")
+     "-v" ,(paths "~/.config/Tresorit" "/home/tresorit/.config/Tresorit")
+     "-v" ,(paths "~/Tresors" "/home/tresorit/Tresors"))
    "tresorit"))
 
 (defcommand viber ()
   (run-with-docker-x
    `("-v" ,(paths "~/.ViberPC/" "/root/.ViberPC/")
-          "-v" ,(paths (xdg-dir "DESKTOP") "/root/Desktop/")
-          "-v" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/"))
+     "-v" ,(paths (xdg-dir "DESKTOP") "/root/Desktop/")
+     "-v" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/"))
    "viber"))
 
 (defcommand rz! (&rest args)
@@ -157,7 +156,7 @@
   (success))
 
 (defun run-with-chroot (program args)
-  "Run PROGRAM inside the chroot."
+  "Run PROGRAM with ARGS inside the chroot."
   (run/i `("zsh" "-c" ,(cat "cr " (namestring program)) ,args))
   (success))
 

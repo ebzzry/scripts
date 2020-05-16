@@ -16,7 +16,7 @@
       #\space
       (code-char c)))
 
-(defun* (battery-status t) ()
+(defun* battery-status ()
   "Display battery status."
   (let ((base-dir "/sys/class/power_supply/*")
         (exclude-string "/AC/"))
@@ -29,67 +29,67 @@
             :for status = (uiop:read-file-line (uiop:subpathname dir "status"))
             :do (format s "~A: ~A% (~A)~%" battery capacity status)))))
 
-(defun* (wine t) (path &rest args)
+(defun* wine (path &rest args)
   "Run PATH to wine."
   (run/i `(wine ,path ,@args)))
 
-(defun* (err t) (message)
+(defun* err (message)
   "Exit with MESSAGE."
   (die 1 (format t "Error: ~A~%" message)))
 
-(defun* (apply-args t) (function options args)
+(defun* apply-args (function options args)
   "Apply FUNCTION to ARGS."
   (apply function (append (list options) args)))
 
-(defun* (apply-args-1 t) (function args &key (options nil))
+(defun* apply-args-1 (function args &key (options nil))
   "Apply FUNCTION to ARGS."
   (apply function (append options args)))
 
-(defun* (string-first t) (string)
+(defun* string-first (string)
   "Return the first string from STRING."
   (let* ((space (position #\  string :test #'equal)))
     (subseq string 0 space)))
 
-(defun* (run-with-locale t) (locale &rest args)
+(defun* run-with-locale (locale &rest args)
   "Run args with locale set to LOCALE."
   (setf (uiop:getenv "LANG") locale)
   (run/i `(,@(first args)))
   (success))
 
-(defun* (run-with-locale-en t) (args)
+(defun* run-with-locale-en (args)
   "Run args with locale set to "
   (run-with-locale "en_US.UTF-8" args))
 
-(defun* (run-with-nix-system t) (binary &rest args)
+(defun* run-with-nix-system (binary &rest args)
   "Run binary without user paths."
   (setf (uiop:getenv "PATH") "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
   (run/i `(,binary ,@args))
   (success))
 
-(defun* (run-with-xdg t) (binary &rest args)
+(defun* run-with-xdg (binary &rest args)
   "Run binary under a custom XDG_DATA_DIRS path."
   (setf (uiop:getenv "XDG_DATA_DIRS")
         (uiop:native-namestring (marie:home ".local/share/mime")))
   (run/i `(,binary ,@args))
   (success))
 
-(defun* (run-with-wine t) (location)
+(defun* run-with-wine (location)
   "Run LOCATION using Wine."
   (setf (uiop:getenv "WINEDEBUG") "-all")
   (run/i `("wine" ,location))
   (success))
 
-(defun* (run-with-wine-program-files t) (path)
+(defun* run-with-wine-program-files (path)
   "Run PATH under Program Files using Wine."
   (run-with-wine (marie:home (marie:fmt ".wine/drive_c/Program Files/~A" path))))
 
-(defun* (run-with-libgl-always-software t) (binary &rest args)
+(defun* run-with-libgl-always-software (binary &rest args)
   "Run BINARY using some LIBGL flags"
   (setf (uiop:getenv "LIBGL_ALWAYS_SOFTWARE") "1")
   (run/i `(,binary ,@args))
   (success))
 
-(defmacro* (defcommand t) (name args &rest body)
+(defmacro* defcommand (name args &rest body)
   "Define a function with SIGINT handler."
   `(progn
      (defun ,name ,args
@@ -106,24 +106,24 @@
        (cl-scripting:success))
      (export ',name)))
 
-(defun* (run-with-nix-user t) (profile binary args)
+(defun* run-with-nix-user (profile binary args)
   "Run binary under a separate profile."
   (let ((bin (marie:home (marie:fmt ".baf/profiles/~A/bin" profile))))
     (setf (uiop:getenv "PATH") (unix-namestring bin))
     (run/i `(,binary ,@args))
     (success)))
 
-(defun* (with-qt t) (command args)
+(defun* with-qt (command args)
   "Run a program in the QT profile."
   (setf (uiop:getenv "QT_QPA_PLATFORMTHEME") "gtk2")
   (setf (uiop:getenv "QT_STYLE_OVERRIDE") "gtk2")
   (run-with-nix-user "qt" command args))
 
-(defun* (xdg-dir t) (spec)
+(defun* xdg-dir (spec)
   "Return the appropriate XDG directory specified by SPEC."
   (marie:trim-whitespace (inferior-shell:run/s `("xdg-user-dir" ,spec))))
 
-(defun* (run-with-docker-x t) (docker-args name &rest program-args)
+(defun* run-with-docker-x (docker-args name &rest program-args)
   "Run command with Docker."
   (let* ((id (marie:trim-whitespace
               (inferior-shell:run/s
@@ -137,7 +137,7 @@
     (run/i `("xhost" ,(marie:cat "-" permissions))))
   (success))
 
-(defmacro* (% t) (&rest args)
+(defmacro* % (&rest args)
   "Define a normal command runner."
   `(progn
      ,@(loop :for arg :in (partition args 2)
@@ -149,7 +149,7 @@
                                 :error-output t :on-error nil)
                            (success))))))
 
-(defmacro* ($ t) (&rest args)
+(defmacro* $ (&rest args)
   "Define a runner with the QT_QPA environment set to GTK2."
   `(progn
      ,@(loop :for arg :in (partition args 2)
@@ -162,7 +162,7 @@
                                 :error-output t :on-error nil)
                            (success))))))
 
-(defmacro* ($$ t) (&rest args)
+(defmacro* $$ (&rest args)
   "Define a runner with the QT_QPA environment."
   `(progn
      ,@(loop :for arg :in (partition args 2)
@@ -175,7 +175,7 @@
                                 :error-output t :on-error nil)
                            (success))))))
 
-(defmacro* ($% t) (&rest args)
+(defmacro* $% (&rest args)
   "Define a runner without the QT_QPA environment."
   `(progn
      ,@(loop :for arg :in (partition args 2)
@@ -189,7 +189,7 @@
                                 :error-output t :on-error nil)
                            (success))))))
 
-(defmacro* (@ t) (&rest args)
+(defmacro* @ (&rest args)
   "Define a command with wine."
   `(progn
      ,@(loop :for arg :in (partition args 2)
@@ -198,7 +198,7 @@
                         `(defcommand ,name (&rest args)
                            (run-with-wine ,command))))))
 
-(defmacro* (@+ t) (&rest args)
+(defmacro* @+ (&rest args)
   "Define a wine runner."
   `(progn
      ,@(loop :for arg :in (partition args 2)

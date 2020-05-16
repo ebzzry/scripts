@@ -184,7 +184,7 @@
         (t (cons (format-two (hash (first-context) (first arg)) (first arg))
                  (string-with (rest arg))))))
 
-(defun* (mksum t) (&rest args)
+(defun* mksum (&rest args)
   "The top-level function"
   (cond ((and (get-opt "s") (get-opt "t") (remainder)) (print-exit (string-with (remainder))))
         ((options-everywhere-p args) (print-exit (weird-with args (first-weird args))))

@@ -84,7 +84,7 @@
 (defun pgrep-lines (&rest args)
   (run/lines `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args)))
 
-(defun* (ascii-hex-table t) ()
+(defun* ascii-hex-table ()
   (loop :for i :from 32 :to 255
         :do (format t "~A~X~A:~A~A~A~:[ ~;~%~]"
                     *num-mode* i
@@ -94,7 +94,7 @@
                     (zerop (mod (1+ i) 16))))
   (success))
 
-(defun* (ascii-oct-table t) ()
+(defun* ascii-oct-table ()
   (loop :for i :from 32 :to 255
         :do (format t "~A~3O~A~A~A~:[ ~;~%~]"
                     *num-mode* i
@@ -104,15 +104,15 @@
                     (zerop (mod (1+ i) 16))))
   (success))
 
-(defun* (rot13 t) (&rest args)
+(defun* rot13 (&rest args)
   (run/i `(tr "[a-zA-Z]" "[n-za-mN-ZA-M]" ,@args))
   (success))
 
-(defun* (battery t) ()
+(defun* battery ()
   (format t "~A" (battery-status))
   (values))
 
-(defun* (trackpoint t) (arg)
+(defun* trackpoint (arg)
   (let ((device arg))
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation" 1))
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Button" 2))
@@ -120,7 +120,7 @@
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Axes" 7 6 5 4))
     (success)))
 
-(defun* (config-x t) ()
+(defun* config-x ()
   (load-keymap)
   (load-xset)
   (load-resources)
@@ -129,16 +129,16 @@
   (load-pointer)
   (success))
 
-(defun* (pg t) (&rest args)
+(defun* pg (&rest args)
   (run/i `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args))
   (success))
 
-(defun* (pk t) (&rest args)
+(defun* pk (&rest args)
   (let ((numbers (mapcar #'string-first (pgrep-lines (last args)))))
     (loop :for number :in numbers :do (run/i `(kill ,@(butlast args) ,number))))
   (success))
 
-(defun* (pk! t) (&rest args)
+(defun* pk! (&rest args)
   (apply-args-1 'pk args :options '("-9")))
 
 (register-commands :scripts/general)

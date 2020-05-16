@@ -17,30 +17,30 @@
 
 (in-package #:scripts/touchpad)
 
-(defun* (get-id t) ()
+(defun* get-id ()
   (dolist (line (run/lines '(xinput list)))
     (match line
       ((ppcre "(TouchPad|\\sSYNA.*)\\s+id\=([0-9]{1,2})\\s+" _ x)
        (return (values (parse-integer x)))))))
 
-(defun* (id t) (&rest args) (apply #'get-id args))
+(defun* id (&rest args) (apply #'get-id args))
 
 (defun enabledp (&optional (id (get-id)))
   (dolist (line (run/lines `(xinput list-props ,id)))
     (match line
       ((ppcre "Device Enabled\\s+[():0-9]+\\s+([01])" x) (return (equal x "1"))))))
 
-(defun* (toggle t) (&optional (id (get-id)) (on :toggle))
+(defun* toggle (&optional (id (get-id)) (on :toggle))
   (let ((state (ecase on
                  ((:toggle) (not (enabledp id)))
                  ((nil t) on))))
     (run `(xinput ,(if state 'enable 'disable) ,id)))
   (success))
 
-(defun* (disable t) (&optional (id (get-id)))
+(defun* disable (&optional (id (get-id)))
   (toggle id nil))
 
-(defun* (enable t) (&optional (id (get-id)))
+(defun* enable (&optional (id (get-id)))
   (toggle id t))
 
 (defun main (argv) ;; TODO: use command-line-arguments, or CLON
