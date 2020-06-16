@@ -6,6 +6,7 @@
         #:cl-scripting
         #:optima
         #:optima.ppcre
+        #:scripts/common
         #:marie))
 
 (in-package #:scripts/general)
@@ -112,7 +113,7 @@
   (format t "~A" (battery-status))
   (values))
 
-(defun* trackpoint (arg)
+(defun trackpoint (arg)
   (let ((device arg))
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation" 1))
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Button" 2))
@@ -124,7 +125,7 @@
   (load-keymap)
   (load-xset)
   (load-resources)
-  (load-touchring)
+  ;(load-touchring)
   (load-hostname)
   (load-pointer)
   (success))

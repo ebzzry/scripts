@@ -4,6 +4,7 @@
   (:use #:cl
         #:inferior-shell
         #:cl-scripting
+        #:scripts/unix
         #:marie))
 
 (in-package #:scripts/touchring)
