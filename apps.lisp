@@ -23,19 +23,15 @@
    rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\""
    rm@ "shred -vfzun 10"
    s "sudo"
+   sbcl! "rl shell lisp sbcl"
    us "usync --one-way --prefer-local"
    vg "vagrant"
    xf "xmllint --format"
    zx "zsh -c")
 
-(% ae "aegisub"
-   au "audacity"
-   av "ahoviewer"
+(% av "ahoviewer"
    b "gqview"
-   bm "blueman-manager"
-   cv "guvcview"
    dc "Discord"
-   earth "googleearth"
    ev "evince"
    fs "gtk2fontsel"
    lx "lxappearance"
@@ -45,9 +41,6 @@
    pe "pulseeffects"
    tx "len urxvt"
    ty "terminator"
-   sm "stellarium"
-   sp "speedcrunch"
-   tb "tor-browser"
    vbm "VBoxManage"
    vl "vlc -I ncurses"
    vl! "vl --random --loop --playlist-autostart"
@@ -58,7 +51,6 @@
 
 (% bb "brave"
    cb "google-chrome-stable"
-   xb "chromium"
    fb "firefox")
 ($ qb "qutebrowser")
 
@@ -66,8 +58,6 @@
    eb "ebook-viewer"
    kp "keepassxc"
    kt "krita"
-   mb "mumble"
-   ok "okular"
    qbt "qbittorrent"
    qt4 "qtconfig"
    qt5 "qt5ct"
@@ -175,16 +165,15 @@
   (run-with-chroot "edrawmax" args))
 
 (defcommand shell (&rest args)
-  (destructuring-bind (base &rest arguments)
+  (destructuring-bind (base &rest command)
       args
     (let* ((cwd (uiop:getcwd))
-           (path (cat (xdg-dir "TEMPLATES") "/shell/"))
-           (directory (cat path base))
-           (default-command (or arguments "bash")))
+           (path (uiop:ensure-directory-pathname
+                  (uiop:merge-pathnames* "shell" (pathname (xdg-dir "TEMPLATES")))))
+           (directory (uiop:merge-pathnames* base path)))
       (when (uiop:directory-exists-p directory)
-        (format t "Loading shell from ~A...~%" directory)
         (uiop:chdir directory)
-        (run/i `("baf" "shell" "--run" ,(format nil "sh -c \"cd ~A; ~A\"" cwd default-command)))))
+        (run/i `("baf" "shell" "--run" ,(fmt "cd ~A; ~{'~A'~^ ~}" cwd command)))))
     (success)))
 
 (defvar *smallcaps-alist*
