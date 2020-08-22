@@ -1,17 +1,17 @@
 ;;;; mksum.lisp
 
 (uiop:define-package #:scripts/mksum
-    (:use #:cl
-          #:cl-scripting
-          #:net.didierverna.clon
-          #:marie))
+  (:use #:cl
+        #:cl-scripting
+        #:net.didierverna.clon
+        #:marie))
 
 (in-package #:scripts/mksum)
 
 (defvar *default-hash* :sha256 "Default hash function")
 
 (defsynopsis (:postfix "(FILE...|STRING)")
-  (text :contents "Prints the checksums of files and directories. Uses SHA256 by default.
+    (text :contents "Prints the checksums of files and directories. Uses SHA256 by default.
 ")
   (group (:header "Options:")
          (flag :short-name "h" :long-name "help"
@@ -25,7 +25,7 @@
 
 (defun concat (&rest args)
   "Concatenate strings."
-  (reduce #'(lambda (x y) (concatenate 'string x y)) args))
+  (reduce (λ (x y) (cat x y)) args))
 
 (defun format-two (arg-1 arg-2)
   "Print the two arguments in aesthetic form."
@@ -142,15 +142,15 @@
 (defun list-dir-checksum (type directory)
   "List the TYPE checksums of the files inside DIRECTORY."
   (mapcar #'first
-          (mapcar #'(lambda (string) (cl-ppcre:split #\space string))
-                  (mapcar #'(lambda (file) (file-checksum type file))
+          (mapcar (λ (string) (cl-ppcre:split #\space string))
+                  (mapcar (λ (file) (file-checksum type file))
                           (collect-files directory)))))
 
 (defun directory-checksum (type directory)
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
   (when (uiop:directory-exists-p directory)
     (let* ((path (uiop:truenamize directory))
-           (value (reduce #'(lambda (string-1 string-2) (concat string-1 string-2))
+           (value (reduce (λ (string-1 string-2) (concat string-1 string-2))
                           (list-dir-checksum type path))))
       (format-two (hash type value) path))))
 
@@ -184,7 +184,7 @@
         (t (cons (format-two (hash (first-context) (first arg)) (first arg))
                  (string-with (rest arg))))))
 
-(defun* mksum (&rest args)
+(def mksum (&rest args)
   "The top-level function"
   (cond ((and (get-opt "s") (get-opt "t") (remainder)) (print-exit (string-with (remainder))))
         ((options-everywhere-p args) (print-exit (weird-with args (first-weird args))))
