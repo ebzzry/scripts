@@ -24,11 +24,11 @@
 (% lh "l -H")
 (% l1 "l -1")
 
-(defun* lv (&rest args)
+(def lv (&rest args)
   (run/i `(pipe (l ,@args) (less)))
   (success))
 
-(defun* sush (&rest args)
+(def sush (&rest args)
   (run/i `(sudo "sh" "-c" ,(fmt "~{~A~^ ~}" args)))
   (success))
 

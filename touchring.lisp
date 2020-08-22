@@ -52,7 +52,7 @@
   "Return the name of the touchring by type NAME."
   (let* ((lines (inferior-shell:run/lines `(xsetwacom list devices)))
          (device (concatenate 'string "type: " (string-upcase type)))
-         (line (first (remove-if-not #'(lambda (line) (search device line :test #'string=))
+         (line (first (remove-if-not (λ (line) (search device line :test #'string=))
                                      lines))))
     (cl-ppcre:regex-replace "(^.*Pad pad).*"  line "\\1")))
 
@@ -60,33 +60,33 @@
   "Return the pad name of touchring detected."
   (touchring-device-name "pad"))
 
-(defun* touchring-status ()
+(def touchring-status ()
   "Return the current value of the LED file."
   (let ((value (uiop:read-file-form (touchring-led-file))))
     value))
 
-(defun* touchring-map (&rest args)
+(def touchring-map (&rest args)
   "Bind a button using xsetwacom."
   (let ((name (touchring-pad-name)))
     (run/i `(xsetwacom "set" ,name ,@args))
     (success)))
 
-(defun* touchring-bind (&optional (key *touchring-selector-key*))
+(def touchring-bind (&optional (key *touchring-selector-key*))
   "Bind the middle selector key to the default value."
   (let ((value (fmt "key ~A" key)))
     (touchring-map "Button" "1" value)))
 
-(defun* touchring-mode (value)
+(def touchring-mode (value)
   "Use sudo to set the value of the LED file."
   (let ((command (fmt "echo ~A > ~A" value (touchring-led-file))))
     (sush command)))
 
-(defun* touchring-actions (action-1 action-2)
+(def touchring-actions (action-1 action-2)
   "Bind actions to the ring."
   (touchring-map "AbsWheelUp" action-1)
   (touchring-map "AbsWheelDown" action-2))
 
-(defun* touchring-set (&optional mode)
+(def touchring-set (&optional mode)
   "Change the behavior of the ring depending on the current LED value."
   (when mode (touchring-mode mode))
   (apply #'touchring-actions (touchring-config-value (touchring-status)))

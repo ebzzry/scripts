@@ -14,7 +14,6 @@
 (defvar +screenshots-dir+ (home ".screenshots"))
 
 (% bt "bluetoothctl"
-   dv "gdrive upload --recursive"
    e "emacsclient -nw"
    gpg "gpg2"
    par "parallel"
@@ -62,13 +61,16 @@
    qt4 "qtconfig"
    qt5 "qt5ct"
    qtx "qtox"
+   qj "qjoypad --notray"
    rd "qt-recordMyDesktop"
    sw "Write"
    vp "vlc"
-   td "telegram-desktop")
+   wire "sudo -Hi QT_QPA_PLATFORMTHEME=gtk2 wireshark"
+   td "telegram-desktop"
+   vb "VirtualBox")
 
 (@ fightcade "/pub/ludoj/emu/fightcade/FightCade.exe"
-   ui "uninstaller")
+             ui "uninstaller")
 
 (@+ ni "Neat Image Standalone/NeatImage.exe"
     xu "Xenu/Xenu.exe")
@@ -76,7 +78,6 @@
 (defcommand lc (&rest args) (run-with-locale "C" args))
 (defcommand len (&rest args) (run-with-locale "en_US.UTF-8" args))
 (defcommand leo (&rest args) (run-with-locale "eo.utf8" args))
-(defcommand vb () (run-with-nix-system "VirtualBox"))
 
 (defun paths (x y)
   "Merge path namestrings."
@@ -88,18 +89,18 @@
 (defcommand tresorit ()
   (run-with-docker-x
    `("-v" ,(paths "~/.local/share/tresorit/Profiles" "/home/tresorit/.local/share/tresorit/Profiles")
-     "-v" ,(paths "~/.local/share/tresorit/Logs" "/home/tresorit/.local/share/tresorit/Logs")
-     "-v" ,(paths "~/.local/share/tresorit/Reports" "/home/tresorit/.local/share/tresorit/Reports")
-     "-v" ,(paths "~/.local/share/tresorit/Temp" "/home/tresorit/.local/share/tresorit/Temp")
-     "-v" ,(paths "~/.config/Tresorit" "/home/tresorit/.config/Tresorit")
-     "-v" ,(paths "~/Tresors" "/home/tresorit/Tresors"))
+          "-v" ,(paths "~/.local/share/tresorit/Logs" "/home/tresorit/.local/share/tresorit/Logs")
+          "-v" ,(paths "~/.local/share/tresorit/Reports" "/home/tresorit/.local/share/tresorit/Reports")
+          "-v" ,(paths "~/.local/share/tresorit/Temp" "/home/tresorit/.local/share/tresorit/Temp")
+          "-v" ,(paths "~/.config/Tresorit" "/home/tresorit/.config/Tresorit")
+          "-v" ,(paths "~/Tresors" "/home/tresorit/Tresors"))
    "tresorit"))
 
 (defcommand viber ()
   (run-with-docker-x
    `("-v" ,(paths "~/.ViberPC/" "/root/.ViberPC/")
-     "-v" ,(paths (xdg-dir "DESKTOP") "/root/Desktop/")
-     "-v" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/"))
+          "-v" ,(paths (xdg-dir "DESKTOP") "/root/Desktop/")
+          "-v" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/"))
    "viber"))
 
 (defcommand rz! (&rest args)
@@ -142,7 +143,7 @@
 (defcommand ds (&rest args)
   (run `("sudo" "pkill" "-9" "ds4drv") :output :interactive :on-error nil)
   (run `("sudo" "rm" "-f" "/tmp/ds4drv.pid") :output :interactive :on-error nil)
-  (run/i `("sudo" "ds4drv" "--daemon" "--config" ,(expand-pathname "~/.config/ds4drv.conf")))
+  (run/i `("sudo" "ds4drv" "--config" ,(expand-pathname "~/.config/ds4drv.conf")))
   (success))
 
 (defun run-with-chroot (program args)
@@ -170,10 +171,11 @@
     (let* ((cwd (uiop:getcwd))
            (path (uiop:ensure-directory-pathname
                   (uiop:merge-pathnames* "shell" (pathname (xdg-dir "TEMPLATES")))))
-           (directory (uiop:merge-pathnames* base path)))
+           (directory (uiop:merge-pathnames* base path))
+           (cmd (or command '("bash"))))
       (when (uiop:directory-exists-p directory)
         (uiop:chdir directory)
-        (run/i `("baf" "shell" "--run" ,(fmt "cd ~A; ~{'~A'~^ ~}" cwd command)))))
+        (run/i `("baf" "shell" "--run" ,(fmt "cd ~A; ~{'~A'~^ ~}" cwd cmd)))))
     (success)))
 
 (defvar *smallcaps-alist*
@@ -206,13 +208,13 @@
 
 (defcommand smallcaps (text)
   "Output the smallcaps version of TEXT."
-  (labels ((fn (base)
-             "Return the smallcaps version of BASE."
-             (let ((value (cdr (assoc base *smallcaps-alist*))))
-               (if (and value (lower-case-p base))
-                   value
-                   base))))
-    (loop :for char :across text :do (format t "~A" (fn char)))
-    (success)))
+  (flet* ((fn (base)
+              "Return the smallcaps version of BASE."
+              (let ((value (cdr (assoc base *smallcaps-alist*))))
+                (if (and value (lower-case-p base))
+                    value
+                    base))))
+         (loop :for char :across text :do (format t "~A" (fn char)))
+         (success)))
 
 (register-commands :scripts/apps)

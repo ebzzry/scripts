@@ -17,11 +17,11 @@
   "/sys/bus/usb/devices/*/product"
   "The pathname wildcard for the USB devices")
 
-(defconstant* +increments+
+(defc +increments+
   10
   "The zoom increments.")
 
-(defconstant* +program+
+(defc +program+
   "v4l2-ctl"
   "The program name to adjust webcam parameters")
 
@@ -40,8 +40,8 @@
 (defun zoom-settings (&optional (device *device*))
   "Return the zoom settings from DEVICE."
   (uiop:split-string
-   (first (remove-if-not #'(lambda (line)
-                             (search "zoom_absolute" line))
+   (first (remove-if-not (λ (line)
+                              (search "zoom_absolute" line))
                          (inferior-shell:run/lines
                           `("v4l2-ctl" "-d" ,device "-l"))))
    :separator '(#\space)))
@@ -52,7 +52,7 @@
    (parse-integer
     (cl-ppcre:regex-replace
      (fmt "~A=(.*)" type)
-     (first (remove-if-not #'(lambda (text) (search type text)) (zoom-settings device)))
+     (first (remove-if-not (λ (text) (search type text)) (zoom-settings device)))
      "\\1"))))
 
 (defun get-default-zoom (&optional (device *device*))
@@ -70,8 +70,8 @@
 (defun search-device-id (name)
   "Return the device ID of device with NAME."
   (let* ((files (directory *directory-wildcard*))
-         (entry (first (remove-if-not #'(lambda (device)
-                                          (string-equal name (uiop:read-file-line device)))
+         (entry (first (remove-if-not (λ (device)
+                                           (string-equal name (uiop:read-file-line device)))
                                       files)))
          (strings (remove-if #'empty-string-p
                              (cl-ppcre:split #\/
@@ -84,29 +84,29 @@
   "Return the ID of the integrated camera."
   (search-device-id "Integrated Camera"))
 
-(defun* enable-integrated-webcam ()
+(def enable-integrated-webcam ()
   "Enable the integrated webcam."
   (let* ((id (get-integrated-camera-id))
          (fmt (fmt "echo ~A > /sys/bus/usb/drivers/usb/bind" id)))
     (sush fmt)))
 
-(defun* disable-integrated-webcam ()
+(def disable-integrated-webcam ()
   "Disable the integrated webcam."
   (let* ((id (get-integrated-camera-id))
          (fmt (fmt "echo ~A > /sys/bus/usb/drivers/usb/unbind" id)))
     (sush fmt)))
 
-(defun* set-zoom (device value)
+(def set-zoom (device value)
   "Set a specific zoom value."
   (run-command/i device "-c" (fmt "zoom_absolute=~A" value))
   (current-zoom))
 
-(defun* reset-zoom (&optional (device *device*))
+(def reset-zoom (&optional (device *device*))
   "Set the zoom to the default vaule."
   (set-zoom device (get-default-zoom))
   (current-zoom))
 
-(defun* decrease-zoom (&optional (device *device*))
+(def decrease-zoom (&optional (device *device*))
   "Decrease the zoom setting."
   (let* ((current (current-zoom))
          (new (- current +increments+))
@@ -115,7 +115,7 @@
                     new)))
     (set-zoom device value)))
 
-(defun* increase-zoom (&optional (device *device*))
+(def increase-zoom (&optional (device *device*))
   "Decrease the zoom setting."
   (let* ((current (current-zoom))
          (new (+ current +increments+))
@@ -124,11 +124,11 @@
                     new)))
     (set-zoom device value)))
 
-(defun* minimum-zoom (&optional (device *device*))
+(def minimum-zoom (&optional (device *device*))
   "Set the zoom to the lowest setting."
   (set-zoom device (get-minimum-zoom)))
 
-(defun* maximum-zoom (&optional (device *device*))
+(def maximum-zoom (&optional (device *device*))
   "Set the zoom to the highest setting."
   (set-zoom device (get-maximum-zoom)))
 

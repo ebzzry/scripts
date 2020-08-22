@@ -21,8 +21,8 @@
        (cl-ppcre:regex-replace
         (cl-ppcre:create-scanner ".*id=(.*?)	+.*")
         (first (remove-if (complement
-                           #'(lambda (line)
-                               (and (search name line) (search (fmt "slave  ~A" type) line))))
+                           (λ (line)
+                                (and (search name line) (search (fmt "slave  ~A" type) line))))
                           (uiop:run-program '("xinput" "list") :output :lines))) "\\1")))
 
 (defun xdev (name type command &rest args)
@@ -38,7 +38,7 @@
   (success))
 
 (defun load-xmodmap (device)
-  (if (remove-if (complement #'(lambda (line) (search device line)))
+  (if (remove-if (complement (λ (line) (search device line)))
                  (uiop:run-program '("lsusb") :output :lines))
       (xmap "advantage.dv")
       (if (string-equal (uiop:hostname) "vulpo")
@@ -85,7 +85,7 @@
 (defun pgrep-lines (&rest args)
   (run/lines `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args)))
 
-(defun* ascii-hex-table ()
+(def ascii-hex-table ()
   (loop :for i :from 32 :to 255
         :do (format t "~A~X~A:~A~A~A~:[ ~;~%~]"
                     *num-mode* i
@@ -95,7 +95,7 @@
                     (zerop (mod (1+ i) 16))))
   (success))
 
-(defun* ascii-oct-table ()
+(def ascii-oct-table ()
   (loop :for i :from 32 :to 255
         :do (format t "~A~3O~A~A~A~:[ ~;~%~]"
                     *num-mode* i
@@ -105,11 +105,11 @@
                     (zerop (mod (1+ i) 16))))
   (success))
 
-(defun* rot13 (&rest args)
+(def rot13 (&rest args)
   (run/i `(tr "[a-zA-Z]" "[n-za-mN-ZA-M]" ,@args))
   (success))
 
-(defun* battery ()
+(def battery ()
   (format t "~A" (battery-status))
   (values))
 
@@ -121,25 +121,26 @@
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Axes" 7 6 5 4))
     (success)))
 
-(defun* config-x ()
+(def config-x ()
   (load-keymap)
   (load-xset)
   (load-resources)
-  ;(load-touchring)
+                                        ;(load-touchring)
   (load-hostname)
   (load-pointer)
   (success))
 
-(defun* pg (&rest args)
+(def pg (&rest args)
   (run/i `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args))
   (success))
 
-(defun* pk (&rest args)
+(def pk (&rest args)
   (let ((numbers (mapcar #'string-first (pgrep-lines (last args)))))
-    (loop :for number :in numbers :do (run/i `(kill ,@(butlast args) ,number))))
+    (loop :for number :in numbers
+          :do (run/i `(kill ,@(butlast args) ,number))))
   (success))
 
-(defun* pk! (&rest args)
+(def pk! (&rest args)
   (apply-args-1 'pk args :options '("-9")))
 
 (register-commands :scripts/general)
