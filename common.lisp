@@ -121,11 +121,11 @@
 
 (def xdg-dir (spec)
   "Return the appropriate XDG directory specified by SPEC."
-  (marie:trim-whitespace (inferior-shell:run/s `("xdg-user-dir" ,spec))))
+  (string-trim '(#\space #\newline) (inferior-shell:run/s `("xdg-user-dir" ,spec))))
 
 (def run-with-docker-x (docker-args name &rest program-args)
   "Run command with Docker."
-  (let* ((id (marie:trim-whitespace
+  (let* ((id (string-trim '(#\space #\newline)
               (inferior-shell:run/s
                `("docker" "inspect" "--format={{ .Config.Hostname }}" ,name))))
          (permissions (marie:cat "local:" id)))
