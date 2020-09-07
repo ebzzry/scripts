@@ -209,12 +209,12 @@
 (defcommand smallcaps (text)
   "Output the smallcaps version of TEXT."
   (flet* ((fn (base)
-              "Return the smallcaps version of BASE."
-              (let ((value (cdr (assoc base *smallcaps-alist*))))
-                (if (and value (lower-case-p base))
-                    value
-                    base))))
-         (loop :for char :across text :do (format t "~A" (fn char)))
-         (success)))
+            "Return the smallcaps version of BASE."
+            (let ((value (cdr (assoc base *smallcaps-alist*))))
+              (if (and value (lower-case-p base))
+                  value
+                  base))))
+    (loop :for char :across text :do (format t "~A" (fn char)))
+    (success)))
 
 (register-commands :scripts/apps)
