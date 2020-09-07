@@ -22,7 +22,7 @@
         (exclude-string "/AC/"))
     (uiop:with-output (s nil)
       (loop :for dir :in (remove-if (λ (path)
-                                         (search exclude-string (uiop:native-namestring path)))
+                                      (search exclude-string (uiop:native-namestring path)))
                                     (uiop:directory* base-dir))
             :for battery = (first (last (pathname-directory dir)))
             :for capacity = (uiop:read-file-line (uiop:subpathname dir "capacity"))
@@ -30,7 +30,7 @@
             :do (format s "~A: ~A% (~A)~%" battery capacity status)))))
 
 (def wine (path &rest args)
-  "Run PATH to wine."
+  "Run PATH with wine."
   (run/i `(wine ,path ,@args)))
 
 (def err (message)
@@ -126,8 +126,8 @@
 (def run-with-docker-x (docker-args name &rest program-args)
   "Run command with Docker."
   (let* ((id (string-trim '(#\space #\newline)
-              (inferior-shell:run/s
-               `("docker" "inspect" "--format={{ .Config.Hostname }}" ,name))))
+                          (inferior-shell:run/s
+                           `("docker" "inspect" "--format={{ .Config.Hostname }}" ,name))))
          (permissions (marie:cat "local:" id)))
     (run/i `("xhost" ,(marie:cat "+" permissions)))
     (run/i `("docker" "run" "--rm" "-e" "DISPLAY" "--name" ,name

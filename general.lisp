@@ -22,7 +22,7 @@
         (cl-ppcre:create-scanner ".*id=(.*?)	+.*")
         (first (remove-if (complement
                            (λ (line)
-                                (and (search name line) (search (fmt "slave  ~A" type) line))))
+                             (and (search name line) (search (fmt "slave  ~A" type) line))))
                           (uiop:run-program '("xinput" "list") :output :lines))) "\\1")))
 
 (defun xdev (name type command &rest args)

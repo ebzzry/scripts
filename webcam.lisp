@@ -41,7 +41,7 @@
   "Return the zoom settings from DEVICE."
   (uiop:split-string
    (first (remove-if-not (λ (line)
-                              (search "zoom_absolute" line))
+                           (search "zoom_absolute" line))
                          (inferior-shell:run/lines
                           `("v4l2-ctl" "-d" ,device "-l"))))
    :separator '(#\space)))
@@ -71,7 +71,7 @@
   "Return the device ID of device with NAME."
   (let* ((files (directory *directory-wildcard*))
          (entry (first (remove-if-not (λ (device)
-                                           (string-equal name (uiop:read-file-line device)))
+                                        (string-equal name (uiop:read-file-line device)))
                                       files)))
          (strings (remove-if #'empty-string-p
                              (cl-ppcre:split #\/
