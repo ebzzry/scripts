@@ -34,7 +34,6 @@
    ev "evince"
    fs "gtk2fontsel"
    lx "lxappearance"
-   mx "len wxmaxima"
    p "mpv --mute"
    pc "pavucontrol"
    pe "pulseeffects"
@@ -70,7 +69,7 @@
    vb "VirtualBox")
 
 (@ fightcade "/pub/ludoj/emu/fightcade/FightCade.exe"
-             ui "uninstaller")
+   ui "uninstaller")
 
 (@+ ni "Neat Image Standalone/NeatImage.exe"
     xu "Xenu/Xenu.exe")
@@ -166,16 +165,19 @@
   (run-with-chroot "edrawmax" args))
 
 (defcommand shell (&rest args)
-  (destructuring-bind (base &rest command)
+  (destructuring-bind (&optional base &rest command)
       args
-    (let* ((cwd (uiop:getcwd))
-           (path (uiop:ensure-directory-pathname
-                  (uiop:merge-pathnames* "shell" (pathname (xdg-dir "TEMPLATES")))))
-           (directory (uiop:merge-pathnames* base path))
-           (cmd (or command '("bash"))))
-      (when (uiop:directory-exists-p directory)
-        (uiop:chdir directory)
-        (run/i `("baf" "shell" "--run" ,(fmt "cd ~A; ~{'~A'~^ ~}" cwd cmd)))))
+    (cond
+      ((null args)
+       (run/i `("baf" "shell")))
+      (t (let* ((cwd (uiop:getcwd))
+                (path (uiop:ensure-directory-pathname
+                       (uiop:merge-pathnames* "shell" (pathname (xdg-dir "TEMPLATES")))))
+                (directory (uiop:merge-pathnames* base path))
+                (cmd (or command '("bash"))))
+           (when (uiop:directory-exists-p directory)
+             (uiop:chdir directory)
+             (run/i `("baf" "shell" "--run" ,(fmt "cd ~A; ~{'~A'~^ ~}" cwd cmd)))))))
     (success)))
 
 (defvar *smallcaps-alist*
