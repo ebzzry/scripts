@@ -30,7 +30,6 @@
 
 (% av "ahoviewer"
    b "gqview"
-   dc "Discord"
    ev "evince"
    fs "gtk2fontsel"
    lx "lxappearance"
@@ -57,6 +56,7 @@
    kp "keepassxc"
    kt "krita"
    qbt "qbittorrent"
+   qeq "qpaeq"
    qt4 "qtconfig"
    qt5 "qt5ct"
    qtx "qtox"
@@ -156,10 +156,10 @@
   (success))
 
 (defcommand lispworks (&rest args)
-  (run-with-chroot "/usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux" args))
+  (run-with-chroot "/home/pub/hejmo/apoj/lispworks/save-image/lispworks" args))
 
-(defcommand lispworks-cli (&rest args)
-  (run-with-chroot "/home/pub/hejmo/apoj/lispworks/save-image/lispworks-cli" args))
+(defcommand lispworks-gui (&rest args)
+  (run-with-chroot "/usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux" args))
 
 (defcommand edraw (&rest args)
   (run-with-chroot "edrawmax" args))
