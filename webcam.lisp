@@ -23,7 +23,7 @@
 
 (defc +program+
   "v4l2-ctl"
-  "The program name to adjust webcam parameters")
+  "The program name used to adjust webcam parameters")
 
 (defun run-command/i (device &rest args)
   (inferior-shell:run/i `(,+program+ "-d" ,device ,@args)))
@@ -77,7 +77,7 @@
                              (cl-ppcre:split #\/
                                              (directory-namestring
                                               (uiop:native-namestring entry)))))
-         (id (last* strings)))
+         (id (end strings)))
     id))
 
 (defun get-integrated-camera-id ()

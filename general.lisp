@@ -125,7 +125,7 @@
   (load-keymap)
   (load-xset)
   (load-resources)
-                                        ;(load-touchring)
+  ;;(load-touchring)
   (load-hostname)
   (load-pointer)
   (success))
