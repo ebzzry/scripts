@@ -51,6 +51,7 @@
 
 (defun load-xset ()
   (run/i `("xset" "-dpms"))
+  (run/i `("xset" "m" "5" "1"))
   (run/i `("xset" "s" "off")))
 
 (defun load-touchring ()
@@ -121,7 +122,7 @@
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Axes" 7 6 5 4))
     (success)))
 
-(def config-x ()
+(def (config-x x) ()
   (load-keymap)
   (load-xset)
   (load-resources)
