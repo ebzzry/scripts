@@ -11,7 +11,7 @@
 
 (in-package #:scripts/apps)
 
-(defvar +screenshots-dir+ (home ".screenshots"))
+(defc +screenshots-dir+ (home ".screenshots"))
 
 (% bt "bluetoothctl"
    e "emacsclient -nw"
@@ -30,6 +30,7 @@
 
 (% av "ahoviewer"
    b "gqview"
+   bs "inkview"
    ev "evince"
    fs "gtk2fontsel"
    lx "lxappearance"
