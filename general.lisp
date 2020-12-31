@@ -51,7 +51,7 @@
 
 (defun load-xset ()
   (run/i `("xset" "-dpms"))
-  (run/i `("xset" "m" "5" "1"))
+  (run/i `("xset" "m" "4" "2"))
   (run/i `("xset" "s" "off")))
 
 (defun load-touchring ()
