@@ -50,24 +50,26 @@
 (% bb "brave"
    cb "google-chrome-stable"
    fb "firefox")
-($ qb "qutebrowser")
 
 ($ ca "calibre"
+   dj "djview"
    eb "ebook-viewer"
    kp "keepassxc"
    kt "krita"
    qbt "qbittorrent"
    qeq "qpaeq"
    qt4 "qtconfig"
-   qt5 "qt5ct"
    qtx "qtox"
    qj "qjoypad --notray"
    rd "qt-recordMyDesktop"
    sw "Write"
-   vp "vlc"
    wire "sudo -Hi QT_QPA_PLATFORMTHEME=gtk2 wireshark"
    td "telegram-desktop"
    vb "VirtualBox")
+
+($$ vp "vlc"
+    qb "qutebrowser"
+    qt5 "qt5ct")
 
 (@ fightcade "/pub/ludoj/emu/fightcade/FightCade.exe"
    ui "uninstaller")
