@@ -49,11 +49,13 @@
 
 (% bb "brave"
    cb "google-chrome-stable"
-   fb "firefox")
+   fb "firefox"
+   tb "tor-browser")
 
 ($ ca "calibre"
    dj "djview"
    eb "ebook-viewer"
+   kd "len kdenlive"
    kp "keepassxc"
    kt "krita"
    qbt "qbittorrent"
