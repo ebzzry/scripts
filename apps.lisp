@@ -228,4 +228,8 @@
     (loop :for char :across text :do (format t "~A" (fn char)))
     (success)))
 
+(defcommand gu (&rest args)
+  (let ((device (scripts/webcam:webcam "default-device")))
+    (run/i `("guvcview" "-d" ,device))))
+
 (register-commands :scripts/apps)

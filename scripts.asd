@@ -19,10 +19,10 @@
                "scripts/misc"
                "scripts/touchpad"
                "scripts/general"
+               "scripts/webcam"
                "scripts/apps"
                "scripts/unix"
                "scripts/mksum"
-               "scripts/webcam"
                "scripts/touchring"
                "scripts/main"
                "scripts/driver"))
