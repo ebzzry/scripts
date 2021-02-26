@@ -23,15 +23,16 @@
 
 (defun webcam-device (regex)
   "Return the webcam device for REGEX."
-  (let ((devices (webcam-devices)))
-    (string-trim '(#\Space #\Tab #\Newline)
-                 (nth (1+ (position-if (λ (entry)
-                                         (cl-ppcre:scan regex entry))
-                                       devices))
-                      devices))))
+  (let* ((devices (webcam-devices))
+         (position (position-if (λ (entry)
+                                  (cl-ppcre:scan regex entry))
+                                devices)))
+    (when position
+      (string-trim '(#\Space #\Tab #\Newline)
+                   (nth (1+ position) devices)))))
 
 (defparameter *default-device*
-  (webcam-device *webcam-regex*)
+  (or (webcam-device *webcam-regex*) "/dev/video0")
   "The default webcam device.")
 
 (defparameter *directory-wildcard*
