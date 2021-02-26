@@ -37,7 +37,7 @@
    p "mpv --mute"
    pc "pavucontrol"
    pe "pulseeffects"
-   tx "len urxvt"
+   tx "termite"
    ty "terminator"
    vbm "VBoxManage"
    vl "vlc -I ncurses"
