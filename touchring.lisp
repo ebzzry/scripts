@@ -2,7 +2,6 @@
 
 (uiop:define-package #:scripts/touchring
   (:use #:cl
-        #:inferior-shell
         #:cl-scripting
         #:scripts/unix
         #:marie))
@@ -50,7 +49,7 @@
 
 (defun touchring-device-name (type)
   "Return the name of the touchring by type NAME."
-  (let* ((lines (inferior-shell:run/lines `(xsetwacom list devices)))
+  (let* ((lines (inferior-shell:run/lines `("xsetwacom" "list" "devices")))
          (device (concatenate 'string "type: " (string-upcase type)))
          (line (first (remove-if-not (λ (line) (search device line :test #'string=))
                                      lines))))
@@ -68,7 +67,7 @@
 (def touchring-map (&rest args)
   "Bind a button using xsetwacom."
   (let ((name (touchring-pad-name)))
-    (run/i `(xsetwacom "set" ,name ,@args))
+    (inferior-shell:run/i `("xsetwacom" "set" ,name ,@args))
     (success)))
 
 (def touchring-bind (&optional (key *touchring-selector-key*))

@@ -32,7 +32,8 @@
                    (nth (1+ position) devices)))))
 
 (defparameter *default-device*
-  (or (webcam-device *webcam-regex*) "/dev/video0")
+  ;; (or (webcam-device *webcam-regex*) "/dev/video0")
+  "/dev/video0"
   "The default webcam device.")
 
 (defparameter *directory-wildcard*

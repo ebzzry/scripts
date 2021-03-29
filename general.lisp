@@ -37,7 +37,15 @@
   (run/i `("xmodmap" ,(home (fmt "hejmo/ktp/xmodmap/~A.xmap" keymap))))
   (success))
 
-(defun load-xmodmap (device)
+(defun trackpoint (arg)
+  (let ((device arg))
+    (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation" 1))
+    (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Button" 2))
+    (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Timeout" 200))
+    (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Axes" 6 7 4 5))
+    (success)))
+
+(defun load-keymap (&optional (device "Kinesis Advantage PRO MPC/USB Keyboard"))
   (if (remove-if (complement (λ (line) (search device line)))
                  (uiop:run-program '("lsusb") :output :lines))
       (xmap "advantage.dv")
@@ -45,9 +53,6 @@
           (xmap "thinkpad.dv")
           (xmap "aliaj.dv")))
   (success))
-
-(defun load-keymap ()
-  (load-xmodmap "Kinesis Advantage PRO MPC/USB Keyboard"))
 
 (defun load-xset ()
   (run/i `("xset" "-dpms"))
@@ -65,7 +70,11 @@
     (run/i (append (list "touchring-map" "Button") cmd))))
 
 (defun load-resources ()
-  (run `(xrdb ,(home ".Xresources")) :output :interactive :input :interactive :error-output nil :on-error nil)
+  (run `(xrdb ,(home ".Xresources"))
+       :output :interactive
+       :input :interactive
+       :error-output nil
+       :on-error nil)
   (success))
 
 (defun load-hostname ()
@@ -75,6 +84,7 @@
       ((ppcre "vulpo")
        (scripts/touchpad:disable)
        (trackpoint "TPPS/2 IBM TrackPoint")
+       (trackpoint "pointer:Lenovo ThinkPad Compact USB Keyboard with TrackPoint")
        (apply #'xdev (append '("Logitech USB Receiver") xdev-args)))
       ((ppcre "pando")
        (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
@@ -113,14 +123,6 @@
 (def battery ()
   (format t "~A" (battery-status))
   (values))
-
-(defun trackpoint (arg)
-  (let ((device arg))
-    (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation" 1))
-    (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Button" 2))
-    (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Timeout" 200))
-    (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Axes" 7 6 5 4))
-    (success)))
 
 (def (config-x x) ()
   (load-keymap)

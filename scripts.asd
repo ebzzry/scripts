@@ -15,6 +15,7 @@
   :depends-on (#:cl-ppcre
                #:local-time
                #:ironclad
+               #:inferior-shell
                "scripts/common"
                "scripts/misc"
                "scripts/touchpad"
