@@ -37,8 +37,10 @@
   (run/i `("xmodmap" ,(home (fmt "hejmo/ktp/xmodmap/~A.xmap" keymap))))
   (success))
 
-(defun trackpoint (arg)
-  (let ((device arg))
+(def trackpoint (device)
+  (when (loop :for line :in (uiop:run-program `("xinput" "list") :output :lines)
+              :when (search device line)
+              :return t)
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation" 1))
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Button" 2))
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Timeout" 200))
