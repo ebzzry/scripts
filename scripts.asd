@@ -7,7 +7,7 @@
 
 (defsystem :scripts
   :name "scripts"
-  :version "1.2.0"
+  :version "1.2.1"
   :description "Common Lisp scripts"
   :license "CC0"
   :author "Rommel MARTINEZ <rom@mimix.io>"
