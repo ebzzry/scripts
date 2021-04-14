@@ -31,11 +31,6 @@
       (string-trim '(#\Space #\Tab #\Newline)
                    (nth (1+ position) devices)))))
 
-(defparameter *default-device*
-  ;; (or (webcam-device *webcam-regex*) "/dev/video0")
-  "/dev/video0"
-  "The default webcam device.")
-
 (defparameter *directory-wildcard*
   "/sys/bus/usb/devices/*/product"
   "The pathname wildcard for the USB devices.")
@@ -46,7 +41,7 @@
 
 (defun default-device ()
   "Return the default webcam device."
-  *default-device*)
+  (or (webcam-device *webcam-regex*) "/dev/video0"))
 
 (defun device-id (name)
   "Return the device ID of device with NAME."
@@ -66,13 +61,13 @@
 (defun run-command/ss (device &rest args)
   (inferior-shell:run/ss `(,+program+ "-d" ,device ,@args)))
 
-(defun current-zoom (&optional (device *default-device*))
+(defun current-zoom (&optional (device (default-device)))
   "Return the current zoom settings."
   (let* ((output (run-command/ss device "-C" "zoom_absolute"))
          (value (parse-integer (second (cl-ppcre:split #\space output)))))
     value))
 
-(defun zoom-settings (&optional (device *default-device*))
+(defun zoom-settings (&optional (device (default-device)))
   "Return the zoom settings from DEVICE."
   (uiop:split-string
    (first (remove-if-not (λ (line)
@@ -81,7 +76,7 @@
                           `(,+program+ "-d" ,device "-l"))))
    :separator '(#\space)))
 
-(defun zoom-value (type &optional (device *default-device*))
+(defun zoom-value (type &optional (device (default-device)))
   "Return the current absolute zoom value for TYPE."
   (values
    (parse-integer
@@ -92,15 +87,15 @@
                            (zoom-settings device)))
      "\\1"))))
 
-(defun get-default-zoom (&optional (device *default-device*))
+(defun get-default-zoom (&optional (device (default-device)))
   "Return the default zoom value."
   (zoom-value "default" device))
 
-(defun get-minimum-zoom (&optional (device *default-device*))
+(defun get-minimum-zoom (&optional (device (default-device)))
   "Return the minimum zoom value for DEVICE."
   (zoom-value "min" device))
 
-(defun get-maximum-zoom (&optional (device *default-device*))
+(defun get-maximum-zoom (&optional (device (default-device)))
   "Return the maximum zoom value for DEVICE."
   (zoom-value "max" device))
 
@@ -129,12 +124,12 @@
   (run-command/i device "-c" (fmt "zoom_absolute=~A" value))
   (current-zoom device))
 
-(defun reset-zoom (&optional (device *default-device*))
+(defun reset-zoom (&optional (device (default-device)))
   "Set the zoom to the default vaule."
   (set-zoom device (get-default-zoom device))
   (current-zoom device))
 
-(defun decrease-zoom (&optional (device *default-device*))
+(defun decrease-zoom (&optional (device (default-device)))
   "Decrease the zoom setting."
   (let* ((current (current-zoom device))
          (new (- current +zoom-increments+))
@@ -143,7 +138,7 @@
                     new)))
     (set-zoom device value)))
 
-(defun increase-zoom (&optional (device *default-device*))
+(defun increase-zoom (&optional (device (default-device)))
   "Decrease the zoom setting."
   (let* ((current (current-zoom device))
          (new (+ current +zoom-increments+))
@@ -152,11 +147,11 @@
                     new)))
     (set-zoom device value)))
 
-(defun minimum-zoom (&optional (device *default-device*))
+(defun minimum-zoom (&optional (device (default-device)))
   "Set the zoom to the lowest setting."
   (set-zoom device (get-minimum-zoom device)))
 
-(defun maximum-zoom (&optional (device *default-device*))
+(defun maximum-zoom (&optional (device (default-device)))
   "Set the zoom to the highest setting."
   (set-zoom device (get-maximum-zoom device)))
 
