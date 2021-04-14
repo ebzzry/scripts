@@ -37,10 +37,28 @@
   (run/i `("xmodmap" ,(home (fmt "hejmo/ktp/xmodmap/~A.xmap" keymap))))
   (success))
 
+(defun device-header (device)
+  "Return the header of DEVICE."
+  (loop :for header :in '("keyboard" "pointer")
+        :when (cl-ppcre:scan (marie:cat "^" header ":") device)
+        :return header))
+
+(defun trim-device-header (device)
+  "Return DEVICE without the header."
+  (let ((header (device-header device)))
+    (multiple-value-bind (start end)
+        (cl-ppcre:scan (marie:cat "^" header ":") device)
+      (when start
+        (subseq device end)))))
+
+(defun device-present-p (device)
+  "Return true if DEVICE is present according to xinput."
+  (loop :for line :in (uiop:run-program `("xinput" "list") :output :lines)
+        :when (search (trim-device-header device) line)
+        :return t))
+
 (def trackpoint (device)
-  (when (loop :for line :in (uiop:run-program `("xinput" "list") :output :lines)
-              :when (search device line)
-              :return t)
+  (when (device-present-p device)
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation" 1))
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Button" 2))
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Timeout" 200))
@@ -58,7 +76,9 @@
 
 (defun load-xset ()
   (run/i `("xset" "-dpms"))
-  (run/i `("xset" "m" "4" "2"))
+  (if (device-present-p "Lenovo ThinkPad Compact USB Keyboard with TrackPoint")
+      (run/i `("xset" "m" "5" "1"))
+      (run/i `("xset" "m" "4" "2")))
   (run/i `("xset" "s" "off")))
 
 (defun load-touchring ()
