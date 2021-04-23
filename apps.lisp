@@ -33,15 +33,18 @@
    bs "inkview"
    ev "evince"
    fs "gtk2fontsel"
+   lo "libreoffice"
    lx "lxappearance"
+   ms "musescore"
    p "mpv --mute"
    pc "pavucontrol"
    pe "pulseeffects"
+   sm "steam"
    tx "termite"
-   ty "terminator"
    vbm "VBoxManage"
    vl "vlc -I ncurses"
    vl! "vl --random --loop --playlist-autostart"
+   vr "viber"
    xmind "XMind"
    xo "xournal"
    xs "simple-scan"
@@ -67,7 +70,8 @@
    sw "Write"
    wire "sudo -Hi QT_QPA_PLATFORMTHEME=gtk2 wireshark"
    td "telegram-desktop"
-   vb "VirtualBox")
+   vb "VirtualBox"
+   zm "zoom-us")
 
 ($$ vp "vlc"
     qb "qutebrowser"
@@ -230,6 +234,6 @@
 
 (defcommand gu (&rest args)
   (let ((device (scripts/webcam:webcam "default-device")))
-    (run/i `("guvcview" "-d" ,device))))
+    (run/i `("guvcview" "-d" ,device ,@args))))
 
 (register-commands :scripts/apps)
