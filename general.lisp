@@ -46,10 +46,12 @@
 (defun trim-device-header (device)
   "Return DEVICE without the header."
   (let ((header (device-header device)))
-    (multiple-value-bind (start end)
-        (cl-ppcre:scan (marie:cat "^" header ":") device)
-      (when start
-        (subseq device end)))))
+    (if header
+        (multiple-value-bind (start end)
+            (cl-ppcre:scan (marie:cat "^" header ":") device)
+          (when start
+            (subseq device end)))
+        device)))
 
 (defun device-present-p (device)
   "Return true if DEVICE is present according to xinput."
