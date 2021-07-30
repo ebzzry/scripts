@@ -13,7 +13,8 @@
 
 (defc +screenshots-dir+ (home ".screenshots"))
 
-(% bt "bluetoothctl"
+(% br "broot"
+   bt "bluetoothctl"
    e "emacsclient -nw"
    gpg "gpg2"
    par "parallel"
@@ -37,6 +38,7 @@
    lx "lxappearance"
    ms "musescore"
    p "mpv --mute"
+   p! "p --no-resume-playback"
    pc "pavucontrol"
    pe "pulseeffects"
    sm "steam"
@@ -45,6 +47,7 @@
    vl "vlc -I ncurses"
    vl! "vl --random --loop --playlist-autostart"
    vr "viber"
+   ts "tresorit"
    xmind "XMind"
    xo "xournal"
    xs "simple-scan"
@@ -53,9 +56,10 @@
 (% bb "brave"
    cb "google-chrome-stable"
    fb "firefox"
+   nb "nyxt"
    tb "tor-browser")
 
-($ ca "calibre"
+($ ce "calibre"
    dj "djview"
    eb "ebook-viewer"
    kd "len kdenlive"
@@ -91,9 +95,6 @@
   "Merge path namestrings."
   (cat (uiop:native-namestring (expand-pathname x)) ":" y))
 
-(defcommand ts (&rest args)
-  (run-with-chroot (home ".local/share/tresorit/tresorit") args))
-
 (defcommand tresorit ()
   (run-with-docker-x
    `("-v" ,(paths "~/.local/share/tresorit/Profiles" "/home/tresorit/.local/share/tresorit/Profiles")
@@ -103,6 +104,9 @@
           "-v" ,(paths "~/.config/Tresorit" "/home/tresorit/.config/Tresorit")
           "-v" ,(paths "~/Tresors" "/home/tresorit/Tresors"))
    "tresorit"))
+
+(defcommand tresorit-chroot (&rest args)
+  (run-with-chroot (home ".local/share/tresorit/tresorit") args))
 
 (defcommand viber ()
   (run-with-docker-x
@@ -160,8 +164,13 @@
   (success))
 
 (defcommand kb (&rest args)
-  (setf (getenv "NIX_SKIP_KEYBASE_CHECKS") "1")
+  (setf (uiop:getenv "NIX_SKIP_KEYBASE_CHECKS") "1")
   (run/i `("keybase-gui" ,@args))
+  (success))
+
+(defcommand steam! (&rest args)
+  (setf (uiop:getenv "NIX_PATH") "nixpkgs=https://github.com/nixos/nixpkgs/archive/refs/heads/release-20.09.tar.gz")
+  (run/i `("nix-shell" "-p" "steam" "--run" "steam"))
   (success))
 
 (defcommand lispworks (&rest args)
@@ -196,7 +205,7 @@
     (#\Ĉ . "ᴄx")
     (#\D . "ᴅ")
     (#\E . "ᴇ")
-    (#\F . "ꜰ")
+    (#\F . "ғ")
     (#\G . "ɢ")
     (#\Ĝ . "ɢx")
     (#\H . "ʜ")
