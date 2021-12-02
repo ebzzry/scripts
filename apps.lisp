@@ -11,12 +11,14 @@
 
 (in-package #:scripts/apps)
 
-(defc +screenshots-dir+ (home ".screenshots"))
+(defp +screenshots-dir+ (home ".screenshots"))
 
 (% br "broot"
    bt "bluetoothctl"
+   em "emacs --daemon"
+   ew "emacsclient -nw"
+   ec "emacsclient -nc"
    e "emacsclient -nw"
-   gpg "gpg2"
    par "parallel"
    pm "pulsemixer"
    rz "rsync -az"
@@ -37,8 +39,6 @@
    lo "libreoffice"
    lx "lxappearance"
    ms "musescore"
-   p "mpv --mute"
-   p! "p --no-resume-playback"
    pc "pavucontrol"
    pe "pulseeffects"
    sm "steam"
@@ -244,5 +244,10 @@
 (defcommand gu (&rest args)
   (let ((device (scripts/webcam:webcam "default-device")))
     (run/i `("guvcview" "-d" ,device ,@args))))
+
+(defcommand p (&rest args)
+  (uiop:os-cond
+   ((uiop:os-macosx-p) (run/i `("iina" "--mpv-mute" ,@args)))
+   (t (run/i `("mpv" "--mute" ,@args)))))
 
 (register-commands :scripts/apps)
