@@ -18,7 +18,6 @@
    em "emacs --daemon"
    ew "emacsclient -nw"
    ec "emacsclient -nc"
-   e "emacsclient -nw"
    par "parallel"
    pm "pulsemixer"
    rz "rsync -az"
@@ -47,7 +46,6 @@
    vl "vlc -I ncurses"
    vl! "vl --random --loop --playlist-autostart"
    vr "viber"
-   ts "tresorit"
    xmind "XMind"
    xo "xournal"
    xs "simple-scan"
@@ -115,10 +113,16 @@
           "-v" ,(paths (xdg-dir "DOWNLOAD") "/root/Downloads/"))
    "viber"))
 
-(defcommand rz! (&rest args)
+(defcommand rz@ (&rest args)
   (apply-args-1
    'rz args
    :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
+  (success))
+
+(defcommand rz! (&rest args)
+  (apply-args-1
+   'rz args
+   :options '("--no-p" "--no-o" "--no-g" "--no-t" "--no-D"))
   (success))
 
 (defcommand screenshot (mode)
@@ -222,14 +226,14 @@
     (#\P . "ᴘ")
     (#\Q . "ǫ")
     (#\R . "ʀ")
-    (#\S . "s")
+    (#\S . "s")    ;s
     (#\Ŝ . "sx")
     (#\T . "ᴛ")
     (#\U . "ᴜ")
     (#\Ŭ . "ᴜx")
     (#\V . "ᴠ")
     (#\W . "ᴡ")
-    (#\X . "x")
+    (#\X . "x")    ;x
     (#\Y . "ʏ")
     (#\Z . "ᴢ")))
 
@@ -242,12 +246,26 @@
     (success)))
 
 (defcommand gu (&rest args)
+  "Run guvcview with the default device."
   (let ((device (scripts/webcam:webcam "default-device")))
     (run/i `("guvcview" "-d" ,device ,@args))))
 
 (defcommand p (&rest args)
+  "Run the media player."
   (uiop:os-cond
    ((uiop:os-macosx-p) (run/i `("iina" "--mpv-mute" ,@args)))
    (t (run/i `("mpv" "--mute" ,@args)))))
+
+(defcommand e (&rest args)
+  "Run emacsclient."
+  (if (¬ args)
+      (run/i `("emacsclient" "-nw" "."))
+      (run/i `("emacsclient" "-nw" ,@args))))
+
+(defcommand clhs (&rest args)
+  "Open the Common Lisp Hyperspec in the browser."
+  (run/i `(,(uiop:getenv "BROWSER")
+            (fmt "https://www.xach.com/clhs?q=~A" ,@args)))
+  (success))
 
 (register-commands :scripts/apps)

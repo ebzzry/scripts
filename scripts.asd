@@ -1,16 +1,18 @@
-#-asdf3.1 (error "ASDF 3.1 or bust!")
+;;; scripts.asd
 
-(defpackage :scripts-system
+#-ASDF3.1 (error "ASDF 3.1 or bust!")
+
+(uiop:define-package :scripts-system
   (:use #:cl #:asdf))
 
 (in-package #:scripts-system)
 
 (defsystem :scripts
   :name "scripts"
-  :version "1.2.1"
+  :version "1.3.0"
   :description "Common Lisp scripts"
   :license "CC0"
-  :author "Rommel MARTINEZ <rom@mimix.io>"
+  :author "Rommel MARTINEZ <rommel.martinez@astn-group.com>"
   :class :package-inferred-system
   :depends-on (#:cl-ppcre
                #:local-time
