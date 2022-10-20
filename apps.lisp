@@ -22,7 +22,7 @@
    pm "pulsemixer"
    rz "rsync -az"
    rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\""
-   rm@ "shred -vfzun 10"
+   ;; rm@ "shred -vfzun 10"
    s "sudo"
    sbcl! "rl shell lisp sbcl"
    us "usync --one-way --prefer-local"
@@ -252,15 +252,29 @@
 
 (defcommand p (&rest args)
   "Run the media player."
-  (uiop:os-cond
-   ((uiop:os-macosx-p) (run/i `("iina" "--mpv-mute" ,@args)))
-   (t (run/i `("mpv" "--mute" ,@args)))))
+  (flet ((cmd (args)
+           (uiop:os-cond
+            ((uiop:os-macosx-p) (run/i `("iina" "--mpv-mute" ,@args)))
+            (t (run/i `("mpv" "--mute" ,@args))))))
+    (if (¬ args)
+        (cmd '("."))
+        (cmd args))))
 
 (defcommand e (&rest args)
-  "Run emacsclient."
-  (if (¬ args)
-      (run/i `("emacsclient" "-nw" "."))
-      (run/i `("emacsclient" "-nw" ,@args))))
+  "Run Emacs on the terminal with ARGS."
+  (flet ((cmd (args)
+           (run/i `("emacsclient" "-nw" ,@args))))
+    (if (¬ args)
+        (cmd '("."))
+        (cmd args))))
+
+(defcommand eg (&rest args)
+  "Run Emacs GUI with ARGS."
+  (flet ((cmd (args)
+           (run/i `("emacsclient" "-nc" ,@args))))
+    (if (¬ args)
+        (cmd '("."))
+        (cmd args))))
 
 (defcommand clhs (&rest args)
   "Open the Common Lisp Hyperspec in the browser."

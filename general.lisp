@@ -40,7 +40,7 @@
 (defun device-header (device)
   "Return the header of DEVICE."
   (loop :for header :in '("keyboard" "pointer")
-        :when (cl-ppcre:scan (marie:cat "^" header ":") device)
+        :when (cl-ppcre:scan (cat "^" header ":") device)
         :return header))
 
 (defun trim-device-header (device)
@@ -48,7 +48,7 @@
   (let ((header (device-header device)))
     (if header
         (multiple-value-bind (start end)
-            (cl-ppcre:scan (marie:cat "^" header ":") device)
+            (cl-ppcre:scan (cat "^" header ":") device)
           (when start
             (subseq device end)))
         device)))
@@ -148,7 +148,7 @@
   (format t "~A" (battery-status))
   (values))
 
-(def (config-x x) ()
+(def config-x ()
   (load-keymap)
   (load-xset)
   (load-resources)

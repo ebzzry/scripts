@@ -69,7 +69,7 @@
 (def run-with-xdg (binary &rest args)
   "Run binary under a custom XDG_DATA_DIRS path."
   (setf (uiop:getenv "XDG_DATA_DIRS")
-        (uiop:native-namestring (marie:home ".local/share/mime")))
+        (uiop:native-namestring (home ".local/share/mime")))
   (run/i `(,binary ,@args))
   (success))
 
@@ -81,7 +81,7 @@
 
 (def run-with-wine-program-files (path)
   "Run PATH under Program Files using Wine."
-  (run-with-wine (marie:home (marie:fmt ".wine/drive_c/Program Files/~A" path))))
+  (run-with-wine (home (fmt ".wine/drive_c/Program Files/~A" path))))
 
 (def run-with-libgl-always-software (binary &rest args)
   "Run BINARY using some LIBGL flags"
@@ -108,7 +108,7 @@
 
 (def run-with-nix-user (profile binary args)
   "Run binary under a separate profile."
-  (let ((bin (marie:home (marie:fmt ".baf/profiles/~A/bin" profile))))
+  (let ((bin (home (fmt ".baf/profiles/~A/bin" profile))))
     (setf (uiop:getenv "PATH") (unix-namestring bin))
     (run/i `(,binary ,@args))
     (success)))
@@ -128,13 +128,13 @@
   (let* ((id (string-trim '(#\space #\newline)
                           (inferior-shell:run/s
                            `("docker" "inspect" "--format={{ .Config.Hostname }}" ,name))))
-         (permissions (marie:cat "local:" id)))
-    (run/i `("xhost" ,(marie:cat "+" permissions)))
+         (permissions (cat "local:" id)))
+    (run/i `("xhost" ,(cat "+" permissions)))
     (run/i `("docker" "run" "--rm" "-e" "DISPLAY" "--name" ,name
                       "-v" "/tmp/.X11-unix:/tmp/.X11-unix" "--device=/dev/dri:/dev/dri"
                       "--memory" "1024m" "--cpus" ".5"
                       ,@docker-args ,name ,@program-args))
-    (run/i `("xhost" ,(marie:cat "-" permissions))))
+    (run/i `("xhost" ,(cat "-" permissions))))
   (success))
 
 (defm % (&rest args)

@@ -29,7 +29,7 @@
 
 (defun format-two (arg-1 arg-2)
   "Print the two arguments in aesthetic form."
-  (marie:fmt "~A ~A" arg-1 arg-2))
+  (fmt "~A ~A" arg-1 arg-2))
 
 (defun print-list (list)
   "Output formatted string from LIST."
@@ -127,7 +127,7 @@
 (defun collect-files (directory)
   "Collect valid existing files under DIRECTORY."
   (loop :for file
-        :in (marie:files directory)
+        :in (entries directory)
         :when (file-really-exists-p file)
         :collect file))
 

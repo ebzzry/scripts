@@ -1,0 +1,49 @@
+#+TITLE: scripts
+#+LANGUAGE: en
+
+* Overview
+This is a collection of scripts written in Common Lisp. This repo started as a fork of [[http://github.com/fare/fare-scripts][fare-scripts]].
+The mksum subsystem was implemented by [[https://github.com/zhaqenl][zhaqenl]].
+
+* System dependencies
+- sbcl
+- cl-launch
+- make
+
+You may use your system package manager to install them.
+
+* Lisp dependencies
+- inferior-shell
+- local-time
+- ironclad
+- clon
+- cl-launch
+- fare-utils
+- cl-scripting
+- marie
+
+You may install them with:
+
+#+BEGIN_SRC sh
+$ sbcl --noinform --eval "(mapc #'ql:quickload '(:inferior-shell :local-time :ironclad :clon :cl-launch :fare-utils :cl-scripting))" --quit
+$ cd ~/common-lisp
+$ git clone https://github.com/ebzzry/marie.git
+#+END_src
+
+* Building
+To install the scripts to =~/bin=, run:
+
+#+BEGIN_SRC sh
+$ make install
+#+END_SRC
+
+* Miscellany
+
+The file =default.nix= is used with by the =shell= script to spawn a nix-shell
+containing programs and library dependencies conducive to Common Lisp development.
+
+To load it directly, change to this repository’s directory then run:
+
+#+BEGIN_SRC sh
+$ nix-shell
+#+END_SRC

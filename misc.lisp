@@ -18,7 +18,7 @@
   (success))
 
 (def help ()
-  (format! t "~A commands: ~{~A~^ ~}~%" (get-name) (all-entry-names))
+  (format t "~A commands: ~{~A~^ ~}~%" (get-name) (all-entry-names))
   (success))
 
 (register-commands :scripts/misc)
