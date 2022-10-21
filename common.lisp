@@ -108,7 +108,7 @@
 
 (def run-with-nix-user (profile binary args)
   "Run binary under a separate profile."
-  (let ((bin (home (fmt ".baf/profiles/~A/bin" profile))))
+  (let ((bin (home (fmt ".barf/profiles/~A/bin" profile))))
     (setf (uiop:getenv "PATH") (unix-namestring bin))
     (run/i `(,binary ,@args))
     (success)))

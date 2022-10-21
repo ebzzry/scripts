@@ -13,8 +13,7 @@
 
 (defp +screenshots-dir+ (home ".screenshots"))
 
-(% br "broot"
-   bt "bluetoothctl"
+(% bt "bluetoothctl"
    em "emacs --daemon"
    ew "emacsclient -nw"
    ec "emacsclient -nc"
@@ -22,7 +21,6 @@
    pm "pulsemixer"
    rz "rsync -az"
    rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\""
-   ;; rm@ "shred -vfzun 10"
    s "sudo"
    sbcl! "rl shell lisp sbcl"
    us "usync --one-way --prefer-local"
@@ -186,20 +184,27 @@
 (defcommand edraw (&rest args)
   (run-with-chroot "edrawmax" args))
 
+(defun template-directory ()
+  "Return the template directory for the current system."
+  (uiop:os-cond
+   ((uiop:os-macosx-p) (home "Templates/"))
+   ((uiop:os-unix-p) (xdg-dir "TEMPLATES"))
+   (t (home "Templates/"))))
+
 (defcommand shell (&rest args)
   (destructuring-bind (&optional base &rest command)
       args
     (cond
       ((null args)
-       (run/i `("baf" "shell")))
+       (run/i `("barf" "shell")))
       (t (let* ((cwd (uiop:getcwd))
                 (path (uiop:ensure-directory-pathname
-                       (uiop:merge-pathnames* "shell" (pathname (xdg-dir "TEMPLATES")))))
+                       (uiop:merge-pathnames* "shell" (template-directory))))
                 (directory (uiop:merge-pathnames* base path))
                 (cmd (or command '("bash"))))
            (when (uiop:directory-exists-p directory)
              (uiop:chdir directory)
-             (run/i `("baf" "shell" "--run" ,(fmt "cd ~A; ~{'~A'~^ ~}" cwd cmd)))))))
+             (run/i `("barf" "shell" "--run" ,(fmt "cd ~A; ~{'~A'~^ ~}" cwd cmd)))))))
     (success)))
 
 (defvar *smallcaps-alist*
