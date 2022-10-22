@@ -22,7 +22,6 @@
    rz "rsync -az"
    rl "rlwrap -s 1000000 -c -b \"(){}[].,=&^%$#@\\;|\""
    s "sudo"
-   sbcl! "rl shell lisp sbcl"
    us "usync --one-way --prefer-local"
    vg "vagrant"
    xf "xmllint --format"
@@ -183,72 +182,6 @@
 
 (defcommand edraw (&rest args)
   (run-with-chroot "edrawmax" args))
-
-(defun template-directory ()
-  "Return the template directory for the current system."
-  (uiop:os-cond
-   ((uiop:os-macosx-p) (home "Templates/"))
-   ((uiop:os-unix-p) (xdg-dir "TEMPLATES"))
-   (t (home "Templates/"))))
-
-(defcommand shell (&rest args)
-  (destructuring-bind (&optional base &rest command)
-      args
-    (cond
-      ((null args)
-       (run/i `("barf" "shell")))
-      (t (let* ((cwd (uiop:getcwd))
-                (path (uiop:ensure-directory-pathname
-                       (uiop:merge-pathnames* "shell" (template-directory))))
-                (directory (uiop:merge-pathnames* base path))
-                (cmd (or command '("bash"))))
-           (when (uiop:directory-exists-p directory)
-             (uiop:chdir directory)
-             (run/i `("barf" "shell" "--run" ,(fmt "cd ~A; ~{'~A'~^ ~}" cwd cmd)))))))
-    (success)))
-
-(defvar *smallcaps-alist*
-  '((#\A . "ᴀ")
-    (#\B . "ʙ")
-    (#\C . "ᴄ")
-    (#\Ĉ . "ᴄx")
-    (#\D . "ᴅ")
-    (#\E . "ᴇ")
-    (#\F . "ғ")
-    (#\G . "ɢ")
-    (#\Ĝ . "ɢx")
-    (#\H . "ʜ")
-    (#\Ĥ . "ʜx")
-    (#\I . "ɪ")
-    (#\J . "ᴊ")
-    (#\Ĵ . "ᴊx")
-    (#\K . "ᴋ")
-    (#\L . "ʟ")
-    (#\M . "ᴍ")
-    (#\N . "ɴ")
-    (#\Ñ . "ɴ̃")
-    (#\O . "ᴏ")
-    (#\P . "ᴘ")
-    (#\Q . "ǫ")
-    (#\R . "ʀ")
-    (#\S . "s")    ;s
-    (#\Ŝ . "sx")
-    (#\T . "ᴛ")
-    (#\U . "ᴜ")
-    (#\Ŭ . "ᴜx")
-    (#\V . "ᴠ")
-    (#\W . "ᴡ")
-    (#\X . "x")    ;x
-    (#\Y . "ʏ")
-    (#\Z . "ᴢ")))
-
-(defcommand smallcaps (&optional (text (uiop:slurp-stream-line *standard-input*)))
-  "Output the smallcaps version of TEXT."
-  (flet ((fn (base)
-            (let ((value (cdr (assoc base *smallcaps-alist* :test #'char-equal))))
-              (or value base))))
-    (loop :for char :across text :do (format t "~A" (fn char)))
-    (success)))
 
 (defcommand gu (&rest args)
   "Run guvcview with the default device."

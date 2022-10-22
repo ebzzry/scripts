@@ -19,7 +19,7 @@
                #:ironclad
                #:inferior-shell
                "scripts/common"
-               "scripts/misc"
+               "scripts/ext"
                "scripts/touchpad"
                "scripts/general"
                "scripts/webcam"
@@ -27,5 +27,7 @@
                "scripts/unix"
                "scripts/mksum"
                "scripts/touchring"
+               "scripts/smallcaps"
+               "scripts/shell"
                "scripts/main"
                "scripts/driver"))

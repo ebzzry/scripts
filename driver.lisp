@@ -4,7 +4,7 @@
   (:nicknames :scripts)
   (:use :uiop/common-lisp)
   (:use-reexport #:scripts/common
-                 #:scripts/misc
+                 #:scripts/ext
                  #:scripts/touchpad
                  #:scripts/general
                  #:scripts/apps
@@ -12,6 +12,8 @@
                  #:scripts/mksum
                  #:scripts/webcam
                  #:scripts/touchring
+                 #:scripts/smallcaps
+                 #:scripts/shell
                  #:scripts/main))
 
 (provide "scripts")
