@@ -15,8 +15,6 @@
 
 (% bt "bluetoothctl"
    em "emacs --daemon"
-   ew "emacsclient -nw"
-   ec "emacsclient -nc"
    par "parallel"
    pm "pulsemixer"
    rz "rsync -az"
@@ -174,12 +172,6 @@
   (run/i `("nix-shell" "-p" "steam" "--run" "steam"))
   (success))
 
-(defcommand lispworks (&rest args)
-  (run-with-chroot "/home/pub/hejmo/apoj/lispworks/save-image/lispworks" args))
-
-(defcommand lispworks-gui (&rest args)
-  (run-with-chroot "/usr/local/lib/LispWorks/lispworks-7-0-0-x86-linux" args))
-
 (defcommand edraw (&rest args)
   (run-with-chroot "edrawmax" args))
 
@@ -194,22 +186,6 @@
            (uiop:os-cond
             ((uiop:os-macosx-p) (run/i `("iina" "--mpv-mute" ,@args)))
             (t (run/i `("mpv" "--mute" ,@args))))))
-    (if (¬ args)
-        (cmd '("."))
-        (cmd args))))
-
-(defcommand e (&rest args)
-  "Run Emacs on the terminal with ARGS."
-  (flet ((cmd (args)
-           (run/i `("emacsclient" "-nw" ,@args))))
-    (if (¬ args)
-        (cmd '("."))
-        (cmd args))))
-
-(defcommand eg (&rest args)
-  "Run Emacs GUI with ARGS."
-  (flet ((cmd (args)
-           (run/i `("emacsclient" "-nc" ,@args))))
     (if (¬ args)
         (cmd '("."))
         (cmd args))))

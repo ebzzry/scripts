@@ -99,7 +99,7 @@
           #+clisp system::simple-interrupt-condition
           #+ecl ext:interactive-interrupt
           #+allegro excl:interrupt-signal
-          #+lispworks mp:process-interrupt
+          #+lispworks error
           () nil)
          (error (c)
            (format t "Oops, an unknown error occured:~&~A~&" c)))
