@@ -36,6 +36,7 @@
    pc "pavucontrol"
    pe "pulseeffects"
    sm "steam"
+   syn "flatpak run --branch=master --arch=x86_64 com.symless.Synergy"
    tx "termite"
    vbm "VBoxManage"
    vl "vlc -I ncurses"
@@ -195,5 +196,9 @@
   (run/i `(,(uiop:getenv "BROWSER")
             (fmt "https://www.xach.com/clhs?q=~A" ,@args)))
   (success))
+
+(defcommand backlight (host value)
+  "Set the backlight level of HOST to VALUE."
+  (run/i `("ssh" ,host ,(fmt "sudo light -S ~A -s sysfs/backlight/intel_backlight" value))))
 
 (register-commands :scripts/apps)
