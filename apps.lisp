@@ -182,7 +182,7 @@
     (run/i `("guvcview" "-d" ,device ,@args))))
 
 (defcommand p (&rest args)
-  "Run the media player."
+            "Run the media player."
   (flet ((cmd (args)
            (uiop:os-cond
             ((uiop:os-macosx-p) (run/i `("iina" "--mpv-mute" ,@args)))
@@ -200,5 +200,9 @@
 (defcommand backlight (host value)
   "Set the backlight level of HOST to VALUE."
   (run/i `("ssh" ,host ,(fmt "sudo light -S ~A -s sysfs/backlight/intel_backlight" value))))
+
+(defcommand resolution (mode)
+  "Set the screen resolution to MODE."
+  (run/i `("xrandr" "--output" "eDP-1" "--mode" ,mode)))
 
 (register-commands :scripts/apps)
