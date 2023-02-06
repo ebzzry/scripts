@@ -8,7 +8,7 @@
 
 (in-package #:scripts/common)
 
-(def (char-display-char) (c)
+(def char-display-char (c)
   "Display character C to stdout."
   (if (or (member c '(127 155))
           (< c 32)
