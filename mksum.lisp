@@ -23,10 +23,6 @@
          (stropt :short-name "t" :long-name "type" :argument-name "HASH"
                  :description "Specify hash function to use.")))
 
-(defun concat (&rest args)
-  "Concatenate strings."
-  (reduce (λ (x y) (cat x y)) args))
-
 (defun format-two (arg-1 arg-2)
   "Print the two arguments in aesthetic form."
   (fmt "~A ~A" arg-1 arg-2))
@@ -127,9 +123,9 @@
 (defun collect-files (directory)
   "Collect valid existing files under DIRECTORY."
   (loop :for file
-        :in (entries directory)
+          :in (entries directory)
         :when (file-really-exists-p file)
-        :collect file))
+          :collect file))
 
 (defun file-checksum (type file)
   "Compute the TYPE checksum of FILE."
@@ -142,15 +138,15 @@
 (defun list-dir-checksum (type directory)
   "List the TYPE checksums of the files inside DIRECTORY."
   (mapcar #'first
-          (mapcar (λ (string) (cl-ppcre:split #\space string))
-                  (mapcar (λ (file) (file-checksum type file))
+          (mapcar (lambda (string) (cl-ppcre:split #\space string))
+                  (mapcar (lambda (file) (file-checksum type file))
                           (collect-files directory)))))
 
 (defun directory-checksum (type directory)
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
   (when (uiop:directory-exists-p directory)
     (let* ((path (uiop:truenamize directory))
-           (value (reduce (λ (string-1 string-2) (concat string-1 string-2))
+           (value (reduce (lambda (string-1 string-2) (concat string-1 string-2))
                           (list-dir-checksum type path))))
       (format-two (hash type value) path))))
 

@@ -1,21 +1,21 @@
 ;;;; shell.lisp
 
 (uiop:define-package #:scripts/shell
-    (:use #:cl
-          #:inferior-shell
-          #:cl-scripting
-          #:optima
-          #:optima.ppcre
-          #:marie
-          #:scripts/common))
+  (:use #:cl
+        #:inferior-shell
+        #:cl-scripting
+        #:optima
+        #:optima.ppcre
+        #:marie
+        #:scripts/common))
 
 (in-package #:scripts/shell)
 
 (defun template-directory ()
   "Return the template directory for the current system."
   (uiop:os-cond
-   ((uiop:os-macosx-p) (home "Templates/"))
-   ((uiop:os-unix-p) (xdg-dir "TEMPLATES"))
+   ((uiop:os-macosx-p) (home "Developer/src/templates/"))
+   ((uiop:os-unix-p) (home "Developer/src/templates/"))
    (t (home "Templates/"))))
 
 (defcommand shell (&rest args)
@@ -23,7 +23,7 @@
       args
     (cond
       ((null args)
-       (run/i `("barf" "shell")))
+       (run/i `("oof" "shell")))
       (t (let* ((cwd (uiop:getcwd))
                 (path (uiop:ensure-directory-pathname
                        (uiop:merge-pathnames* "shell" (template-directory))))
@@ -31,7 +31,7 @@
                 (cmd (or command '("bash"))))
            (when (uiop:directory-exists-p directory)
              (uiop:chdir directory)
-             (run/i `("barf" "shell" "--run" ,(fmt "cd ~A; ~{'~A'~^ ~}" cwd cmd)))))))
+             (run/i `("oof" "shell" "--run" ,(fmt "cd ~A; ~{'~A'~^ ~}" cwd cmd)))))))
     (success)))
 
 (register-commands :scripts/shell)

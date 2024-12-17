@@ -21,7 +21,7 @@
   (let ((base-dir "/sys/class/power_supply/*")
         (exclude-string "/AC/"))
     (uiop:with-output (s nil)
-      (loop :for dir :in (remove-if (λ (path)
+      (loop :for dir :in (remove-if (lambda (path)
                                       (search exclude-string (uiop:native-namestring path)))
                                     (uiop:directory* base-dir))
             :for battery = (first (last (pathname-directory dir)))
@@ -108,7 +108,7 @@
 
 (def run-with-nix-user (profile binary args)
   "Run binary under a separate profile."
-  (let ((bin (home (fmt ".barf/profiles/~A/bin" profile))))
+  (let ((bin (home (fmt ".oof/profiles/~A/bin" profile))))
     (setf (uiop:getenv "PATH") (unix-namestring bin))
     (run/i `(,binary ,@args))
     (success)))
@@ -131,13 +131,13 @@
          (permissions (cat "local:" id)))
     (run/i `("xhost" ,(cat "+" permissions)))
     (run/i `("docker" "run" "--rm" "-e" "DISPLAY" "--name" ,name
-                      "-v" "/tmp/.X11-unix:/tmp/.X11-unix" "--device=/dev/dri:/dev/dri"
-                      "--memory" "1024m" "--cpus" ".5"
-                      ,@docker-args ,name ,@program-args))
+             "-v" "/tmp/.X11-unix:/tmp/.X11-unix" "--device=/dev/dri:/dev/dri"
+             "--memory" "1024m" "--cpus" ".5"
+             ,@docker-args ,name ,@program-args))
     (run/i `("xhost" ,(cat "-" permissions))))
   (success))
 
-(defm % (&rest args)
+(defm rc^% (&rest args)
   "Define a normal command runner."
   `(progn
      ,@(loop :for arg :in (partition args 2)
@@ -149,8 +149,8 @@
                                 :error-output t :on-error nil)
                            (success))))))
 
-(defm $ (&rest args)
-  "Define a runner with the QT_QPA environment set to GTK2."
+(defm rc-gtk2 (&rest args)
+  "Define a runner with the QT_QPA environment set to gtk2."
   `(progn
      ,@(loop :for arg :in (partition args 2)
              :collect (destructuring-bind (name command)
@@ -162,8 +162,8 @@
                                 :error-output t :on-error nil)
                            (success))))))
 
-(defm $$ (&rest args)
-  "Define a runner with the QT_QPA environment."
+(defm rc-qt5ct (&rest args)
+  "Define a runner with the QT_QPA environment set to qt5ct."
   `(progn
      ,@(loop :for arg :in (partition args 2)
              :collect (destructuring-bind (name command)
@@ -175,7 +175,7 @@
                                 :error-output t :on-error nil)
                            (success))))))
 
-(defm $% (&rest args)
+(defm rc-noqt (&rest args)
   "Define a runner without the QT_QPA environment."
   `(progn
      ,@(loop :for arg :in (partition args 2)
@@ -189,7 +189,7 @@
                                 :error-output t :on-error nil)
                            (success))))))
 
-(defm @ (&rest args)
+(defm rc-wine (&rest args)
   "Define a command with wine."
   `(progn
      ,@(loop :for arg :in (partition args 2)
@@ -198,7 +198,7 @@
                         `(defcommand ,name (&rest args)
                            (run-with-wine ,command))))))
 
-(defm @+ (&rest args)
+(defm rc-wine-r (&rest args)
   "Define a wine runner."
   `(progn
      ,@(loop :for arg :in (partition args 2)

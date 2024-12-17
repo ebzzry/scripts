@@ -51,7 +51,7 @@
   "Return the name of the touchring by type NAME."
   (let* ((lines (inferior-shell:run/lines `("xsetwacom" "list" "devices")))
          (device (concatenate 'string "type: " (string-upcase type)))
-         (line (first (remove-if-not (λ (line) (search device line :test #'string=))
+         (line (first (remove-if-not (lambda (line) (search device line :test #'string=))
                                      lines))))
     (cl-ppcre:regex-replace "(^.*Pad pad).*"  line "\\1")))
 

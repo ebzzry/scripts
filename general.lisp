@@ -21,7 +21,7 @@
        (cl-ppcre:regex-replace
         (cl-ppcre:create-scanner ".*id=(.*?)	+.*")
         (first (remove-if (complement
-                           (λ (line)
+                           (lambda (line)
                              (and (search name line) (search (fmt "slave  ~A" type) line))))
                           (uiop:run-program '("xinput" "list") :output :lines))) "\\1")))
 
@@ -31,17 +31,17 @@
       (run/i `(xinput ,command ,(parse-integer id) ,@args))
       (success))))
 
-(defun xmap (keymap)
-  (run/i `("setxkbmap" "dvorak"))
+(defun xmap (&optional keymap)
+  (run/i `("setxkbmap" "us"))
   (run/i `("xset" "r" "rate" "250"))
-  (run/i `("xmodmap" ,(home (fmt "hejmo/ktp/xmodmap/~A.xmap" keymap))))
+  ;; (run/i `("xmodmap" ,(home (fmt "hejmo/ktp/xmodmap/~A.xmap" keymap))))
   (success))
 
 (defun device-header (device)
   "Return the header of DEVICE."
   (loop :for header :in '("keyboard" "pointer")
         :when (cl-ppcre:scan (cat "^" header ":") device)
-        :return header))
+          :return header))
 
 (defun trim-device-header (device)
   "Return DEVICE without the header."
@@ -57,7 +57,7 @@
   "Return true if DEVICE is present according to xinput."
   (loop :for line :in (uiop:run-program `("xinput" "list") :output :lines)
         :when (search (trim-device-header device) line)
-        :return t))
+          :return t))
 
 (def trackpoint (device)
   (when (device-present-p device)
@@ -68,12 +68,13 @@
     (success)))
 
 (defun load-keymap (&optional (device "Kinesis Advantage PRO MPC/USB Keyboard"))
-  (if (remove-if (complement (λ (line) (search device line)))
-                 (uiop:run-program '("lsusb") :output :lines))
-      (xmap "advantage.dv")
-      (if (string-equal (uiop:hostname) "vulpo")
-          (xmap "thinkpad.dv")
-          (xmap "aliaj.dv")))
+  ;; (if (remove-if (complement (lambda (line) (search device line)))
+  ;;                (uiop:run-program '("lsusb") :output :lines))
+  ;;     (xmap "adv.us")
+  ;;     (if (string-equal (uiop:hostname) "la-vulpo")
+  ;;         (xmap "tpad.us")
+  ;;         (xmap "aliaj.us")))
+  (xmap)
   (success))
 
 (defun load-xset ()
@@ -105,12 +106,12 @@
   (let ((hostname (uiop:hostname))
         (xdev-args '("pointer" "set-button-map" "1" "2" "3" "5" "4")))
     (match hostname
-      ((ppcre "vulpo")
+      ((ppcre "la-vulpo")
        (scripts/touchpad:disable)
        (trackpoint "TPPS/2 IBM TrackPoint")
        (trackpoint "pointer:Lenovo ThinkPad Compact USB Keyboard with TrackPoint")
        (apply #'xdev (append '("Logitech USB Receiver") xdev-args)))
-      ((ppcre "pando")
+      ((ppcre "la-pando")
        (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
       (_ (success)))))
 

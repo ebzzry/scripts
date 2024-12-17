@@ -24,7 +24,7 @@
 (defun webcam-device (regex)
   "Return the webcam device for REGEX."
   (let* ((devices (webcam-devices))
-         (position (position-if (λ (entry)
+         (position (position-if (lambda (entry)
                                   (cl-ppcre:scan regex entry))
                                 devices)))
     (when position
@@ -46,7 +46,7 @@
 (defun device-id (name)
   "Return the device ID of device with NAME."
   (let* ((files (directory *directory-wildcard*))
-         (entry (first (remove-if-not (λ (device)
+         (entry (first (remove-if-not (lambda (device)
                                         (string-equal name (uiop:read-file-line device)))
                                       files)))
          (strings (remove-if #'empty-string-p
@@ -70,7 +70,7 @@
 (defun zoom-settings (&optional (device (default-device)))
   "Return the zoom settings from DEVICE."
   (uiop:split-string
-   (first (remove-if-not (λ (line)
+   (first (remove-if-not (lambda (line)
                            (search "zoom_absolute" line))
                          (inferior-shell:run/lines
                           `(,+program+ "-d" ,device "-l"))))
@@ -82,7 +82,7 @@
    (parse-integer
     (cl-ppcre:regex-replace
      (fmt "~A=(.*)" type)
-     (first (remove-if-not (λ (text)
+     (first (remove-if-not (lambda (text)
                              (search type text))
                            (zoom-settings device)))
      "\\1"))))
