@@ -14,8 +14,8 @@
 (defun template-directory ()
   "Return the template directory for the current system."
   (uiop:os-cond
-   ((uiop:os-macosx-p) (home "Developer/src/templates/"))
-   ((uiop:os-unix-p) (home "Developer/src/templates/"))
+   ((uiop:os-macosx-p) (home "Developer/src/t/"))
+   ((uiop:os-unix-p) (home "Developer/src/t/"))
    (t (home "Templates/"))))
 
 (defcommand shell (&rest args)
